@@ -1,0 +1,12 @@
+ore_iron.gif,16,25
+bl_alga.gif,111,70
+wolf.gif,89,200
+carrolit.gif,103,200
+tree.gif,110,50
+ore_met.gif,18,6400
+karas.gif,106,10
+honney.gif,97,20
+lipa.gif,99,20
+silk.gif,98,40
+obsidian.gif,42,200
+squirel.gif,88,100

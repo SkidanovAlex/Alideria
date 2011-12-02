@@ -1,0 +1,84 @@
+<META http-equiv=Content-Type content="text/html; charset=windows-1251">
+<link href="../style2.css" rel="stylesheet" type="text/css">
+
+<html>
+<body>
+
+<h1>Combat SDK Help</h1>
+<h2>Константы</h2>
+<table border=0>
+<tr><td colspan=2><b>Для параметров <code>$whom</code></td></tr>
+<tr><td><code>$myself</code></td><td>Вы</td></tr>
+<tr><td><code>$opponent</code></td><td>Ваш оппонент</td></tr>
+<tr><td><code>$friends</code></td><td>Вы и союзники</td></tr>
+<tr><td><code>$enemies</code></td><td>Все враги</td></tr>
+<tr><td colspan=2><b>Для параметров <code>$where</code></td></tr>
+<tr><td><code>$current_creature</code></td><td>Выбранное существо</td></tr>
+<tr><td><code>$all_creatures</code></td><td>Все существа</td></tr>
+<tr><td><code>$creature_slot_1</code></td><td>Существо в слоте 1</td></tr>
+<tr><td><code>$creature_slot_2</code></td><td>Существо в слоте 2</td></tr>
+<tr><td><code>$creature_slot_3</code></td><td>Существо в слоте 3</td></tr>
+<tr><td colspan=2><b>Для параметров <code>$attrib</code></td></tr>
+<tr><td><code>$creature_attack</code></td><td>Атака существа</td></tr>
+<tr><td><code>$creature_defence</code></td><td>Защита существа</td></tr>
+</table>
+<h2>Функции, возвращающие информацию о сражении</h2>
+<b><code>get_turn_number( );</code></b><br>
+Возвращает номер текущего хода.<br>
+<br>
+
+<h2>Функции, воздействующие на персонажей</h2>
+<b><code>kill( $whom );</code></b><br>
+Убивает указанную в качестве параметра <code>$whom</code> цель.<br>
+<br>
+<b><code>damage( $whom, $value );</code></b><br>
+Наносит цели <code>$whom</code> <code>$value</code> урона.<br>
+<br>
+<b><code>heal( $whom, $value );</code></b><br>
+Восстанавливает цели <code>$whom</code> <code>$value</code> жизней.<br>
+<br>
+<b><code>alter_attrib( $whom, $attribute_id, $value );</code></b><br>
+Изменяет цели <code>$whom</code> значение аттрибута <code>$attribute_id</code> на <code>$value</code>.<br>
+<br>
+<b><code>set_attrib( $whom, $attribute_id, $value );</code></b><br>
+Устанавливает цели <code>$whom</code> значение аттрибута <code>$attribute_id</code> в <code>$value</code>.<br>
+<br>
+
+<h2>Функции, возвращающие информацию о персонажах</h2>
+<b><code>get_attrib_value( $whom, $attribute_id );</code></b><br>
+Возвращает значение аттрибута <code>$attribute_id</code> у цели <code>$whom</code>.<br>
+<code>$whom</code> не может быть <code>$friends</code> или <code>$enemies</code>.<br>
+<br>
+
+<h2>Функции, воздействующие на существ</h2>
+<b><code>summon( $creature_id, $where = $current_creature );</code></b><br>
+Призывает в выбранный слот существо $creature_id.<br>
+<br>
+<b><code>kill_creature( $whom, $where );</code></b><br>
+Убивает свое существо или существо оппонента в слоте $where, в зависимости от параметра $whom.<br>
+<code>$whom</code> не может быть <code>$friends</code> или <code>$enemies</code>.<br>
+<br>
+<b><code>alter_creature_attrib( $whom, $where, $attrib, $value );</code></b><br>
+Увеличивает выбранному существу у себя ($whom == $myself) или у оппонента ($whom == $opponent) значение аттрибута $attrib ($creature_attack или $creature_defence) на $value.<br>
+<code>$whom</code> не может быть <code>$friends</code> или <code>$enemies</code>.<br>
+<br>
+<b><code>set_creature_attrib( $whom, $where, $attrib, $value );</code></b><br>
+Устанавливает выбранному существу у себя ($whom == $myself) или у оппонента ($whom == $opponent) значение аттрибута $attrib ($creature_attack или $creature_defence) в $value.<br>
+<code>$whom</code> не может быть <code>$friends</code> или <code>$enemies</code>.<br>
+<br>
+
+<h2>Функции, возвращающие информацию о существах</h2>
+<b><code>get_creature_attrib_value( $whom, $where, $attrib );</code></b><br>
+Возвращает значение аттрибута <code>$attrib</code> у существа <code>$where</code> у персонажа <code>$whom</code>.<br>
+<code>$whom</code> не может быть <code>$friends</code> или <code>$enemies</code>.<br>
+<code>$where</code> не может быть <code>$all_creatures</code>.<br>
+<br>
+<b><code>has_creature_in_slot( $whom, $where );</code></b><br>
+Возвращает айди существа существа в слоте <code>$where</code> у персонажа <code>$whom</code> или <code>false</code> если существо в слоте не призывано.<br>
+<code>$whom</code> не может быть <code>$friends</code> или <code>$enemies</code>.<br>
+<code>$where</code> не может быть <code>$all_creatures</code>.<br>
+<br>
+
+
+</body>
+</html>

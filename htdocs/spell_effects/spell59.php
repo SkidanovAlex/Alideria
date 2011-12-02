@@ -1,0 +1,5 @@
+<?
+
+$sdk->kill( $sdk->opponent );
+
+?>

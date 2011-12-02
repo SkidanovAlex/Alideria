@@ -1,0 +1,1 @@
+$sdk->damage( $sdk->opponent, $sdk->get_turn_number( ) * 4 );

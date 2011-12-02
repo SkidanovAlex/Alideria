@@ -1,0 +1,1 @@
+$sdk->set_damage_coef( $sdk->myself, 2 );

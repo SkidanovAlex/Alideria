@@ -1,0 +1,45 @@
+/* Верх */
+#head
+{
+	position: absolute;
+	left: 50%;
+	margin-left: -440px;
+
+	width: 870px;
+}
+	#title
+	{
+		float: left;
+		font-weight: bold;
+	}
+	#menu
+	{
+		float: right;
+		text-align: right;	
+	}
+		.submenu
+		{
+			display: none;
+			position: fixed;
+			z-index: 1001;
+
+			border: 1px solid #651010;
+			border-top: none;
+
+			padding: 5px 7px 8px;
+			
+			background: url('/images/chat/chat_bg.gif');
+			
+			text-align: right;
+		}
+
+/* Содержимое */
+#content
+{
+	position: absolute;
+	top: 35px;
+	left: 50%;
+	margin-left: -440px;
+
+	width: 870px;
+}

@@ -1,0 +1,1 @@
+$sdk->he->card->Process2( $sdk->me, $sdk->he, $sdk->we, $sdk->they, $sdk->combat_id, $sdk->turn );

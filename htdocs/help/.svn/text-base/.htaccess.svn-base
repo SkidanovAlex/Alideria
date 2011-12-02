@@ -1,0 +1,4 @@
+Options -Indexes
+<Files log.txt>
+  deny from all 
+</Files>

@@ -1,0 +1,1 @@
+$sdk->damage( $sdk->opponent, $sdk->get_attrib_value( $sdk->opponent, 43 ) * 15 );

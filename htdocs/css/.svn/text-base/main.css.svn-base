@@ -1,0 +1,154 @@
+body { 
+  font-family: Arial;
+  font-size: 12px;
+  background: url('/images/background.jpg');
+  background-repeat:  repeat-x;
+}
+#bg{
+  position: absolute;
+  z-index: 0;
+  width: 100%;
+  top: 20px;  
+}
+#person_bg{
+  position: absolute;
+  top: 40px;
+  width: 200px;
+}
+#person{
+  position: absolute;
+  top: 60px; 
+  width: 150px;  
+}
+#person_div{
+  position: absolute;
+  top: 350px; 
+  width: 200px;
+}
+#leav1{
+  position: absolute;
+  top: 500px; 
+}
+#leav2{
+  position: absolute;
+  top: 10px; 
+  width: 730px;
+}
+#small_thing_1{
+  position: absolute;
+  top: 270px; 
+  width: 40px;
+}
+#small_thing_2{
+  position: absolute;
+  top: 270px; 
+  width: 75px;
+}
+#small_thing_3{
+  position: absolute;
+  top: 305px; 
+  width: 40px;
+}
+#small_thing_4{
+  position: absolute;
+  top: 305px; 
+  width: 75px;
+}
+#animal_1{
+  position: absolute;
+  top: 190px; 
+  width: 210px;
+}
+#person_thing_1{
+  position: absolute;
+  top: 20px; 
+  width: 70px;
+}
+#person_thing_2{
+  position: absolute;
+  top: 75px;
+}
+#person_thing_3{
+  position: absolute;
+  top: 130px; 
+}
+#person_thing_4{
+  position: absolute;
+  top: 212px;
+  width: 40px;
+}
+#person_thing_5{
+  position: absolute;
+  top: 265px; 
+  width: 150px;
+}
+#person_thing_6{
+  position: absolute;
+  top: 120px; 
+  width: 200px;
+}
+#person_thing_7{
+  position: absolute;
+  top: 65px; 
+  width: 200px;
+}
+#person_thing_8{
+  position: absolute;
+  top: 25px; 
+  width: 170px;
+}
+#main{
+  position: absolute;
+  z-index:100;
+  width: 100%;
+  color: 501704; 
+  top: 30px; 
+}
+#buttons{
+  position: absolute;
+  width: 660px;
+  top: 480px; 
+}
+#textt{
+  font-size: 12px;
+}
+#s_table{
+  font-size: 12px;
+}
+#s_header{
+  color: 00aa00;
+  font-weight: bold;
+}
+#header{
+  font-size: 22px;
+}
+#formselect{
+  color: #000000;
+  font-family: Arial;
+  font-size: 11px;
+}
+#menu_navigation{
+  font-family: Arial;
+  font-size: 12px;
+}
+div a {
+  color: 501704;
+  text-decoration: none;
+  }
+#menu_top_left{
+  height: 151px;
+  width: 180px;
+}
+#menu_middle_left{
+  height: 209px;
+}
+#content{
+  color: 501704;
+  font-size: 12px;
+}
+#content_text{
+  width: 650px;
+}
+#label{
+  float: right;
+}

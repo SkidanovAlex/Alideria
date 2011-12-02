@@ -1,0 +1,24 @@
+<?
+
+// НЕ ЗАБЫТЬ ПОМЕНЯТЬ ОТНОСИТЕЛЬНЫЕ ПУТИ!!!
+
+include( '../functions.php' );
+include( '../player.php' );
+
+f_MConnect( );
+
+	$st = "Вниманию игроков Алидерии! На Арене Теллы начинается новый бой для всех, кто хочет сразиться с настоящими оппонентами! В бой входить без божественных амулетов и посохов Кузнецов!";
+    // ---------------------
+    $plr = new Player( 69055 );
+    $plr->UploadInfoToJavaServer( );
+
+    $sock = socket_create(AF_INET, SOCK_STREAM, 0);
+    socket_connect($sock, "127.0.0.1", 82);
+    $tm = date( "H:i", time( ) );
+    $st = "say\n{$st}\n69055\n0\n0\n{$tm}\n"; // 0\n0
+    socket_write( $sock, $st, strlen($st) ); 
+    socket_close( $sock );
+    // ---------------------
+
+
+?>

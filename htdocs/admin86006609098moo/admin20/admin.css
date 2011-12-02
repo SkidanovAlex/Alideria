@@ -1,0 +1,13 @@
+.menu_item {
+	font-family: sans-serif, Tahoma, Verdana, Geneva, Arial, Helvetica;
+	font-size: 12px;
+	text-decoration: none;
+	margin: 0px 0px 0px 0px;
+	background-color: #ebe3ce;
+	font-weight: bold;
+	color: #FFFFFF;
+	height : 18px;
+	width : 90px;
+	text-align: left;
+	vertical-align: middle;
+}

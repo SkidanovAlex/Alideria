@@ -1,0 +1,243 @@
+var private_rooms = new Array( );
+var new_messages = new Array( );
+var new_my_messages = new Array( );
+var cur_private = 0;
+var msgs = new Array( );
+var msgn = new Array( );
+var n = 0;
+var my_login = '';
+var my_id = 0;
+var saved_message = '';
+var chat_timeout = 30000;
+
+function ge( b, a )
+{
+	return b.document.getElementById( a );
+}
+
+function refresh_params( )
+{
+	var st = '<table ceppspacing=0 cellpadding=0 border=0><tr>';
+	for( i = 0; i < n; ++ i )
+	{
+		if( cur_private == i )
+			z = '<b>' + private_rooms[i] + '</b>';
+		else
+			z = '<nobr><a style="cursor:pointer" onClick="window.top.setPrivate( ' + i + ' )">' + private_rooms[i] + '</a>';
+
+		show_v = 0;	
+		if( cur_private == i )
+			clr = 'white';
+		else if( new_my_messages[i] )
+			clr = '#e0c3a0 background=\"images/misc/blink-white.gif\"';			
+		else if( new_messages[i] && ( private_rooms[i] == 'Общий' || private_rooms[i] == 'Системные' || private_rooms[i] == 'Торговый' ) )
+		{
+			clr = '#e0c3a0';
+			show_v = 1;
+		}
+		else if( new_messages[i] )
+			clr = '#e0c3a0 background=\"images/misc/blink.gif\"';
+		else
+			clr = '#e0c3a0';
+		
+		st += '<td><table cellspacing=0 cellpadding=1 style="border:1px solid black" bgcolor=' + clr + '><tr><td><nobr>' + z + ( ( show_v ? '&nbsp;(!)' : '' ) ) + '&nbsp;&nbsp;<a style="cursor:pointer" onClick="window.top.closePrivate( ' + i + ' )" title="Закрыть"><img width=11 height=11 border=0 src=images/x.gif></a></nobr></td></tr></table>' + '</td>';
+	}
+	st += '</tr></table>';
+		
+	ge( chat_at, 'privates' ).innerHTML = st;
+}
+
+function refresh_chat( )
+{
+	chat.refr( );
+}
+
+function cleanPrivates( )
+{
+	n = cur_private = 0;
+	parent.createPrivateRoom( 'Общий' );
+}
+
+function setPrivate( a )
+{
+	cur_private = a;
+	new_messages[a] = false;
+	new_my_messages[a] = false;
+
+	if( ge( chat, 'ch' ) )	 // Если чат загружен
+	{
+		chat.msgn = msgn[a];
+		for( i = 0; i < msgn[a]; ++ i )
+			chat.msgs[i] = msgs[a][i];
+		
+		refresh_chat( );
+	}
+	
+	refresh_params( );
+}
+
+function getPrivateRoom( a )
+{
+	for( i = 0; i < n; ++ i )
+		if( private_rooms[i] == a )
+			return i;
+		
+	msgn[n] = 0;
+	msgs[n] = new Array( );
+	private_rooms[n] = a;
+
+	if( a == 'Ishamael' )
+	{
+		msgs[n][0] = 'Уважаемый игрок. Вы открыли приват с администратором Ishamael. Если у вас вопрос по игре, советуем вам в первую очередь ознакомиться с энциклопедией. Также не стоит задавать вопросы, ответы на которые можно вывести игровым путем, и вопросы по прохождению квестов. Не пишите вводные фразы вида "Привет, у меня есть вопрос". Опишите сразу вашу проблему.';
+		msgn[n] = 1;
+	}
+	if( a == 'Пламени' )
+	{
+		msgs[n][0] = '<span style="padding-left:40px;">Уважаемый игрок ! Вы открыли приват с администратором Пламени.</span><ul style="margin-top:5px;margin-bottom:3px;"><li>Пожалуйста, не обращайтесь ко мне с игровыми вопросами, на которые Вам могут дать ответ в общем чате или на форуме.</li><li>Пожалуйста, не обращайтесь ко мне с вопросами, связанными с кодом или ошибками в игре — этим занимается администратор Ishamael.</li><li>Обращайтесь ко мне только с вопросами насчёт вещей, оформления, наполнения, развития проекта, а также по финансовым и рекламным, но не по игровым вопросам.</li></ul>';
+		msgn[n] = 1;
+	}
+	if( a == 'Май' )
+	{
+		msgs[n][0] = 'Доброго времени суток, игрок! =) Это личный чат Мая, младшего администратора Алидерии.<br>Я могу ответить на вопросы, связанные с опечатками, ошибками в текстах, квестах и описаниях, а также по поводу некоторых игровых мелочей. Задавайте свой вопрос сразу же, не ожидая моей реакции на приветствие: я отвечу на сообщение как можно быстрее.<br>Если вы хотите спросить по поводу новых комплектов вещей или разводов, напишите персонажу <a href=player_info.php?nick=%CF%EB%E0%EC%E5%ED%E8 target=_blank><b>Пламени</b></a>.';
+		msgn[n] = 1;
+	}
+	if( a == 'Торговый' )
+	{
+		msgs[n][0] = 'Вы открыли Торговый чат. Здесь действуют особые правила, детально описанные в <a target=_blank href=help.php?id=500>правилах игры</a>. Главное, что вы должны помнить: в Торговом чате разрешена <u>только</u> реклама вещей или услуг (ремонт, создание вещей, улучшение заклинаний). <b>Обсуждать детали сделок следует в привате.</b> Модераторы будут жестоко наказывать за любые сообщения, не являющиеся рекламой.';
+		msgn[n] = 1;
+	}
+	if( n == 0 && a == 'Общий' )
+	{
+		msgs[n][0] = "Ссылка для приглашения игроков в игру: <u>http://www.alideria.ru/?r=" + my_id + "</u>. <a target=_blank href=help.php?id=50000>Узнай подробнее!</a>";
+		msgn[n] = 1;
+	}
+
+	++ n;
+	
+	return n - 1;
+}
+
+function closePrivate( id )
+{
+	if( private_rooms[id] == 'Общий' || private_rooms[id] == 'Орден' || private_rooms[id] == 'Торговый' )
+	{
+		msgn[id] = 1;
+		msgs[id] = new Array( );
+		msgs[id][0] = "--- Чат очищен ---";
+		if( cur_private == id )
+		{
+    		chat.msgn = 1;
+    		chat.msgs = new Array( );
+    		chat.msgs[0] = "--- Чат очищен ---";
+			refresh_chat( );
+    	}
+
+		return;
+	}
+	if( !id )
+		return;
+
+	-- n;
+	for( i = id; i < n; ++ i )
+	{
+		private_rooms[i] = private_rooms[i + 1];
+		msgs[i] = msgs[i + 1];
+		msgn[i] = msgn[i + 1];
+	}
+		
+	if( cur_private >= id ) setPrivate( cur_private - 1 );
+
+	refresh_params( );
+}
+
+function closePrivateNamed( nm )
+{
+	for( i = 0; i < n; ++ i )
+		if( private_rooms[i] == nm ) closePrivate( i );
+}
+
+function createPrivateRoom( a )
+{
+	id = getPrivateRoom( a );
+	setPrivate( id );
+	refresh_params( );
+}
+
+// -
+
+function syst( tm, msg )
+{
+	channel_id = getPrivateRoom( 'Системные' );
+
+	st = '[' + tm + ']&nbsp;' + msg;
+	msgs[channel_id][msgn[channel_id] ++] = st;
+	if( cur_private == channel_id )
+	{
+		chat.msgs[chat.msgn ++] = st;
+		refresh_chat( );
+	}
+	else new_messages[channel_id] = true;
+	refresh_params( );
+}
+
+function msg( id, tm, author, msg, channel, nick_clr, text_clr )
+{
+	if( msg.substr( 0, 5 ) == '/del ' && msg.length > 10 )
+	{
+		var q = msg.substr( 5 );
+		for( var i = 0; i < n; ++ i )
+			for( var j = 0; j < msgn[i]; ++ j )
+				if( msgs[i][j].indexOf( q ) != -1 )
+					msgs[i][j] = msgs[i][j].substr( 0, 12 ) + '<i>Сообщение удалено модератором</i>';
+		for( var j = 0; j < chat.msgn; ++ j )
+			if( chat.msgs[j].indexOf( q ) != -1 )
+				chat.msgs[j] = chat.msgs[j].substr( 0, 12 ) + '<i>Сообщение удалено модератором</i>';
+
+		refresh_chat( );
+
+		return;
+	}
+
+	if( id != 0 && chat.lid > id )
+		return;
+	if( id != 0 ) chat.lid = id;
+
+	channel_id = getPrivateRoom( channel );
+	if( msg.indexOf( my_login ) != -1 )
+	{
+		tm = "<span style='background-color:red'>" + tm + "</span>";
+		if( channel_id != cur_private )
+			new_my_messages[channel_id] = true;
+	}
+	if( msg.indexOf( '/me ' ) == 0 )
+		st = '[' + tm + ']&nbsp;' + '<i><font style="cursor: pointer" onclick="parent.chat_who.nick(\'' + author + '\')" onmouseout="menu_mout()" onmouseover="menu_mover()" oncontextmenu="show_menu(\'' + author + '\', event)">' + iin(author) + "</font>" + msg.slice( 3 ) + '</i>';
+	else
+		st = '[' + tm + ']&nbsp;' + '<font color=#' + nick_clr + ' style="cursor: pointer" onclick="parent.chat_who.nick(\'' + author + '\')" onmouseout="menu_mout()" onmouseover="menu_mover()" oncontextmenu="show_menu(\'' + author + '\', event)"><b>' + iin(author) + ':&nbsp;</b></font><font color=#' + text_clr + '>' + msg + '</font>';
+	
+	msgs[channel_id][msgn[channel_id] ++] = st;
+	if( cur_private == channel_id )
+	{
+		chat.msgs[chat.msgn ++] = st;
+		refresh_chat( );
+	}
+	else
+		new_messages[channel_id] = true;
+	refresh_params( );
+}
+
+function upal( )
+{
+	chat_timeout = 30000
+	saved_message = window.top.chat_in.document.getElementById( 'inp' ).value;
+	window.top.chat_in.document.getElementById( 'inp' ).disabled = true;
+	window.top.chat_in.document.getElementById( 'inp' ).value = 'Сервер чата временно недоступен';
+}
+
+function ok( )
+{
+	if( saved_message == 'Сервер чата временно недоступен' ) saved_message = '';
+	chat_timeout = 10000;
+	window.top.chat_in.document.getElementById( 'inp' ).disabled = false;
+	if( window.top.chat_in.document.getElementById( 'inp' ).value == 'Сервер чата временно недоступен' )
+		window.top.chat_in.document.getElementById( 'inp' ).value = saved_message;
+}

@@ -1,0 +1,94 @@
+<?
+
+// НЕ ЗАБЫТЬ ПОМЕНЯТЬ ОТНОСИТЕЛЬНЫЕ ПУТИ!!!
+
+include( '../functions.php' );
+include( '../player.php' );
+
+f_MConnect( );
+
+$res = f_MQuery( "SELECT * FROM auction ORDER BY rand() LIMIT 3" );
+
+if( !f_MNum( $res ) ) die( );
+
+$st = "<img src=images/smiles/writer.gif> на Аукционе кипит торговля! Не пропустите!";
+
+while( $arr = f_MFetch( $res ) )
+{
+	$iarr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$arr[item_id]" ) );
+	if( '' == $iarr['name13'] ) $iarr['name13'] = $iarr['name'];
+	if( '' == $iarr['name2_m'] ) $iarr['name2_m'] = $iarr['name'];
+	$nm = my_word_str( $arr['number'], $iarr['name'], $iarr['name13'], $iarr['name2_m'] );
+	if( $arr['number'] > 1 ) $nm = $arr['number'].' '.$nm; 
+
+	$price = min( $arr['immediately_price'], $arr['cur_price'] + $arr['step'] );
+	$st .= " <b>".$nm."</b> всего за <b>$price</b> ".my_word_str( $price, "дублон", "дублона", "дублонов" )."!";
+}
+
+echo $st;
+
+// ---------------------
+$plr = new Player( 69055 );
+$plr->UploadInfoToJavaServer( );
+
+$sock = socket_create(AF_INET, SOCK_STREAM, 0);
+socket_connect($sock, "127.0.0.1", 82);
+$tm = date( "H:i", time( ) );
+$st = "say\n{$st}\n69055\n3264\n0\n{$tm}\n"; // 0\n-5
+socket_write( $sock, $st, strlen($st) ); 
+socket_close( $sock );
+// ---------------------
+
+$tm = time( );
+
+$res = f_MQuery( "SELECT * FROM tournament_announcements WHERE date > $tm ORDER BY rand()" );
+$arr = f_MFetch( $res );
+if( $arr && mt_rand( 1, 4 ) == 1 )
+{
+	$st = "Вниманию игроков $arr[min_level] уровня! Не пропустите турнир <b>&quot;$arr[name]&quot;</b>, который состоится <b>".date( "d.m.Y", $arr['date'] )."</b> в <b>".date( "H:i", $arr['date'] )."</b>! Запись заканчивается за пять минут до начала турнира!";
+//	$st = "Вниманию игроков, записавшихся на один из турниров! К сожалению, в Городской Управе потеряли папку с именами записавшихся, необходимо записаться заново!";
+    // ---------------------
+    $plr = new Player( 69055 );
+    $plr->UploadInfoToJavaServer( );
+
+    $sock = socket_create(AF_INET, SOCK_STREAM, 0);
+    socket_connect($sock, "127.0.0.1", 82);
+    $tm = date( "H:i", time( ) );
+    $st = "say\n{$st}\n69055\n3264\n0\n{$tm}\n"; // 0\n0
+    socket_write( $sock, $st, strlen($st) ); 
+    socket_close( $sock );
+    // ---------------------
+}
+else if( mt_rand( 1, 2 ) == 0 )
+{
+	$st = "В столовых Орденов теперь можно готовить еду на вынос! Кроме того, появилась возможность моментальной рассылки сообщения всем членам Ордена. Интересны подробности? Все на форуме в разделе Новостей!";
+    // ---------------------
+    $plr = new Player( 69055 );
+    $plr->UploadInfoToJavaServer( );
+
+    $sock = socket_create(AF_INET, SOCK_STREAM, 0);
+    socket_connect($sock, "127.0.0.1", 82);
+    $tm = date( "H:i", time( ) );
+    $st = "say\n{$st}\n69055\n3264\n0\n{$tm}\n"; // 0\n0
+    socket_write( $sock, $st, strlen($st) ); 
+    socket_close( $sock );
+    // ---------------------
+}
+elseif( mt_rand( 1, 2 ) == 0 )
+{
+	$st = "Невероятные новости! У входа в пещеры нашли расщелину, ведущую в ужасные подземелья, кишащие монстрами! А на Арене Героев этим временем заметно упал шанс сломать свое обмундирование. Интересны подробности? Все в новостях на форуме!";
+    // ---------------------
+    $plr = new Player( 69055 );
+    $plr->UploadInfoToJavaServer( );
+
+    $sock = socket_create(AF_INET, SOCK_STREAM, 0);
+    socket_connect($sock, "127.0.0.1", 82);
+    $tm = date( "H:i", time( ) );
+    $st = "say\n{$st}\n69055\n3264\n0\n{$tm}\n"; // 0\n0
+    socket_write( $sock, $st, strlen($st) ); 
+    socket_close( $sock );
+    // ---------------------
+}
+
+
+?>

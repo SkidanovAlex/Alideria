@@ -1,0 +1,1 @@
+$sdk->me->player->AlterQuestValue( 500, 1 );

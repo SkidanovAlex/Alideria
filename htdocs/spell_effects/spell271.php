@@ -1,0 +1,1 @@
+$sdk->alter_creature_attrib( $sdk->opponent, $sdk->all_creatures, $sdk->creature_defence, -20 );

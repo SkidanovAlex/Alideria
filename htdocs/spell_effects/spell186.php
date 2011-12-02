@@ -1,0 +1,1 @@
+$sdk->heal( $sdk->myself, 10+15*$sdk->get_attrib_value($sdk->myself, 0) );

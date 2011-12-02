@@ -1,0 +1,1 @@
+$sdk->aura( $sdk->opponent, 30, 3 );

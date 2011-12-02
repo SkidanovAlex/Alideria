@@ -1,0 +1,1 @@
+$sdk->alter_attrib( $sdk->myself, 500, 65 );

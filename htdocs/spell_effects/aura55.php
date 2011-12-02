@@ -1,0 +1,1 @@
+$sdk->alter_attrib( $sdk->opponent, 501, 3 );

@@ -1,0 +1,101 @@
+var items = new Array( );
+var item_err = 'У вас нет ни одной вещи';
+var ir1, ir2, ir3;
+var item_types = new Array( 
+"Ресурсы", "Зелья", "Оружие", "", "Браслеты", "", "Кольца", "", "Броня", "Амулеты", "Шлемы", "Обувь", "Перчатки", "Накидки", "", "", "", "", "", "", "", "Заклинания", "Рецепты", "Инстанты", "Еда", "Перья", "", "", "", "", "Талисманы", "", "", "", "", "Медальоны"
+ );
+item_types[-1] = "Все";
+
+function add_item( item_id, type, name, img, descr, num )
+{
+	var v = new Object( );
+	v.item_id = item_id;
+	v.type = type;
+	v.name = name;
+	v.image = img;
+	v.descr = descr;
+	items[item_id] = v;
+	if( !items[item_id].number ) items[item_id].number = num;
+	else items[item_id].number += num;
+}
+
+function alter_item( item_id, num )
+{
+	items[item_id].number += num;
+}
+
+function remove_item( item_id, num )
+{
+	items[item_id].number -= num;
+}
+
+var mootm = 0;
+function show_filters( )
+{
+	var c = getAp( document.getElementById( 'vfilter' ) );
+	document.getElementById( 'lfilter' ).style.left = c.x + 'px';
+	document.getElementById( 'lfilter' ).style.top = c.y + 'px';
+	document.getElementById( 'lfilter' ).style.display = '';
+	if( mootm ) clearTimeout( mootm );
+}
+
+function hide_filters( )
+{
+	mootm = setTimeout( "document.getElementById( 'lfilter' ).style.display = 'none'", 200 );
+}
+
+function render_items_filtered( showButtons, btnFunc, filter )
+{
+	ir1 = showButtons;
+	ir2 = btnFunc;
+	ir3 = filter;
+
+	var st = "<table>";
+	var tp = new Array( );
+	tp[-1] = 1;
+	for( id in items ) if( items[id].number != 0 ) tp[items[id].type] = 1;
+	st += "<tr><td colspan=4 align=center><span style='border-bottom:1px dashed #651010'><a href=# id=vfilter onmouseover='show_filters()'>Фильтр</a></span><br><br>";
+	st += "<div onmouseout='hide_filters()' id=lfilter style='background-color:#e3ac67;position:absolute;display:none;border:1px dashed #651010' align=left>";
+	for( id in tp )
+	{
+		if( id == filter ) st += "<b onmouseover='show_filters()'>" + item_types[id] + "</b>";
+		else st += "<a href=# onmouseover='show_filters()' style='cursor:pointer' onclick='document.getElementById( \"items_div\" ).innerHTML = render_items_filtered( "+showButtons+", \""+btnFunc+"\", " + id + " );'>" + item_types[id] + "</a>";
+		st += "<br>";
+	}
+	st += "</div>";
+	st += "</td></tr>";
+
+	var ok = false;
+	for( id in items )
+	{
+		v = items[id];
+		if( filter != -1 && filter != v.type ) continue;
+		if( v.number == 0 ) continue;
+		ok = true;
+		st += "<tr><td align=center><img src=images/items/" + v.image + "></td><td valign=top>[" + v.number + "] <span onmousemove='showTooltipW( event, \"" + v.descr + "\", 250 )' onmouseout='hideTooltip()'><b>" + v.name + "</b></span></td>";
+		if( showButtons )
+		{
+			st += "<td valign=top align=right><table border=0 cellspacing=0 cellpadding=0><tr><td><input type=text class=btn40 value=" + v.number + " name=place" + v.item_id + " id=place"  + v.item_id +  "></td><td><button onClick=" + btnFunc + "(" + v.item_id + ") class=sss_btn>>>></button></td></tr></table></td>";
+		}
+		else st += "<td>&nbsp;</td><td>&nbsp;</td>";
+		st += "</tr>";
+
+	}
+	if( !ok )
+	{
+		if( filter == -1 ) return "<i>" + item_err + "</i>";
+		return render_items_filtered( showButtons, btnFunc, -1 );
+	}
+	st += "</table>";
+	return st;
+}
+
+function render_items( showButtons, btnFunc )
+{
+	return "<div id=items_div>" + render_items_filtered( showButtons, btnFunc, -1 ) + "</div>";
+}
+
+function refresh_items( )
+{
+	document.getElementById( 'items_div' ).innerHTML = render_items_filtered( ir1, ir2, ir3 );
+}

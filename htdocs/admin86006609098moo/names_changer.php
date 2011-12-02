@@ -1,0 +1,10 @@
+<?
+
+function changeNames( )
+{
+	global $arr;
+
+
+}
+
+?>

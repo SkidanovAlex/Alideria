@@ -1,0 +1,1 @@
+$sdk->alter_attrib( $sdk->myself, 1, ( $sdk->get_attrib_value( $sdk->myself, 101 ) - $sdk->get_attrib_value( $sdk->myself, 1 ) ) / 10 );

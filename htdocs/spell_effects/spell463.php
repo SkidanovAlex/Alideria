@@ -1,0 +1,1 @@
+$sdk->kill( $sdk->myself );

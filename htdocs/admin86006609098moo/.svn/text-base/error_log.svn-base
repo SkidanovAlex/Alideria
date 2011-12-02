@@ -1,0 +1,10 @@
+[31-Aug-2008 04:44:12] PHP Parse error:  syntax error, unexpected $end in /home/alideri2/public_html/admin/forest_editor_items.php on line 60
+[06-Sep-2008 23:33:44] PHP Warning:  Invalid argument supplied for foreach() in /home/alideri2/public_html/admin/craft_editor_mid.php on line 23
+[06-Sep-2008 23:33:44] PHP Warning:  Invalid argument supplied for foreach() in /home/alideri2/public_html/admin/craft_editor_mid.php on line 69
+[12-Sep-2008 01:32:17] PHP Warning:  Invalid argument supplied for foreach() in /home/alideri2/public_html/admin/craft_editor_mid.php on line 23
+[12-Sep-2008 01:32:17] PHP Warning:  Invalid argument supplied for foreach() in /home/alideri2/public_html/admin/craft_editor_mid.php on line 69
+[17-Sep-2008 15:59:34] PHP Warning:  mysql_connect() [<a href='function.mysql-connect'>function.mysql-connect</a>]: Lost connection to MySQL server during query in /home/alideri2/public_html/functions.php on line 15
+[17-Sep-2008 15:59:44] PHP Warning:  mysql_select_db() [<a href='function.mysql-select-db'>function.mysql-select-db</a>]: Access denied for user 'root'@'localhost' (using password: NO) in /home/alideri2/public_html/functions.php on line 16
+[17-Sep-2008 15:59:44] PHP Warning:  mysql_select_db() [<a href='function.mysql-select-db'>function.mysql-select-db</a>]: A link to the server could not be established in /home/alideri2/public_html/functions.php on line 16
+[05-Oct-2008 16:55:22] PHP Warning:  Invalid argument supplied for foreach() in /home/alideri2/public_html/admin/craft_editor_mid.php on line 23
+[05-Oct-2008 16:55:22] PHP Warning:  Invalid argument supplied for foreach() in /home/alideri2/public_html/admin/craft_editor_mid.php on line 69

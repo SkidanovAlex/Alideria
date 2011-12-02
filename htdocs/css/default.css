@@ -1,0 +1,66 @@
+/*Основные теги*/
+html, body
+{
+	margin: 0px;
+	padding: 0px;
+
+	background: #E3AC67 url('/images/bg.gif');
+
+	font: 12px Arial;
+	color: black;
+}
+
+table
+{
+	font: 12px Arial;
+	color: black;
+}
+
+hr
+{
+	height: 1px;
+
+	border: none;
+	
+	background: #651010;
+	
+	color: #651010;
+}
+
+a
+{
+	color: #651010;
+}
+a:link, a:visited
+{
+	text-decoration: underline;
+}
+a:hover, a:focus, a:active
+{
+	text-decoration: none;
+}
+
+input, select
+{
+	background-color: #E0C3A0;
+	border: 1px solid #651010;
+	color: #651010;
+}
+
+/*Основные классы*/
+.container
+{
+	margin: 0px;
+	padding: 5px;
+	border: 1px solid #651010;
+	
+	background: url('/images/chat/chat_bg.gif');
+}
+
+tr.title td
+{
+	height: 20px;
+	vertical-align: middle;
+	background: url(/images/bg.gif);
+	font-weight: bold;
+}

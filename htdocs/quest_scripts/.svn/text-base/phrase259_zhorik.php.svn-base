@@ -1,0 +1,92 @@
+<?
+
+if( !$mid_php ) die( );
+
+if ( $player->HasTrigger( 101 ) )
+{
+	// ok, как это можно быть. легко, он только что выплнил квест
+	echo "<b>Жорик</b>: Ты выполнил задание... Получи свою награду.<br>";
+	$item_id = $player->GetQuestValue( 105 );
+	$arr = f_MFetch( f_MQuery( "SELECT name FROM items WHERE item_id={$item_id}" ) );
+	if ( !$arr )
+		RaiseError( "Игрок {$player->login} получил в награду за бандита неизвестный предмет {$item_id}" );
+	echo "Вы получаете: <a href=help.php?id=1010&item_id=$item_id target=_blank>{$arr[0]}</a>.";
+//		$player->AddItems( $item_id );
+// не даем повторно шмотку
+	echo "<br><br><ul><li><a href='game.php?phrase=610'>Спасибо</a></ul>";
+	return;
+}
+
+require_once( 'zhorik_quest_add.php' );
+
+$current_task = $player->GetQuestValue( 102 );
+$deadline = $player->GetQuestValue( 101 );
+
+if( $deadline > time( ) ) //have quest for this day
+{
+	if ( $player->HasTrigger( 102 ) )
+	{
+		$player->SetTrigger( 101 );
+		echo "<b>Жорик</b>: Ты выполнил задание... Получи свою награду.<br>";
+		$item_id = $player->GetQuestValue( 105 );
+		$arr = f_MFetch( f_MQuery( "SELECT name FROM items WHERE item_id={$item_id}" ) );
+		if ( !$arr )
+			RaiseError( "Игрок {$player->login} получил в награду за бандита неизвестный предмет {$item_id}" );
+		echo "Вы получаете: <a href=help.php?id=1010&item_id=$item_id target=_blank>{$arr[0]}</a>.";
+		$player->AddItems( $item_id );
+		echo "<br><br><ul><li><a href='game.php?phrase=610'>Спасибо</a></ul>";
+	}
+	else
+	{
+		echo "<b>Жорик</b>: Твое текущее задание: <b>" . get_current_task_text( $current_task ) . "</b>. Как выполнишь – приходи, а сейчас нам лучше не попадаться на глаза городской страже.<br><br><ul>";
+		echo "<li><a href='game.php?phrase=608'>Я " . ($player->sex?"устала":"устал") . " и отказываюсь от этого задания. Завтра, наверное, попробую сновa...</a>";
+		echo "<li><a href='game.php?phrase=610'>Ладно, я подумаю</a></ul>";
+	}
+	return;
+}
+
+echo "<div style='text-align:left'>";//<img width=163 height=165 src='images/npcs/favn.jpg' hspace=5 vspace=5 align=left>";
+echo "<i>Жорик поморщился, заерзал. Судя по всему, Ваша осведомленность в его возможностях не очень-то ему по душе. Но, видать, Вы застали его врасплох: выкрутиться он уже не сможет.</i><br>";
+$play_cost = 10 * $player->level;
+echo "<br><b>Жорик</b>: Слухи, слухи, слухи... Молва летит быстрее ветра, однако. Да, есть способ заработать немного денег. Есть у меня старинненький агрегат, работает он по такому принципу: ты бросаешь туда немного монеток ($play_cost), получаешь то или иное задание, а когда выполняешь, то получаешь свою награду. Собственно, ничего сложного. Единственное, ты не части ко мне – раз в день вполне разумно будет воспользоваться сим чудным изобретением. В общем, если хочешь – дергай ручку, только побыстрее, а-то городские стражи уже обратили на нас внимание.";
+
+echo "</div>";
+
+
+$first_prize_filename="images/items/res/ore_iron.gif";
+
+echo "<table><tr><td><br><br>
+<div id=field style='position:relative;left:0px;top:0px;'>
+
+<img width='270px' height='190px' border=0 src='images/misc/bandit_field.jpg'>
+
+<div style='position:absolute;left:50px;top:70px;'><img id=roll0 src='$first_prize_filename' width=50 height=50></div>
+<div style='position:absolute;left:112px;top:70px;'><img id=roll1 src='$first_prize_filename' width=50 height=50></div>
+<div style='position:absolute;left:173px;top:70px;'><img id=roll2 src='$first_prize_filename' width=50 height=50></div>
+
+</div>
+";
+
+echo "</td><td valign=top><br><br>";
+echo "<div id=talkmenu><ul>";
+echo "<li><a href='' onClick='return start_roll( )'>Дернуть</a>";
+echo "<li><a href='game.php?phrase=610'>Уйти</a>";
+echo "</ul></div></td></tr></table>";
+
+?>
+<script>
+	function draw_r( id, src, alt )
+	{
+		_( 'roll' + id ).alt = alt;
+		_( 'roll' + id ).src = eval( src );
+	}
+	function talk_out( vtext )
+	{
+		_( 'talkmenu' ).innerHTML = vtext;
+	}
+	function start_roll( )
+	{
+		query( 'quest_scripts/phrase259_ajax.php', '' );
+		return false;
+	}
+</script>

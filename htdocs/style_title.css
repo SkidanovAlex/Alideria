@@ -1,0 +1,150 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12;
+	background-color : #c1b1a1;
+	color : black;
+	margin-left: 0;
+	margin-top: 0;
+	margin-bottom: 0;
+	margin-right: 0;
+	
+	SCROLLBAR-FACE-COLOR: #e3ac67;
+	SCROLLBAR-HIGHLIGHT-COLOR: #e0c3a0;
+	SCROLLBAR-SHADOW-COLOR: #b78d58;
+	SCROLLBAR-3DLIGHT-COLOR: #b78d58;
+	SCROLLBAR-ARROW-COLOR: #b78d58;
+	SCROLLBAR-TRACK-COLOR: #e0c3a0;
+	SCROLLBAR-DARKSHADOW-COLOR: #b78d58;
+}
+
+
+
+td {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12;
+}
+a { 
+	COLOR: #303030;
+	TEXT-DECORATION: none;
+}
+
+a:hover {
+	COLOR: #000000;
+	TEXT-DECORATION: underline;
+}
+
+a:visited {
+	COLOR: #303030;
+	TEXT-DECORATION: none;
+}
+
+a:visited:hover {
+	COLOR: #000000;
+	TEXT-DECORATION: underline;
+}
+
+.te_btn
+{
+	background-color : #FFFFFF;
+	border : 1px solid #000000;
+	color: #000000;
+}
+
+.l_btn
+{
+	background-color : #FFFFFF;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 400;
+	height: 20;
+}
+
+.c_btn
+{
+	background-color : #FFFFFF;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 120;
+	height: 20;
+}
+.m_btn
+{
+	background-color : #FFFFFF;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 180;
+	height: 20;
+}
+.btn40
+{
+	background-color : #FFFFFF;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 40;
+	height: 20;
+}
+.btn80
+{
+	background-color : #FFFFFF;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 80;
+	height: 20;
+}
+.sss_btn
+{
+	background-color : silver;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 40;
+	height: 20;
+}
+.ss_btn
+{
+	background-color : silver;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 80;
+	height: 20;
+}
+.s_btn
+{
+	background-color : silver;
+	border : 1px solid #000000;
+	color: #000000;
+	width: 180;
+	height: 20;
+}
+
+.hp_bg
+{
+	background-image : url('images/icons/hp_bg.gif');
+	border : 0px solid #000000;
+}
+
+.hp_fg
+{
+	background-image : url('images/icons/hp_fg.gif');
+	border : 0px solid #000000;
+}
+
+.chat_who {
+	background-color : #e0c3a0;
+	background-image : url('images/chat/chat_who.gif');
+}
+
+.n_btn
+{
+	background-color : silver;
+	background-image : url('images/top/f.png');
+	color: #000000;
+	border: 0px;
+	font-size: 10px;
+	width: 92;
+	height: 21;
+}
+
+.edit_box {
+	background-color : #e0c3a0;
+	border : 1px solid #000000;
+}

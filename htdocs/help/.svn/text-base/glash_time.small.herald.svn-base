@@ -1,0 +1,24 @@
+<?
+
+// ÍÅ ÇÀÁÛÒÜ ÏÎÌÅÍßÒÜ ÎÒÍÎÑÈÒÅËÜÍÛÅ ÏÓÒÈ!!!
+
+include( '../functions.php' );
+include( '../player.php' );
+
+f_MConnect( );
+
+	$st = "Ïðîâåðêà... Ìåíÿ âèäíî âîîáùå?";
+    // ---------------------
+    $plr = new Player( 69055 );
+    $plr->UploadInfoToJavaServer( );
+
+    $sock = socket_create(AF_INET, SOCK_STREAM, 0);
+    socket_connect($sock, "127.0.0.1", 82);
+    $tm = date( "H:i", time( ) );
+    $st = "say\n{$st}\n69055\n0\n0\n{$tm}\n"; // 0\n0
+    socket_write( $sock, $st, strlen($st) ); 
+    socket_close( $sock );
+    // ---------------------
+
+
+?>

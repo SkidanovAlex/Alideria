@@ -1,0 +1,1 @@
+$sdk->aura( $sdk->enemies, 45, 15 );

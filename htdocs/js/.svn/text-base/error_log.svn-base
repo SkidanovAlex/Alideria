@@ -1,0 +1,4 @@
+[15-Aug-2007 19:32:11] PHP Warning:  main(arrays.php): failed to open stream: No such file or directory in /home/alideri2/public_html/js/inventory.php on line 3
+[15-Aug-2007 19:32:11] PHP Warning:  main(arrays.php): failed to open stream: No such file or directory in /home/alideri2/public_html/js/inventory.php on line 3
+[15-Aug-2007 19:32:11] PHP Warning:  main(): Failed opening 'arrays.php' for inclusion (include_path='.:/usr/lib/php:/usr/local/lib/php') in /home/alideri2/public_html/js/inventory.php on line 3
+[15-Aug-2007 19:32:11] PHP Warning:  Invalid argument supplied for foreach() in /home/alideri2/public_html/js/inventory.php on line 7

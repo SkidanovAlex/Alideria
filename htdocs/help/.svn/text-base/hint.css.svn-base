@@ -1,0 +1,19 @@
+@charset "utf-8";
+.hint {
+padding: 3px 7px 4px 6px; 
+border: 1px solid #336; 
+background-color: #e7d7be;  
+background: url("../images/chat/chat_bg.gif");
+}
+
+.hint .tiny {
+font: normal 8pt/10pt arial, helvetica, sans-serif; 
+text-align: left; 
+color: #000;
+}
+
+.hint .content {
+font: normal 9pt/11pt arial, helvetica, sans-serif; 
+text-align: left; 
+color: #000;
+}
