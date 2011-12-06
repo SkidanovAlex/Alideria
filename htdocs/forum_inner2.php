@@ -134,7 +134,7 @@ function delete_alowed($room_id, $author)
 
 	if ($author == 6825 && $player->player_id != 6825) return false;
 
-	if ($player->player_id == 6825 || $player->player_id == 868239 || $player->player_id == 67573) return true;
+	if ($player->player_id == 6825 || $player->player_id == 868239 ) return true;
 }
 
 function forum_permission_denied( )

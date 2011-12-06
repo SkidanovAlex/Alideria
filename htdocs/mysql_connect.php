@@ -11,7 +11,7 @@ function f_MConnect( )
 	
 	$query_number = 0;
 	
-	$bd_link = mysql_connect( "localhost", "main_master", "WQs79fJ3GryCB7v8aqYnMn99tFqTyDSa" );
+	$bd_link = mysql_connect( "localhost", "main_master", "tRy6TVMXrAL8amLCVjcMRrX36NpNtDxJ" );
 	$err = mysql_error( );
 	if( $err )
 	{

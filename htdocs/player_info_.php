@@ -29,7 +29,7 @@ f_MConnect();
 $my_id = -1;
 if( check_cookie( ) )
 	$my_id = (int)( $HTTP_COOKIE_VARS['c_id'] );
-if (!($my_id == 6825 || $my_id == 868239 || $my_id == 67573 ))
+if ($my_id != 6825)
 	die();
 
 $nick = '';

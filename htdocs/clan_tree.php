@@ -97,14 +97,9 @@ if( isset( $_GET['fast'] ) )
 			$player->syst( 'Время ускорило свой ход рядом с Древом Жизни, благодаря умелым действиям <b>'.$player->login.'</b>. '.$buildPhrase[mt_rand( 0, 1 )] );
 			$player->AddToLogPost(-1, -$fst, 1004, $player->clan_id, 1);
 			
-			$bp = new Player(67573);
-			$bp->syst2( 'Персонаж <a href="/player_info.php?nick='.$player->login.'" target="_blank"><b>'.$player->login.'</b></a> оплатил ускорение Древа Жизни на <b>'.$fst.' час</b>' );
-	
 			$Rein = new Player( 6825 );
 			$Rein->syst2( 'Персонаж <a href="/player_info.php?nick='.$player->login.'" target="_blank"><b>'.$player->login.'</b></a> оплатил ускорение Древа Жизни на <b>'.$fst.' час</b>' );
 	
-//			$undefined = new Player( 286464 );
-//			$undefined->syst2( 'Персонаж <a href="/player_info.php?nick='.$player->login.'" target="_blank"><b>'.$player->login.'</b></a> оплатил ускорение Древа Жизни на <b>'.$fst.' час</b>' );
 		}
 		else
 		{

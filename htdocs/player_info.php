@@ -296,9 +296,9 @@ else
 			echo "<table width=100%>";
 			echo "<tr><td colspan=2>".GetScrollTableStart()."<b>Личные данные</b>".GetScrollTableEnd()."</td></tr>";
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Имя:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$profile->name}".GetScrollTableEnd()."</td></tr>";
-		if( $my_id == 6825 || $my_id == 67573 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."ID:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$player->player_id}".GetScrollTableEnd()."</td></tr>"; }
-		if( $my_id == 6825 || $my_id == 67573 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Money: {$player->money}".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."UMoney: {$player->umoney}".GetScrollTableEnd()."</td></tr>"; }
-		if( $my_id == 6825 || $my_id == 67573 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Till: ".( $player->till >= time() ? my_time_str($player->till-time()) : $player->till )."".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."Regime: {$player->regime}".GetScrollTableEnd()."</td></tr>"; }
+		if( $my_id == 6825 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."ID:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$player->player_id}".GetScrollTableEnd()."</td></tr>"; }
+		if( $my_id == 6825 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Money: {$player->money}".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."UMoney: {$player->umoney}".GetScrollTableEnd()."</td></tr>"; }
+		if( $my_id == 6825 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Till: ".( $player->till >= time() ? my_time_str($player->till-time()) : $player->till )."".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."Regime: {$player->regime}".GetScrollTableEnd()."</td></tr>"; }
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Город:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$profile->city}".GetScrollTableEnd()."</td></tr>";
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."День Рождения:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."".date( "d.m.Y", $profile->birthday )."".GetScrollTableEnd()."</td></tr>";
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Девиз:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$profile->quote}".GetScrollTableEnd()."</td></tr>";
@@ -341,7 +341,7 @@ else
 			else
 			{
 				echo $loc_names[$player->location];
-				if ($my_id == 6825 || $my_id == 67573 || $my_id == 868239) echo " ".$player->location;
+				if ($my_id == 6825 || $my_id == 868239) echo " ".$player->location;
 			}
 			echo GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart();
 			if ($player->Rank() == 1 && $my_id != 6825)
@@ -349,7 +349,7 @@ else
 			else
 			{
 				echo GetPlaceName( $player->location, $player->depth );
-				if ($my_id == 6825 || $my_id == 67573 || $my_id == 868239) echo " ".$player->depth;
+				if ($my_id == 6825 || $my_id == 868239) echo " ".$player->depth;
 			}
 			echo GetScrollTableEnd()."</td></tr>";
 

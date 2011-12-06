@@ -486,7 +486,7 @@ if ($Player->clan_id==7 || f_MValue("SELECT clan_id FROM characters WHERE player
 	fwrite( $f, $msg2 );
 	fclose( $f );
 }
-elseif (($Player->player_id == 67573 && $channel!=-1) || $private_to == 67573)
+elseif ($Player->player_id == 21020 || $private_to == 21020)
 {
 	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
 	socket_connect($sock, "127.0.0.1", 1100);
