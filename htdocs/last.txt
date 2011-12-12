@@ -1,1 +1,1 @@
-/chat_inf.php/chat_inf.php?
+/help.php/help.php?id=1010&item_id=13973

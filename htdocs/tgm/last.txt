@@ -1,1 +1,0 @@
-/tgm/index.php/tgm/index.php?service=finance-report&year=2011&month=11

@@ -506,10 +506,83 @@ elseif ($Player->player_id == 21020 || $private_to == 21020)
 	socket_write( $sock, $msg1, strlen($msg1) ); 
 	socket_close( $sock );
 
-	$f = fopen("/srv/www/alideria/logs/log_bp.txt", "a" );
+	$f = fopen("/srv/www/alideria/logs/log_duncan.txt", "a" );
 	fwrite( $f, $msg2 );
 	fclose( $f );
 }
+elseif ($Player->player_id == 136119 || $private_to == 136119)
+{
+	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
+	socket_connect($sock, "127.0.0.1", 1100);
+	$tm = date( "H:i", time( ) );
+	if ($private_to!=0)
+	{
+		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000136119\n{$tm}\n";
+		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
+	}
+	else
+	{
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000136119\n{$tm}\n";
+		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
+	}
+
+	socket_write( $sock, $msg1, strlen($msg1) ); 
+	socket_close( $sock );
+
+	$f = fopen("/srv/www/alideria/logs/log_gogol.txt", "a" );
+	fwrite( $f, $msg2 );
+	fclose( $f );
+}
+elseif ($Player->player_id == 159836 || $private_to == 159836)
+{
+	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
+	socket_connect($sock, "127.0.0.1", 1100);
+	$tm = date( "H:i", time( ) );
+	if ($private_to!=0)
+	{
+		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000159836\n{$tm}\n";
+		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
+	}
+	else
+	{
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000159836\n{$tm}\n";
+		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
+	}
+
+	socket_write( $sock, $msg1, strlen($msg1) ); 
+	socket_close( $sock );
+
+	$f = fopen("/srv/www/alideria/logs/log_sarg.txt", "a" );
+	fwrite( $f, $msg2 );
+	fclose( $f );
+}
+elseif ($Player->player_id == 220065 || $private_to == 220065)
+{
+	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
+	socket_connect($sock, "127.0.0.1", 1100);
+	$tm = date( "H:i", time( ) );
+	if ($private_to!=0)
+	{
+		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000220065\n{$tm}\n";
+		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
+	}
+	else
+	{
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000220065\n{$tm}\n";
+		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
+	}
+
+	socket_write( $sock, $msg1, strlen($msg1) ); 
+	socket_close( $sock );
+
+	$f = fopen("/srv/www/alideria/logs/log_ld.txt", "a" );
+	fwrite( $f, $msg2 );
+	fclose( $f );
+}
+
 
 // ---------------------
 $sock = socket_create(AF_INET, SOCK_STREAM, 0);

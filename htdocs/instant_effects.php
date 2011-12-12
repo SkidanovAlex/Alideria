@@ -319,7 +319,29 @@ return false;
 			$player->AddItems($arr[1], $arr[2]);
 //			$last_add_item = "alter_item(".$arr[1].", 0, ".$arr[2]);";
 			$player->AddToLogPost( $arr[1], $arr[2], 991, $item_id);
-			$last_instant_error .= " Вы получаете ".f_MValue('SELECT name FROM items WHERE item_id='.$arr[1])." {$arr[2]} ".my_word_str( $arr[2], 'штуку', 'штуки', 'штук' );
+			$i_n = f_MValue('SELECT name FROM items WHERE item_id='.$arr[1]);
+			$last_instant_error .= " Вы получаете ".$i_n." {$arr[2]} ".my_word_str( $arr[2], 'штуку', 'штуки', 'штук' );
+
+if ($item_id==76555)
+{
+$goog_items = Array (70971, 70972, 70974, 74434, 74796, 74798, 74800, 74864, 74866, 74867, 74868, 74871, 74872, 74873, 74878, 74880, 74881, 75313, 75314, 75315, 75317, 75319, 75320, 75321, 75322, 75332, 75534, 75563);
+
+if (in_array($arr[1], $good_items))
+{
+$plr = new Player( 69055 );
+$plr->UploadInfoToJavaServer( );
+
+$st = "<b>".$player->login."</b> только что выиграл <b>".$i_n."</b> во Всеалидерской лотерее! <img src='images/smiles/congratulations.gif'>";
+
+$sock = socket_create(AF_INET, SOCK_STREAM, 0);
+socket_connect($sock, "127.0.0.1", 1100);
+$tm = date( "H:i", time( ) );
+$st = "say\n{$st}\n69055\n0\n0\n{$tm}\n";
+socket_write( $sock, $st, strlen($st) ); 
+socket_close( $sock );
+}
+}
+
 		}
 
 		$player->AddToLogPost( $item_id, -1, 1005);
