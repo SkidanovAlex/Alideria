@@ -30,6 +30,7 @@ if( $player_id != $player->player_id )
 	if( !mysql_num_rows( $res ) ) die( 'У вас недостаточно прав для просмотра этой страницы' );
 	$arr = f_MFetch( $res );
 	if( $arr[rank] != 1 && $arr[rank] != 5 && $arr[rank] != 2 ) die( 'У вас недостаточно прав для просмотра этой страницы' );
+	if ($arr[rank] != 1 && ($player_id==6825 || $player_id==172 || $player_id==173)) die( 'У вас недостаточно прав для просмотра этой страницы' );
 	
 	$moder_rank = $arr[rank];
 }

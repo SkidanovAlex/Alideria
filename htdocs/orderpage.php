@@ -95,7 +95,7 @@ if( $page_id == 1 ) // состав
 		$job = $jobs[$arr['job']];
  		$plr = new Player( $arr['player_id'] );
 
- 		$ores = f_MQuery( "SELECT count(player_id) FROM online WHERE player_id={$plr->player_id}" );
+ 		$ores = f_MQuery( "SELECT count(player_id) FROM online WHERE player_id!=172 AND player_id={$plr->player_id}" );
  		$oarr = f_MFetch( $ores );
     	if( $oarr[0] )
         	$nmprint="<font color=green title=OnLine>".$num."</font>";

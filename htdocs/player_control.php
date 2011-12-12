@@ -28,7 +28,8 @@
 	
 	$arr = f_MFetch( $res );
 	
-	$target = new Player( $arr[0] );	
+	$target = new Player( $arr[0] );
+	if ($target->Rank()==1 && $player->Rank()!=1) die( 'У вас недостаточно прав для просмотра этой страницы' );
 ?>
 <html>
 <head>
@@ -258,7 +259,7 @@ if( true )
    echo "<div style='width:300px; text-align:center;'>" . ScrollLightTableStart() . "<table width='100%' border='0'>";
    $i = 0;
    
-  	$cres = f_MQuery( "SELECT distinct player_id,login_ip FROM `history_logon_logout` WHERE login_ip != '127.0.0.1' AND login_ip=(SELECT login_ip FROM `history_logon_logout` WHERE player_id='{$arr[0]}' ORDER BY login_time DESC LIMIT 0,1) AND player_id!='{$arr[0]}' ORDER BY login_time DESC" ); //  
+  	$cres = f_MQuery( "SELECT distinct player_id,login_ip FROM `history_logon_logout` WHERE login_ip != '127.0.0.1' AND login_ip=(SELECT login_ip FROM `history_logon_logout` WHERE player_id='{$arr[0]}' ORDER BY login_time DESC LIMIT 0,1) AND player_id!=172 AND player_id!='{$arr[0]}' ORDER BY login_time DESC" ); //  
 	while($carr = f_MFetch( $cres ))
 	{
 	   echo "<tr><td>";

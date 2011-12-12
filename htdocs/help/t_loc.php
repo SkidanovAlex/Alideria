@@ -34,13 +34,19 @@
 				if ( isset( $player_id ) && $res = f_MQuery( "SELECT loc,depth,clan_id,level,login,regime,nick_clr FROM characters WHERE player_id = ".$player_id ) )
 					while ( $r = f_MFetch( $res ) )
 					{
+						if ($player_id == 172)
+						{
+							$r[0] = 2;
+							$r[1] = 0;
+							$r[5] = 0;
+						}
 						$write[$i] = $r;
-						$ores = f_MQuery( "SELECT * FROM online WHERE player_id={$player_id}" );
+						$ores = f_MQuery( "SELECT * FROM online WHERE player_id!=172 AND player_id={$player_id}" );
 						if ( f_MNum( $ores ) )
 							$write[$i]['online'] = '1';
 						else
 							$write[$i]['online'] = '0';
-						$ores = f_MQuery( "SELECT combat_id FROM combat_players WHERE player_id={$player_id}" );
+						$ores = f_MQuery( "SELECT combat_id FROM combat_players WHERE player_id!=172 AND player_id={$player_id}" );
 						if ( $or = f_MFetch( $ores ) )
 							$write[$i]['combat_id'] = $or['combat_id'];
 					}
