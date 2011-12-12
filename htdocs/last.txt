@@ -1,1 +1,0 @@
-/ajaxQuery.php/ajaxQuery.php?module=labyrinthOfLove

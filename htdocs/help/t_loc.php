@@ -34,12 +34,6 @@
 				if ( isset( $player_id ) && $res = f_MQuery( "SELECT loc,depth,clan_id,level,login,regime,nick_clr FROM characters WHERE player_id = ".$player_id ) )
 					while ( $r = f_MFetch( $res ) )
 					{
-						if ($player_id == 172)
-						{
-							$r[0] = 2;
-							$r[1] = 0;
-							$r[5] = 0;
-						}
 						$write[$i] = $r;
 						$ores = f_MQuery( "SELECT * FROM online WHERE player_id!=172 AND player_id={$player_id}" );
 						if ( f_MNum( $ores ) )
@@ -55,6 +49,11 @@
     }
 	for ($i = 0; $i < $pc; $i++)
 	{
+		if ($write[$i]['login']=='Астаниэль')
+		{
+			$write[$i]['loc']=2;
+			$write[$i]['depth']=0;
+		}
 		if ( !isset( $write[$i]) ) continue;
 		if ( $write[$i]['online'] == 0 )
 			echo '0@';
