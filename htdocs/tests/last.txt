@@ -1,1 +1,1 @@
-/tests/qwe.php/tests/qwe.php?
+/tests/4duncan.php/tests/4duncan.php?

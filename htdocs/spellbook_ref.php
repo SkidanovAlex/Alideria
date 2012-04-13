@@ -38,6 +38,8 @@ if( isset( $HTTP_GET_VARS['cast'] ) )
 		$res = f_MQuery( "SELECT till FROM player_cooldowns WHERE player_id={$player->player_id} AND spell_id=$id" );
 		$arr = f_MFetch( $res );
 		if( $arr ) die( "alert( 'Вы сможете использовать это заклинание через ".my_time_str( ( $arr[0] - $tm ) )."' );" );
+		if ($id==103 && f_MValue("SELECT COUNT(effect_id) FROM player_effects WHERE effect_id=9 AND player_id=".$player->player_id))
+			$cost = $cost / 2;
 		f_MQuery( "INSERT INTO player_cooldowns ( player_id, spell_id, till ) VALUES ( {$player->player_id}, $id, $tm + $cost * 60 )" );
 		if( $id == 103 )
 		{
@@ -138,15 +140,16 @@ if( isset( $HTTP_GET_VARS['cast'] ) )
 	$arr = f_MFetch( $res );
 	if( $arr[0] >= 8 ) die( "alert( 'У вас уже выбрано на бой восемь свитков' );" );
 	f_MQuery( "DELETE FROM player_selected_cards WHERE player_id={$player->player_id} AND card_id={$id}" );
+	f_MQuery("UPDATE player_cards SET number=10 WHERE player_id={$player->player_id} AND card_id=".$id);
 	f_MQuery( "INSERT INTO player_selected_cards ( player_id, card_id ) VALUES( {$player->player_id}, {$id} )" );
 	
 	$res = f_MQuery( "SELECT * FROM cards WHERE card_id = $id" );
-	$arr = f_Mfetch( $res );
+	$arr = f_MFetch( $res );
 	$descr = cardGetSmallIcon( $arr );
 	echo "parent.parent.char_ref.add_spell( $descr );";
 	echo "parent.parent.char_ref.show_char( parent.document.getElementById( 'char_items' ) );";
 	echo "parent.char_set_sb_events( )";
-	$player->syst2("/items");
+//	$player->syst2("/items");
 	return;
 }
 

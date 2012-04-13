@@ -13,7 +13,7 @@ function phrase_prolong_premium($act, $days = 7)
 		$arr = f_MFetch( $res );
 		$duration = $days * 24 * 60 * 60;
 		if( !$arr ) f_MQuery( "INSERT INTO frozen_premiums( player_id, premium_id, duration, available ) VALUES ( {$player->player_id}, $act, $duration, 1 )" );
-		else if( $arr[0] < time( ) ) f_MQuery( "UPDATE frozen_premiums SET duration=$duration WHERE player_id={$player->player_id} AND premium_id=$act" ); 
+		else if( $arr[0] < 0 ) f_MQuery( "UPDATE frozen_premiums SET duration=$duration WHERE player_id={$player->player_id} AND premium_id=$act" ); 
 		else f_MQuery( "UPDATE frozen_premiums SET duration=duration+{$days}*24*60*60 WHERE player_id={$player->player_id} AND premium_id=$act" ); 
 		f_MQuery( "UNLOCK TABLES" );
 	}
@@ -34,6 +34,63 @@ function allow_phrase( $a, $consider_random = true )
 {
 	global $player;
 	
+	//if ($a == 1458 && !(f_MValue("SELECT COUNT(*) FROM player_wedding_bets WHERE moo=0 AND p1=".$player->player_id) == 1 || (f_MValue("SELECT COUNT(*) FROM player_weddings WHERE p1=".$player->player_id) && !$player->HasTrigger(12006))))
+	//	return 0;
+	
+	if ($a == 1458 && ((f_MValue("SELECT COUNT(*) FROM player_wedding_bets WHERE moo=0 AND p1=".$player->player_id)==0 && $player->HasTrigger(12006))))
+		return 0;
+	
+	$res = f_MQuery("SELECT * FROM phrase_quests_if WHERE phrase_id=$a");
+	while($arr = f_MFetch($res))
+	{
+		if ($arr[1] == 1)
+		{
+			if ($arr[3]>0)
+			{
+				if (f_MValue("SELECT COUNT(player_id) FROM player_quest_parts WHERE player_id=$player->player_id AND quest_part_id=".$arr[3])==0)
+					return 0;
+			}
+			else
+			{
+				if ($arr[3]==-3)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND quest_id=".$arr[2])==0)
+						return 0;
+				if ($arr[3]==-1)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND status=1 AND quest_id=".$arr[2])==0)
+						return 0;
+				if ($arr[3]==-2)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND status=-1 AND quest_id=".$arr[2])==0)
+						return 0;
+				if ($arr[3]==0)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND status=0 AND quest_id=".$arr[2])==0)
+						return 0;
+			}
+		}
+		else
+		{
+			if ($arr[3]>0)
+			{
+				if (f_MValue("SELECT COUNT(player_id) FROM player_quest_parts WHERE player_id=$player->player_id AND quest_part_id=".$arr[3])!=0)
+					return 0;
+			}
+			else
+			{
+				if ($arr[3]==-3)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND quest_id=".$arr[2])!=0)
+						return 0;
+				if ($arr[3]==-1)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND status=1 AND quest_id=".$arr[2])!=0)
+						return 0;
+				if ($arr[3]==-2)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND status=-1 AND quest_id=".$arr[2])!=0)
+						return 0;
+				if ($arr[3]==0)
+					if (f_MValue("SELECT COUNT(player_id) FROM player_quests WHERE player_id=$player->player_id AND status=0 AND quest_id=".$arr[2])!=0)
+						return 0;
+			}
+		}
+	}
+
 	$res = f_MQuery( "SELECT * FROM phrase_items WHERE ( regime=0 OR regime>=3 AND regime != 7 ) AND phrase_id = $a" );
 	while( $arr = f_MFetch( $res ) )
 	{
@@ -79,11 +136,20 @@ function allow_phrase( $a, $consider_random = true )
 		if( $regime == 2 && $rval >= $aval ) return 0;
 		if( $regime == 3 && $rval <= $aval ) return 0;
 	}
+	
+	$res = f_MQuery("SELECT * FROM phrase_hours WHERE phrase_id=$a"); // проверка временного отрезка
+	while ($arr = f_MFetch($res))
+	{
+		if ($player->regime >= 0)
+			if ((int)date("H") >= $arr[1] && (int)date("H") < $arr[2])
+				return 0;
+	}
+	
 	$res = f_MQuery("SELECT * FROM phrase_sex WHERE phrase_id=$a"); // проверка пола(0-мальчики, 1-девочки)
 	while ($arr = f_MFetch($res))
 	{
 		if ($arr[1] != $player->sex) return 0;
-		if ($a == 1458 && f_MValue("SELECT p0 FROM player_wedding_bets WHERE p1 = $player->player_id AND moo=0") == 0) return 0;
+//		if ($a == 1458 && f_MValue("SELECT p0 FROM player_wedding_bets WHERE p1 = $player->player_id AND moo=0") == 0) return 0;
 	}
 	$res = f_MQuery("SELECT * FROM phrase_clans WHERE phrase_id = $a"); //клановая проверка
 	while ($arr = f_MFetch($res) )
@@ -118,6 +184,20 @@ function allow_phrase( $a, $consider_random = true )
 			if( $arr['action'] == 9 && $gval >= $arr['value'] ) return 0;
 			if( $arr['action'] == 10 && $gval != $arr['value'] ) return 0;
 		}
+	}
+
+	// Effect if
+	$res = f_MQuery("SELECT * FROM phrase_effects_if WHERE phrase_id = $a");
+	while ($arr=f_MFetch($res))
+	{
+		$tm = time();
+		$eff_num = f_MValue("SELECT COUNT(*) FROM player_effects WHERE effect_id=".$arr[2]." AND player_id=$player->player_id AND (expires=-1 OR expires>$tm)");
+		if ($arr[1]==1)
+			if ($eff_num!=$arr[3]) return 0;
+		if ($arr[1]==2)
+			if ($eff_num<=$arr[3]) return 0;
+		if ($arr[1]==3)
+			if ($eff_num>=$arr[3]) return 0;
 	}
 
 	$res = f_MQuery( "SELECT * FROM phrases WHERE phrase_id = $a" );
@@ -165,6 +245,25 @@ function allow_phrase( $a, $consider_random = true )
 		if( $a == 634 && $arr[1] >= 10 ) return false;
 		if( $a == 638 && $arr[1] != 11 ) return false;
 	}
+	if ( $a == 2024 ) // ловить ключ Воды
+	{
+		if ($player->regime >= 0)
+		{
+			$min = (int)date( "i", time( ) );
+			if ($min!=0 && $min!=1 && $player->player_id!=6825 ) return 0;
+		}
+	}
+	
+	if ( $a == 2056 ) // Крещение
+	{
+		if ($player->regime >= 0)
+		{
+			$m = (int)date( "m", time( ) );
+			$d = (int)date( "d", time( ) );
+			if ( !( $m==1 && $d==19 ) ) return 0;
+		}
+	}
+
 
 	return 1;
 }
@@ -180,6 +279,7 @@ function do_phrase( $phrase_id, $script_tags = true )
 	
 	// Квесты
 	$allow = Array( );
+    $largestQuestStatus = 0;
 	$res = f_MQuery( "SELECT * FROM phrase_quests WHERE phrase_id = $phrase_id ORDER BY quest_id, status" );
 	while( $arr = f_MFetch( $res ) )
 	{
@@ -235,6 +335,7 @@ function do_phrase( $phrase_id, $script_tags = true )
 				$player->syst( "Информация о квесте <b>$quest_name</b> обновлена.", $script_tags );
 				f_MQuery( "INSERT INTO player_quest_parts VALUES ( {$player->player_id}, $action )" );
 			}
+            $largestQuestStatus = $action;
 		}
 	}
 	
@@ -252,10 +353,24 @@ function do_phrase( $phrase_id, $script_tags = true )
 		}
 	}
 
+	if( $parr['gain_prof'] )
+	{
+		if( $player->prof_exp + $parr['gain_prof'] < 0 ) f_MQuery( "UPDATE characters SET prof_exp = 0 WHERE player_id = $player->player_id" );
+		else f_MQuery( "UPDATE characters SET prof_exp = prof_exp + $parr[gain_prof] WHERE player_id = $player->player_id" );
+		if( $parr['gain_prof'] > 0 )
+			$player->syst( "Вы получаете <b>$parr[gain_prof]</b> профессионального опыта.", $script_tags );
+		else
+		{
+			$val = - $parr['gain_prof'];
+			$player->syst( "Вы теряете <b>$val</b> профессионального опыта.", $script_tags );
+		}
+	}
+
 	if( $parr['warp_loc'] != -1 )
 	{
 		$player->SetLocation( $parr['warp_loc'] );
 		$player->SetDepth( $parr['warp_depth'] );
+		$player->syst2('/items');
 	}
 	
 	// Эффекты
@@ -271,6 +386,35 @@ function do_phrase( $phrase_id, $script_tags = true )
 			$player->syst("На вас наложен эффект &laquo;$arr[name]&raquo;");
 		else
 			$player->syst( "На вас наложен эффект &laquo;$arr[name]&raquo; на ".my_time_str2( $arr['duration'] ) );
+	}
+	
+	// Смайлики
+	$res = f_MQuery( "SELECT * FROM phrase_smiles WHERE phrase_id=$phrase_id" );
+	while( $arr = f_MFetch( $res ) )
+	{
+		if ($arr['duration'] >= 0)
+			$dur = time() + $arr['duration'];
+		else
+			$dur = -1;
+        $smile_id = $arr['smile_id'];
+        $smile_res = f_MQuery("SELECT * FROM paid_smiles WHERE player_id={$player->player_id} AND set_id=$smile_id");
+        if (!f_MNum($smile_res))
+        {
+            f_MQuery("INSERT INTO paid_smiles (player_id, set_id, expires) VALUES ({$player->player_id}, $smile_id, $dur)");
+        }
+		if ($dur == -1)
+			$player->syst("Вы получаете новый смайлик");
+		else
+			$player->syst( "Вы получаете новый смайлик на ".my_time_str2( $arr['duration'] ) );
+	}
+	
+	// Премиумы
+	$res = f_MQuery( "SELECT * FROM phrase_premiums WHERE phrase_id=$phrase_id" );
+    $premium_names = Array( 0 => "Бои", "Добыча", "Крафт", "Работа", "Свобода", "Монстры" );
+	while( $arr = f_MFetch( $res ) )
+	{
+        phrase_prolong_premium($arr['premium_id'], $arr['duration']);
+        $player->syst("Вы получаете <b>Премиум-{$premium_names[$arr[premium_id]]}</b> на $arr[duration] ".my_word_str( $arr['duration'], "день", "дня", "дней" ));
 	}
 	
 	// Гильдии
@@ -309,6 +453,13 @@ function do_phrase( $phrase_id, $script_tags = true )
 
 			if( $arr[item_id] > 0 )
 			{
+				if (f_MValue("SELECT improved FROM items WHERE item_id=".$arr[item_id])==1) // проверка на уникальность предмета. Если уникальный, то надо выдать предмет с другим ID
+				{
+					f_MQuery("UPDATE items SET improved=0 WHERE item_id=".$arr[item_id]);
+					$item_id1 = copyItem( $arr[item_id], true);
+					f_MQuery("UPDATE items SET improved=1 WHERE item_id=".$arr[item_id]);
+					$arr[item_id]=$item_id1;
+				}
 				$player->AddItems( $arr[item_id], $arr[number] );
 				$player->syst( "Вы получаете <b>".my_word_form2( $arr['number'], getItemNameForm( $arr['item_id'], "4" ), getItemNameForm( $arr['item_id'], "13" ), getItemNameForm( $arr['item_id'], "2_m" ) )."</b>", $script_tags );
 			}
@@ -347,6 +498,20 @@ function do_phrase( $phrase_id, $script_tags = true )
 		else if( $arr[regime] == 3 )
 			$player->SetTrigger( $arr[trigger_id], 0 );
 	}
+
+    // Монстры 
+    $res = f_MQuery("SELECT * FROM phrase_monsters WHERE phrase_id=$phrase_id");
+    while ($arr = f_MFetch($res))
+    {
+        f_MQuery("INSERT INTO player_quest_monsters (player_id, mob_id, target, togo, action_trigger_id, action_phrase_id, quest_part_id) VALUES ({$player->player_id}, {$arr[mob_id]}, {$arr[num]}, {$arr[num]}, {$arr[action_trigger_id]}, {$arr[action_phrase_id]}, {$largestQuestStatus})");
+    }
+
+    // Добыча
+    $res = f_MQuery("SELECT * FROM phrase_mine WHERE phrase_id=$phrase_id");
+    while ($arr = f_MFetch($res))
+    {
+        f_MQuery("INSERT INTO player_quest_mine (player_id, item_id, target, togo, action_trigger_id, action_phrase_id, quest_part_id) VALUES ({$player->player_id}, {$arr[item_id]}, {$arr[num]}, {$arr[num]}, {$arr[action_trigger_id]}, {$arr[action_phrase_id]}, {$largestQuestStatus})");
+    }
 
 
 	// захардкоденные дполнительные действия фраз
@@ -389,6 +554,35 @@ function do_phrase( $phrase_id, $script_tags = true )
 		phrase_prolong_premium(0, 2);
 		phrase_prolong_premium(1, 2);
 		$player->syst2( "Вы продлеваете <b>премум-бои</b> и <b>премиум-добычу</b> на два дня!" );
+	}
+	if ($phrase_id == 1941)
+	{
+		f_MQuery("UPDATE characters SET real_deaths=0 WHERE player_id=".$player->player_id);
+		$sh_value = f_MValue("SELECT value FROM player_quest_values WHERE value_id=12905 AND player_id=".$player->player_id);
+//		f_MQuery("UPDATE items SET improved=0, decay=$sh_value, max_decay=$sh_value WHERE item_id=78512");
+//		$item_id1 = copyItem( 78512, true);
+//		f_MQuery("UPDATE items SET improved=1 WHERE item_id=78512");
+		$player->AddToLog( 78512, $sh_value, 0, $phrase_id );
+		$player->AddItems(78512, $sh_value);
+		$player->syst( "Вы получаете <b>".my_word_form2( $sh_value, getItemNameForm( 78512, "4" ), getItemNameForm( 78512, "13" ), getItemNameForm( 78512, "2_m" ) )."</b>", $script_tags );
+		
+	}
+	if ($phrase_id == 1440 && f_MValue("SELECT COUNT(*) FROM player_wedding_bets WHERE p1=".$player->player_id))
+	{
+		$Guy = new Player(f_MValue("SELECT p0 FROM player_wedding_bets WHERE p1=".$player->player_id));
+		$Guy->syst2($player->login." отказала вам в браке :(");
+		$Guy->SetTrigger( 2011, 0 );
+		f_MQuery("DELETE FROM player_wedding_bets WHERE p1=".$player->player_id);
+	}
+	if ($phrase_id == 1472 && f_MValue("SELECT COUNT(*) FROM player_wedding_bets WHERE p1=".$player->player_id))
+	{
+		$Guy = new Player(f_MValue("SELECT p0 FROM player_wedding_bets WHERE p1=".$player->player_id));
+		$Guy->syst3( $player->login.' приняла ваше предложение пожениться!' );
+		f_MQuery( 'UPDATE player_wedding_bets SET moo = 1 WHERE p1 = '.$player->player_id );
+	}
+	if ($phrase_id==2118)
+	{
+		$player->SetQuestValue(64, time()+7*24*3600);
 	}
 /*
 	if ($phrase_id == 1576)

@@ -238,7 +238,12 @@
 						if( f_MValue( 'SELECT moo FROM player_wedding_bets WHERE p1 = '.$player->player_id ) == 1 )
 						{
 							echo 'Ты скоро станешь женой <script>document.write( '.$Guy->Nick( ).' )</script><br />Осталось дождаться, пока священник скрепит вас брачными узами.';
-						}						
+						}
+						else if (!$player->HasTrigger(12004))
+						{
+							echo 'Вам надо принять решение, хотите ли Вы стать женой <script>document.write( '.$Guy->Nick( ).' )</script><br>';
+						}
+						
 						elseif( isset( $_GET['marry'] ) == true )	// Приняла ли она решение?
 						{
 							// Решение принято
@@ -272,6 +277,7 @@
   							</table>
 							<?
 						}
+						
 					}
 				}
 			}

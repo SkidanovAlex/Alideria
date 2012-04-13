@@ -3,11 +3,11 @@
 if( !$mid_php ) die( );
 
 $fnames = Array (
-	'jack-o-lantern.png',
-	'spirit.png',
-	'black_cat.png',
-	'witch_hat.png',
-	'bat.png'
+	'valentine1.gif',
+	'valentine2.gif',
+	'valentine3.gif',
+	'valentine4.gif',
+	'valentine5.gif'
 );
 
 
@@ -20,16 +20,26 @@ if( array_key_exists('nm', $_POST) &&  isset( $_POST['nm'] ) )
 	$txt = f_MEscape(htmlspecialchars($_POST['txt'],ENT_QUOTES));
 	$res = f_MQuery( "SELECT player_id FROM characters WHERE login='$nme'" );
 	$arr = f_MFetch( $res );
-	if( $arr && $pid >= 0 && $pid < 11 && $dura >= 0 && $dura < 4 )
+	if( $arr && $pid >= 0 && $pid < 5 && $dura >= 0 && $dura < 4 )
 	{
 		$duration = 0;
 		$price = 0;
 		$curre = 0;
 		
-		if( $dura == 0 ) { $duration = 2; $price = 1000; $curre = 0; }
-		if( $dura == 1 ) { $duration = 7; $price = 5000; $curre = 0; }
-		if( $dura == 2 ) { $duration = 31; $price = 2; $curre = -1; }
-		if( $dura == 3 ) { $duration = 100; $price = 15; $curre = -1; }
+		if ($pid == 1 || $pid == 4)
+		{
+			if ( $dura == 0 ) { $duration = 2; $price = 1; $curre = -1; }
+			if ( $dura == 1 ) { $duration = 7; $price = 5; $curre = -1; }
+			if ( $dura == 2 ) { $duration = 31; $price = 15; $curre = -1; }
+			if ( $dura == 3 ) { $duration = 100; $price = 25; $curre = -1; }
+		}
+		else
+		{
+			if( $dura == 0 ) { $duration = 2; $price = 1000; $curre = 0; }
+			if( $dura == 1 ) { $duration = 7; $price = 5000; $curre = 0; }
+			if( $dura == 2 ) { $duration = 31; $price = 4; $curre = -1; }
+			if( $dura == 3 ) { $duration = 100; $price = 15; $curre = -1; }
+		}
 /*
 		if( $pid < 3 ) $price *= 2;
 		else if( $pid < 8 ) $price *= 3;
@@ -44,7 +54,7 @@ if( array_key_exists('nm', $_POST) &&  isset( $_POST['nm'] ) )
 			f_MQuery( "INSERT INTO player_presents ( player_id, img, txt, author, deadline ) VALUES ( {$plr->player_id}, '{$fnames[$pid]}', '$txt', '{$player->login}', $tm )" );
 			$plr->syst3( "Персонаж {$player->login} подарил вам подарок" );
 			echo "<script>update_money( $player->money, $player->umoney );</script>";
-			echo "<b>Подарок персонажу {$plr->login} успешно доставлен</b><br><li><a href=game.php>Подарить еще один подарок</a><li><a href=game.php?phrase=1361>Уйти</a>";
+			echo "<b>Подарок персонажу {$plr->login} успешно доставлен</b><br><li><a href=game.php>Подарить еще один подарок</a><li><a href=game.php?phrase=2121>Уйти</a>";
 				
 			return;
 		} else echo "<font color=darkred>У вас не хватает денег</font><br>";
@@ -52,7 +62,7 @@ if( array_key_exists('nm', $_POST) &&  isset( $_POST['nm'] ) )
 	else echo "<font color=darkred>Игрока с именем $nme не существует</font><br>";
 }
 
-echo "<li><a href=game.php?phrase=1361>Уйти</a>";
+echo "<li><a href=game.php?phrase=2121>Уйти</a>";
 echo "<table><tr><td>";
 echo "<script>FLUc();</script>";
 echo "<table><tr><td>";
@@ -74,9 +84,16 @@ function dchange( id )
 {
 	var val = ''; var cur = '';
 	var dur = _( 'dura'+id ).selectedIndex;
-	if( dur == 0 ) { val = 1000; cur = 'money.gif'; }
+	if (id==1 || id==4)
+	{
+		if( dur == 0 ) { val = 1; cur = 'umoney.gif'; }
+		else if( dur == 1 ) { val = 5; cur = 'umoney.gif'; }
+		else if( dur == 2 ) { val = 15; cur = 'umoney.gif'; }
+		else if( dur == 3 ) { val = 25; cur = 'umoney.gif'; }
+	}
+	else if( dur == 0 ) { val = 1000; cur = 'money.gif'; }
 	else if( dur == 1 ) { val = 5000; cur = 'money.gif'; }
-	else if( dur == 2 ) { val = 2; cur = 'umoney.gif'; }
+	else if( dur == 2 ) { val = 4; cur = 'umoney.gif'; }
 	else if( dur == 3 ) { val = 15; cur = 'umoney.gif'; }
 //	if( id < 3 ) val *= 2;
 //	else if( id < 8 ) val *= 3;
@@ -84,6 +101,6 @@ function dchange( id )
 	_( 'present'+id+'_price' ).innerHTML = "<img width=10 height=10 src='images/" + cur + "' border=0> <b>"+val+"</b>";
 }
 
-for( var i = 0; i < 11; ++ i ) dchange(i);
+for( var i = 0; i < 5; ++ i ) dchange(i);
 
 </script>

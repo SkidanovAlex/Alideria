@@ -242,13 +242,22 @@ function char_unwear( )
 
 function char_set_events( )
 {
-	for( i = 1; i <= 24; ++ i )
+	for( i = 1; i <= 25; ++ i )
 	{
 		document.getElementById( 'item' + i ).onmousedown = prepare_drag;
 		document.getElementById( 'item' + i ).onmousemove = begin_drag;
 		document.getElementById( 'item' + i ).onclick = char_item_info;
 		document.getElementById( 'item' + i ).ondblclick = char_unwear;
 		document.getElementById( 'item' + i ).onmouseout = hideTooltip;
+	}
+	
+	for (i=1;i<=5;++i)
+	{
+		if (document.getElementById( 'pot' + i ))
+		{
+		document.getElementById( 'pot' + i ).onmousemove = safeTooltip;
+		document.getElementById( 'pot' + i ).onmouseout = hideTooltip;
+		}
 	}
 
 	document.getElementById( 'item_drag' ).onmousemove = drag;

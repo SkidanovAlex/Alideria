@@ -22,17 +22,37 @@ $letters = Array(
 	10 => "<font color=red><b>C</b></font>",
 	11 => "<font color=red><b>@</b></font>",
 	12 => "<font color=#AA6446><b>#</b></font>",
-	13 => "<font color=#646464><b>*</b></font>"
+	13 => "<font color=#646464><b>*</b></font>",
+	14 => "<font color=#726693><b>&</b></font>",
+	20 => "<font color=#FC0FC0><b>Ì</b></font>",
+	21 => "<font color=#FF0000><b>Ç</b></font>",
+	22 => "<font color=#F4C430><b>Ó</b></font>",
+	23 => "<font color=#FF0000><b>U</b></font>",
+	
+	100 => "<font color=brown><b>R</b></font>",
+	101 => "<font color=aqua><b>R</b></font>",
+	102 => "<font color=#008800><b>R</b></font>",
+	110 => "<font color=#00FF00><b>R</b></font>",
+	
+	200 => "<font color=brown><b>G</b></font>",
+	201 => "<font color=white><b>G</b></font>",
+	202 => "<font color=gray><b>G</b></font>",
+	203 => "<font color=#0000FF><b>G</b></font>",
+	204 => "<font color=black><b>G</b></font>",
+	205 => "<font color=red><b>G</b></font>",
+	206 => "<font color=yellow><b>G</b></font>",
+	210 => "<font color=#00FF00><b>G</b></font>"
 );
 
 include( 'admin_header.php' );
 
 $str = $HTTP_RAW_POST_DATA;
-list($x, $y, $tile) = @explode( "|", $str );
+list($x, $y, $tile, $locat) = @explode( "|", $str );
 
-$ut = new ForestUtils( 1 );
+if (!$locat) die();
+$ut = new ForestUtils( $locat );
 $ut->setTile( $x, $y, $tile );
 
-echo( "set_tile( $x, $y, '{$letters[$tile]}' );" );
+echo( "set_tile( $x, $y, '{$letters[$tile]}', '{$forest_names[$tile]}' );" );
 
 ?>

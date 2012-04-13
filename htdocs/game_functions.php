@@ -4,7 +4,7 @@
                 {
                 	global $status, $player; 
                     $st_act = "";
-                    if( $status != 4 && $status != 5 && $player->location != 1 && $player->regime == 0 ) // в лесу это сделано само
+                    if( $status != 4 && $status != 5 && $player->location != 1 && $player->location != 6 && $player->location != 7 && $player->regime == 0 ) // в лесу это сделано само
                     {
                     	$zres = f_MQuery( "SELECT * FROM forest_additional_actions WHERE cell_type = -1 AND loc = {$player->location} AND depth = {$player->depth}" );
     					while( $zarr = f_MFetch( $zres ) )

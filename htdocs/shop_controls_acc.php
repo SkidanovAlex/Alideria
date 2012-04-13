@@ -145,8 +145,9 @@ for( $i = 0; ; ++ $i )
 			
 			if($shop->CheckCapacity($item_id))
 			{
+				if (!checkCanDrop( $item_id )) $msg = "Этот предмет нельзя выставить в магазин.";
 				// проверим попытку выставить орденскую вещь на продажу
-				if ( !checkOrderItem( $item_id ) )
+				else if ( !checkOrderItem( $item_id ) )
 				{
 					if($player->DropItems($item_id,$number))
 					{

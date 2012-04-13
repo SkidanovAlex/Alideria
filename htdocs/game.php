@@ -27,7 +27,7 @@ $mid_php = 1;
 $player = new Player( $HTTP_COOKIE_VARS['c_id'] );
 //if ($player->player_id == 6825)
 {
-	echo "<script>if (window.top.location.href.indexOf('alideria.ru/main.php') < 0) window.top.location.href='index.php';</script>";
+	echo "<script>if (window.top.location.href.indexOf('alideria.ru/main.php') < 0 && window.top.location.href.indexOf('109.234.156.122/main.php') < 0) window.top.location.href='index.php';</script>";
 }
 
 $quest_9m = (false);
@@ -140,9 +140,15 @@ $screen_regimes = Array( 0 => "Обзор", "Персонаж", "Инвентарь", "Дневник", "Закл
 //$screen_regimes = Array( 0 => "Тут игра", "Статики :о)", "Шмоточки", "Тетрадка", "Картинки", 98 => "Фигня :о)", 100 => "Сюда не жми" );
 //if( mt_rand( 1,20 ) == 1 ) $screen_regimes = Array( 0 => "Иши", "Самый", "Крутой", "Админ", "А", 98 => "Пламени", 100 => "Нет" );
 
-$res = f_MQuery( "SELECT count( entry_id ) FROM post WHERE receiver_id={$player->player_id} AND readed=0" );
+$res = f_MQuery( "SELECT count( entry_id ) FROM post WHERE receiver_id={$player->player_id} AND readed=0 AND folder_id=0" );
 $arr = f_MFetch( $res );
 if( $arr[0] > 0 ) $screen_regimes[3] .= " <b>($arr[0])</b>";
+if ($player->Rank()==2 || $player->Rank()==5 || $player->player_id==6825)
+{
+	$res = f_MQuery( "SELECT count( entry_id ) FROM post WHERE receiver_id={$player->player_id} AND readed=0 AND folder_id=1" );
+	$arr = f_MFetch( $res );
+	if( $arr[0] > 0 ) $screen_regimes[3] .= " <font color='#FFFFFF'><b>($arr[0])</b></font>";
+}
 
 $loc = $player->location;
 $depth = $player->depth;
@@ -307,7 +313,7 @@ if( $screen_regime == 0 ) // Обзор - начало
 				$cur += $rarr['chance1000000'];
 			}
 			
-			do_phrase( $phrase_id, false );
+			do_phrase( $phrase_id, true );
 			$rres = f_MQuery( "SELECT text FROM phrases WHERE phrase_id=$phrase_id" );
 			$rarr = f_MFetch( $rres );
 			if( !$rarr ) RaiseError( "Неизвестная фраза при выполнении доп. фразы в пещерках", "доп. действие $act_id, $phrase_id" );
@@ -328,7 +334,7 @@ if( $screen_regime == 0 ) // Обзор - начало
 			$zarr = f_MFetch( $zres );
 			include_once( "phrase.php" );
 			if( !$zarr ) RaiseError( "Не существующее действие", "Loc: $loc, Depth: $depth, Act: $do" );
-			else if( !allow_phrase( $zarr[condition_id], false ) ) RaiseError( "Запуск запещенного действия", "Loc: $loc, Depth: $depth, Act: $do" );
+			else if( !allow_phrase( $zarr[condition_id], false ) ) RaiseError( "Запуск запрещенного действия", "Loc: $loc, Depth: $depth, Act: $do" );
 			$player->SetTill( time( ) + $zarr[time] );
 			$player->SetRegime( - $do );
 			$regime = - $do;
@@ -408,18 +414,18 @@ if( $screen_regime == 0 ) // Обзор - начало
 		else
 		{
 			$status = 0; // скрипт должен изменить сам
-			if( $player->location == 2 ) // Столица
+			if( $player->location == 2 || $player->location == 8 ) // Столица
 			{
 				if( $player->depth == 47 ) include( "death_tower_loc.php" );
 				else include( "basic_location.php" );
 		    }
 			else if( $player->location == 0 )
 			{
-				if( $player->depth >= 33 && $player->depth <= 40 ) include( "lab_loc.php" );
+				if( $player->depth >= 33 && $player->depth <= 40 ) include( ($player->player_id == 173) ? "lab_loc_dev.php" : "lab_loc.php" );
 				else if( $player->depth <= 20 ) include( "danger_walk.php" );
 				else include( "basic_location.php" );
 			}
-			else if( $player->location == 1 )
+			else if( $player->location == 1 || $player->location == 6 || $player->location == 7 )
 				include( "forest.php" );
 			else if( $player->location == 3 )
 				include( "river.php" );
@@ -430,13 +436,13 @@ if( $screen_regime == 0 ) // Обзор - начало
 				if( $player->depth != 1 ) include( "basic_location.php" );
 				else include( 'locations/portal/loc.php' );
 			}
-			else if ($player->location >= 10 && $player->location <= 20)
+			else if ($player->location >= 100 && $player->location <= 200)
 				include( 'locations/dungeons/in_loc.php' );
 
 				
 			if( $player->till && $player->regime < -1 )
 			{
-				if( $player->location != 3 && !($player->location >= 10 && $player->location <= 20) ) // в реке свой таймер, лок=3 не нужно // в данжах тоже свой таймер
+				if( $player->location != 3 && !($player->location >= 100 && $player->location <= 200) ) // в реке свой таймер, лок=3 не нужно // в данжах тоже свой таймер
 				{
     				$do = - $player->regime;
     				$zres = f_MQuery( "SELECT * FROM forest_additional_actions WHERE entry_id=$do" );
@@ -458,14 +464,16 @@ if( $screen_regime == 0 ) // Обзор - начало
                 // Здесь можно ...
                 echo "<div id=here_you_can>";
 
-                ShowAdditionalActions( );
+		if (!($player->location >= 100 && $player->location <= 200))
+			ShowAdditionalActions( );
 
                 // таверну показываем до всего остального
 				if( $loc == 2 && $depth == 11 ) include( 'tavern.php' );
 				if( $loc == 2 && $depth == 3 ) include( 'predles.php' );
 				
 				// Здесь можно поговорить с - отключено в залах кланов и гильдий:
-				ShowNPCs( );
+				if (!($player->location >= 100 && $player->location <= 200))
+					ShowNPCs( );
 				
 				if( $loc == 2 ) showFights( );
 
@@ -542,6 +550,7 @@ if( $screen_regime == 0 ) // Обзор - начало
 				if( $loc == 2 && $depth == 55 ) include( 'locations/tailors_altar/loc.php' );
 				if ($loc == 2 && $depth == 58) include('locations/dungeons/ind.php'); // данж на крыше
 				if ($loc == 2 && $depth == 59) if ($player->player_id != 1) include('hall_of_glory.php'); else include('hall_of_glory_new.php'); // Зал Славы
+				if ($loc == 2 && $depth == 60) include('locations/capital/repair.php');
 				if( $loc == 2 && $depth == 100 ) include( 'secondhand.php' );
 				if( $loc == 2 && $depth == 1001 ) require_once( 'locations/capital/waterfall.php' );
 				if( $loc == 2 && $depth == 1002 ) require_once( 'locations/capital/amourShop.php' );

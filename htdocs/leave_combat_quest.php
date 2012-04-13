@@ -10,6 +10,31 @@ if( $won ) checkZhorik( $this, 4, 10 );
 
 if( $this->location == 2 && $this->depth == 1 ) checkZhorik( $this, 5, 5 ); // квест жорика бои на арене
 
+// generic quests that require killing mosnters
+if ($won)
+{
+    $quest_res = f_MQuery("SELECT * FROM player_quest_monsters WHERE player_id={$this->player_id} AND mob_id={$mob_id} AND togo > 0");
+    while ($quest_arr = f_MFetch($quest_res))
+    {
+        $new_togo = $quest_arr['togo'] - 1;
+        if ($new_togo < 0) $new_togo = 0;
+        f_MQuery("UPDATE player_quest_monsters SET togo = {$new_togo} WHERE player_id={$this->player_id} AND mob_id={$mob_id} AND togo > 0 AND quest_part_id = {$quest_arr[quest_part_id]}");
+        $quest_name = f_MValue("SELECT quests.name FROM quests INNER JOIN quest_parts ON quests.quest_id=quest_parts.quest_id WHERE quest_parts.quest_part_id={$quest_arr[quest_part_id]}");
+        $this->syst("¬ы приблизились к цели в выполнении квеста &laquo;{$quest_name}&raquo;");
+        if ($new_togo == 0)
+        {
+            if ($quest_arr['action_trigger_id'] != 0)
+            {
+                $this->SetTrigger($quest_arr['action_trigger_id']);
+            }
+            if ($quest_arr['action_phrase_id'] != 0)
+            {
+                include_once("phrase.php");
+                do_phrase($quest_arr['action_phrase_id']);
+            }
+        }
+    }
+}
 
 // гонка фавна
 if( $won )

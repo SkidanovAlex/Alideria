@@ -80,9 +80,39 @@ if( !$mid_php )
 
 	f_MQuery( "UNLOCK TABLES" );
 
-	if( $arr['coord0'] == $id ) achieveStone( $arr['item_id0'] );
-	else if( $arr['coord1'] == $id ) achieveStone( $arr['item_id1'] );
-	else if( $arr['coord2'] == $id ) achieveStone( $arr['item_id2'] );
+	if( $arr['coord0'] == $id )
+	{
+		if ($player->HasTrigger(13105) && $arr['item_id0']==479)
+		{
+			$arr['item_id0']=79571;
+			f_MQuery( "UPDATE player_stone_table SET item_id0=79571 WHERE player_id={$player->player_id}" );
+			$player->SetTrigger(13105, 0);
+			$player->SetTrigger(13110);
+		}
+		achieveStone( $arr['item_id0'] );
+	}
+	else if( $arr['coord1'] == $id )
+	{
+		if ($player->HasTrigger(13105) && $arr['item_id1']==479)
+		{
+			$arr['item_id1']=79571;
+			f_MQuery( "UPDATE player_stone_table SET item_id1=79571 WHERE player_id={$player->player_id}" );
+			$player->SetTrigger(13105, 0);
+			$player->SetTrigger(13110);
+		}
+		achieveStone( $arr['item_id1'] );
+	}
+	else if( $arr['coord2'] == $id )
+	{
+		if ($player->HasTrigger(13105) && $arr['item_id2']==479)
+		{
+			$arr['item_id2']=79571;
+			f_MQuery( "UPDATE player_stone_table SET item_id2=79571 WHERE player_id={$player->player_id}" );
+			$player->SetTrigger(13105, 0);
+			$player->SetTrigger(13110);
+		}
+		achieveStone( $arr['item_id2'] );
+	}
 	else echo "document.getElementById( 'stone_msg' ).innerHTML = 'Похоже, что тут камня не было.';";
 }
 

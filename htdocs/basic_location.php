@@ -108,6 +108,12 @@ $res = f_MQuery( "SELECT text, title, img, status FROM loc_texts WHERE loc=$loc 
 if( mysql_num_rows( $res ) )
 {
 	$arr = f_MFetch( $res );
+	if ($loc == 2 && $depth == 56 && !$player->HasTrigger(12209))
+	{
+		$arr[0] = "Первый снег невесомыми хлопьями кружил в воздухе. Он уже не таял у самой земли, а ложился ровным пушистым слоем. Местами уже встречались приличные сугробы. Река, плавно текущая еще вчера, за одну ночь спряталась под ледяной панцирь. В ее зеркальной глади, чуть припорошенной снегом, отражалась большая елка.";
+		$arr[1]="Ёлка";
+		$arr['img']="";
+	}
 	if( $arr['img'] == '' )  $arr['img'] = 'no_logo.gif';
 
 	if( $loc == 5 && ( $depth != 1 ) )
@@ -120,7 +126,7 @@ if( mysql_num_rows( $res ) )
 	{
 		$no_rest = true;
 		print( "<table cellspacing=0 cellpadding=0 width=100%><tr><td valign=top>");
-		if( $hallowin) include( "capital_8m.php" ); //include( "capital_9m.php" );
+		if( false) include( "capital_8m.php" ); //include( "capital_9m.php" );
 		else include( "capital.php" ); //  include( "capital.php" );
 	}
 	else if( $loc == 2 && $depth == 50 )
@@ -140,7 +146,7 @@ if( mysql_num_rows( $res ) )
 		print( "<table width=100%><colgroup><col width=120><col width=*><col width=200><tbody><tr><td valign=top>");
 
 		ScrollLightTableStart();
-		if( file_exists( 'images/locations/'.str_replace('.jpg','_.jpg',$arr[img]) ) )
+		if( $arr[img]!="no_logo.gif" && file_exists( 'images/locations/'.str_replace('.jpg','_.jpg',$arr[img]) ) )
 			echo "<img onclick=\"window.open('images/locations/".str_replace('.jpg','_.jpg',$arr[img])."', '_blank', 'width=700,height=528,toolbar=no,status=no,scrollbars=no,menubar=no,resizable=no')\" style='cursor:pointer' src=images/locations/$arr[img] width=170 height=127>";
 		else
 			echo "<img src=images/locations/$arr[img] width=170 height=127>";

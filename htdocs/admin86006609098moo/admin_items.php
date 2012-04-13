@@ -26,10 +26,20 @@ if( isset( $HTTP_GET_VARS['login'] ) )
 		if( $item_id == 0 ) $player2->AddMoney( $number );
 		else if( $item_id == -1 ) $player2->AddUMoney( $number );
 		else
+		{
+			if (f_MValue("SELECT improved FROM items WHERE item_id=".$item_id)==1)
+//			if ($item_id==78666)
+			{
+				f_MQuery("UPDATE items SET improved=0 WHERE item_id=".$item_id);
+				$item_id1 = copyItem( $item_id, true);
+				f_MQuery("UPDATE items SET improved=1 WHERE item_id=".$item_id);
+				$item_id=$item_id1;
+			}
 			if ($number >=0)
 				$player2->AddItems( $item_id, $number );
 			else
 				$player2->DropItems($item_id, -$number);
+		}
 		printf( "<font color=blue>Ўмотка успешно добавлена</font><br>" );
 	}
 }

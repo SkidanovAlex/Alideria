@@ -6,7 +6,7 @@ include_once( 'clan.php' );
 
 
 // копия массива встречается так же в admin_forum_ranks.php
-$forum_room_names = Array( 22 => "Чисто для крутанов конкретных", 21 => "The TOP SECRET project IDE!", 0 => "Новости от Творцов", 1 => "Ошибки Игры", 2 => "Опросы от Администрации", 3 => "Общие Вопросы", 4 => "Прохождение Квестов", 5 => "Идеи и Предложения", 6 => "Персонажи", 7 => "Свободное Общение", 8 => "Творчество Игроков", 10 => "Объявления - продажа", 9 => "Объявления - покупка", 11 => "Жалобная книга", 20 => "Закрытый разрел модераторов" );
+$forum_room_names = Array( 22 => "Чисто для крутанов конкретных", 21 => "The TOP SECRET project IDE!", 0 => "Новости от Творцов", 1 => "Ошибки Игры", 2 => "Опросы от Администрации", 3 => "Общие Вопросы", 4 => "Прохождение Квестов", 5 => "Идеи и Предложения", 6 => "Персонажи", 7 => "Свободное Общение", 8 => "Творчество Игроков", 10 => "Объявления - продажа", 9 => "Объявления - покупка", 11 => "Жалобная книга", 20 => "Закрытый разрел модераторов", 19 => "Закрытый раздел модераторов чата" );
 
 $authorized = false;
 if( check_cookie( ) )
@@ -32,7 +32,8 @@ function thread_alowed( $room )
 	if( !$forum_room_names[$room] ) return false;
 	
 	if( !$authorized ) return false;
-	if( $room == 20 && $player->Rank( ) == 0 ) return false;
+	if( $room == 19 && $player->Rank( ) == 0 ) return false;
+	if( $room == 20 && ($player->Rank( ) == 0 || $player->Rank( ) == 3) ) return false;
 	if( $room == 21 && $player->Rank( ) != 1 ) return false;
 	if( $room == 22 && ( !$player || $player->player_id > 174 ) ) return false;
 	if( $room == 0 && $player->Rank( ) != 1 ) return false;
@@ -55,7 +56,8 @@ function post_alowed( $room, $thread )
 	if( !$forum_room_names[$room] ) return false;
 	
 	if( !$authorized ) return false;
-	if( $room == 20 && $player->Rank( ) == 0 ) return false;
+	if( $room == 19 && $player->Rank( ) == 0 ) return false;
+	if( $room == 20 && ($player->Rank( ) == 0 || $player->Rank( ) == 3) ) return false;
 	if( $room == 21 && $player->Rank( ) != 1 ) return false;
 	if( $room == 22 && ( !$player || ( $player->player_id > 174 || $player->login != 'undefined' ) ) ) return false;
 
@@ -80,7 +82,8 @@ function looking_alowed( $room )
 	
 	if( !$forum_room_names[$room] ) return false;
 	
-	if( $room == 20 && ( !$authorized || $player->Rank( ) == 0 ) ) return false;
+	if( $room == 19 && $player->Rank( ) == 0 ) return false;
+	if( $room == 20 && ( !$authorized || $player->Rank( ) == 0 || $player->Rank( ) == 3 ) ) return false;
 	if( $room == 21 && ( !$authorized || $player->Rank( ) != 1 ) ) return false;
 	if( $room == 22 && ( !$player || $player->player_id > 174 ) ) return false;
 	
@@ -134,7 +137,7 @@ function delete_alowed($room_id, $author)
 
 	if ($author == 6825 && $player->player_id != 6825) return false;
 
-	if ($player->player_id == 6825 || $player->player_id == 868239 ) return true;
+	if ($player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 ) return true;
 }
 
 function forum_permission_denied( )
@@ -159,7 +162,7 @@ if( isset( $_GET['ajax'] ) )
     		if( $arr['id'] == 7 ) echo "<b>Свободное Общение</b><br>";
     		if( $arr['id'] == 9 ) echo "<b>Торговля</b><br>";
 		if( $arr['id'] == 11 ) echo "<b>Жалобы</b><br>";
-    		if( $arr['id'] == 20 ) echo "<b>А это тока для конкретных пацанов</b><br>";
+    		if( $arr['id'] == 19 ) echo "<b>А это тока для конкретных пацанов</b><br>";
 			echo "<a href=forum.php?room=$arr[id]>{$forum_room_names[$arr[id]]}</a><br>";
 		}
 			
@@ -336,10 +339,10 @@ if( isset( $_GET['mode'] ) )
 				else $fname = "p{$player->player_id}.jpg";
 				$errno = unlink( "images/forum_avatars/$fname" );
 //				exec("DEL /F/Q \"images/forum_avatars/$fname\"", $lines, $errno);
-				if( $player->player_id == 173 || $player->player_id == 6825 || $player->player_id == 868239 ) echo "[$errno]";
+				if( $player->player_id == 173 || $player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 ) echo "[$errno]";
 				$errno = move_uploaded_file($_FILES['ava']['tmp_name'], 'images/forum_avatars/'.$fname );
-				if( $player->player_id == 173 || $player->player_id == 6825  || $player->player_id == 868239 ) echo "[$errno]";
-				if( $player->player_id != 173 || $player->player_id != 6825  || $player->player_id != 868239 ) die( "<script>location.href='forum.php?mode=customize';</script>" );
+				if( $player->player_id == 173 || $player->player_id == 6825  || $player->player_id == 172 || $player->player_id == 173 ) echo "[$errno]";
+				if( $player->player_id != 173 || $player->player_id != 6825  || $player->player_id == 172 || $player->player_id == 173 ) die( "<script>location.href='forum.php?mode=customize';</script>" );
 			}
 		}
 		else if( isset( $_GET['prolong'] ) && $player->umoney >= 1 )
@@ -841,7 +844,7 @@ else if( isset( $HTTP_GET_VARS[thread] ) )
 				if( isset( $HTTP_POST_VARS['add_post'] ) )
 				{
 					$text = trim( HtmlSpecialChars( $HTTP_POST_VARS['txt'] ) );
-					if ($player->player_id == 6825 || $player->player_id == 868239) $text = trim( $HTTP_POST_VARS['txt'] ) ;
+					if ($player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173) $text = trim( $HTTP_POST_VARS['txt'] ) ;
 					$text2 = str_replace( "\n", "<br>", $text );
 					$text2 = f_MEscape(process_str( $text2 ));
 					$author_id = $player->player_id;
@@ -901,7 +904,7 @@ if(!$f_p_h)// если $f_p_h пусто то вносим в историю посещение
 				if( edit_alowed( $room_id, $arr12[author_id] ) )
 				{
 					$text = trim( HtmlSpecialChars( $HTTP_POST_VARS[txt] ) );
-					if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 868239 ) $text = trim( $HTTP_POST_VARS[txt] );
+					if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 ) $text = trim( $HTTP_POST_VARS[txt] );
 					$text2 = str_replace( "\n", "<br>", $text );
 					$text2 = f_MEscape(process_str( $text2 ));
 					$tm = date( "d.m.Y H:i", time( ) );
@@ -1034,7 +1037,7 @@ else if( isset( $HTTP_GET_VARS['room'] ) )
 		{
 			$title = f_MEscape(trim( HtmlSpecialChars( $HTTP_POST_VARS[title] ) ));
 			$text = trim( HtmlSpecialChars( $HTTP_POST_VARS[txt] ) );
-			if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 868239 )
+			if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 )
 				$text = trim( $HTTP_POST_VARS[txt] );
 			$text2 = str_replace( "\n", "<br>", $text );
 			$text2 = f_MEscape(process_str( $text2 ));
@@ -1204,6 +1207,7 @@ else
 	$forum_room_descs[9] = "В этой комнате вы можете оставить объявление о покупке.";
 	$forum_room_descs[10] = "В этой комнате вы можете оставить объявление о продаже.";
 
+	$forum_room_descs[19] = "Комната для модераторов чата.";
 	$forum_room_descs[20] = "Доступ в эту комнату имеют только модераторы и администраторы.";
 	$forum_room_descs[21] = "Репетиция рекламы соков. Дети:<br>- А я - вишенка..<br>- А я - яблочко...<br>- А я - томат...<br>- А я - долбоеб....<br>Мальчик!!! Ты - БАКЛАЖАН!!! Еще раз:<br>- А я - вишенка..<br>- А я - яблочко...<br>- А я - томат...<br>- А я - долбоеб....<br>Мальчик!!! Повторяю - Ты - БАКЛАЖАН!!! Еще раз:<br>- А я - вишенка..<br>- А я - яблочко...<br>- А я - баклажан!!!<br>Мальчик!!! Ты - долбоеб!!!! Сначала идет - томат!!.<br>";
 		
@@ -1221,7 +1225,7 @@ else
 		if( $arr['id'] == 7 ) echo "<tr><td colspan=4 align=center><b>Свободное Общение</b></td></tr>";
 		if( $arr['id'] == 9 ) echo "<tr><td colspan=4 align=center><b>Торговля</b></td></tr>";
 		if( $arr['id'] == 11 ) echo "<tr><td colspan=4 align=center><b>Жалобы</b></td></tr>";
-		if( $arr['id'] == 20 ) echo "<tr><td colspan=4><marquee><b>А это тока для конкретных пацанов</b></marquee></td></tr>";
+		if( $arr['id'] == 19 ) echo "<tr><td colspan=4><marquee><b>А это тока для конкретных пацанов</b></marquee></td></tr>";
 
 if ($player->player_id==6825)
 	$ssttrr = $arr[id];

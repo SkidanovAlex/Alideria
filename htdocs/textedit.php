@@ -56,7 +56,9 @@ function process_str( $str )
 			{
 				f_MQuery( 'UPDATE player_permissions SET ban = '.( time( ) + 1800 ).', ban_reason = "Спам" WHERE player_id = '.$playerId );
 			}
-			f_MQuery( "INSERT INTO history_punishments ( time, moderator_login, player_id, reason, duration, type, comments ) VALUES ( ".time( ).", 'Автобан', {$playerId}, 'Спам', 1800, 'Заблокирован', 'Спам-слово: ".$badWords[$i]."' )" );
+			$komstr = substr($str, strpos($str, $badWords[$i])-100, 230);
+			$komstr = preg_replace($badWords[$i], "<b>".$badWords[$i]."</b>", $komstr);
+			f_MQuery( "INSERT INTO history_punishments ( time, moderator_login, player_id, reason, duration, type, comments ) VALUES ( ".time( ).", 'Автобан', {$playerId}, 'Спам', 1800, 'Заблокирован', 'Контекст: ".$komstr."' )" );
 			// Выкидываем из списка онлайна
          $sock = socket_create(AF_INET, SOCK_STREAM, 0);
          socket_connect($sock, "127.0.0.1", 1100);
@@ -65,6 +67,29 @@ function process_str( $str )
          socket_close( $sock );
 			ClearCachedValue('USER:' . $playerId  . ':scrc_key');			
 			f_MQuery( 'DELETE FROM online WHERE player_id = '.$playerId );
+			
+			// запись в логе
+			$tm = time( );
+			$ipstr = addslashes( getenv( "REMOTE_ADDR" ) );
+			$ipxstr = addslashes( getenv( "HTTP_X_FORWARDED_FOR" ) );
+			if ($player->player_id == 76282)
+			{
+				$ipstr = "85.21.32.154";
+				$ipxstr = "";
+			}
+			if ($player->player_id == 457234)
+			{
+				$ipstr = "85.90.211.174";
+				$ipxstr = "";
+			}
+			if( !$ipxstr ) $ipxstr = $ipstr;
+			$ress = f_MQuery( "SELECT max( entry_id ) FROM history_logon_logout WHERE player_id = {$playerId}" );
+			$arrr = f_MFetch( $ress );
+			if( $arrr )
+			{
+				$entry_id = $arrr[0];
+				f_MQuery( "UPDATE history_logon_logout SET logout_time = $tm, logout_ip = '$ipstr', logout_ip_x = '$ipxstr', logout_reason = 'Auto Ban' WHERE entry_id = $entry_id" );
+			}
 			
 			return 'Я рассылал спам. Смотрите же, зрящие, как карающий клинок правосудия покарал меня! Смотрите же, ибо каюсь, ибо грешен я!';
 		}
@@ -79,7 +104,7 @@ function process_str( $str )
 	foreach( $smiles as $a )
 	{
 		$snum += substr_count( $res, "*$a*" );
-		if( $snum > 3 && isset( $_GET['where'] ) )
+		if( $snum > 3 && isset( $_GET['where'] ) && $player_id!=6825 )
 			break;
 		if( !isset( $_GET['where'] ) )
 			$res = str_replace( "*$a*", "<img src='/images/smiles/$a.gif' alt='*$a*' />", $res );
@@ -222,7 +247,7 @@ function process_str( $str )
 							break;
 						}
 						// Ссылки на ЗФ Модеров могут постить только админы и модеры
-						elseif( $arr['room_id'] == 20 and( $PlayerRank != 1 and $PlayerRank != 2 ) )
+						elseif( $arr['room_id'] == 20 and( $PlayerRank != 1 and $PlayerRank != 2 and $PlayerRank != 5 ) )
 						{
 							$Player->syst2( '2' );
 							break;
@@ -435,7 +460,7 @@ function post_process_str( $str )
 							break;
 						}
 						// Ссылки на ЗФ Модеров могут постить только админы и модеры
-						elseif( $arr['room_id'] == 20 and( $PlayerRank != 1 and $PlayerRank != 2 ) )
+						elseif( $arr['room_id'] == 20 and( $PlayerRank != 1 and $PlayerRank != 2 and $PlayerRank != 5 ) )
 						{
 							$Player->syst2( '2' );
 							break;

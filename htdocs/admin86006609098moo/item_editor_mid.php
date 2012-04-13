@@ -133,6 +133,8 @@ else
 	print( "<tr><td>Род, число:</td><td><b>".create_select( 'word_form', $word_forms, $arr['word_form'] )."</b></td></tr>" );
 	print( "<tr><td>Кто чинит:</td><td><b>".create_select( 'repair', $repair, $arr['repair'] )."</b></td></tr>" );
 	print( "<tr><td>Тип вещи:</td><td><b>".create_select( 'kind', $kinds, $arr['kind'] )."</b>Влияет на текст поломки</td></tr>" );
+	print ("<tr><td>Уникальность:</td><td><input class=m_btn type=text name=improved value='$arr[improved]'>&nbsp;тут надо аккуратно</td></tr>");
+	print ("<tr><td>Нельзя передать:</td><td><input class=m_btn type=text name=nodrop value='$arr[nodrop]'>&nbsp;0 - можно передать, 1 - нельзя передать</td></tr>");
 	print( "<tr><td>Нестандартный текст поломки:</td><td><input class=m_btn type=text name=kind_text value='$arr[kind_text]'></td></tr>" );
 	print( "<tr><td>Картинка:</td><td><input class=m_btn type=text name=image value='$arr[image]'></td></tr>" );
 	print( "<tr><td>Картинка большая:</td><td><input class=m_btn type=text name=image_large value='$arr[image_large]'></td></tr>" );
@@ -141,6 +143,7 @@ else
 	print( "<tr><td>Требования:</td><td vAlign=top><textarea name=req cols=20 rows=3>$arr[req]</textarea></td><td vAlign=top>$req_str</td></tr>" );
 	print( "<tr><td>Изучает&nbsp;Спелл:</td><td><input class=m_btn type=text name=learn_spell_id value='$arr[learn_spell_id]'></td></tr>" );
 	print( "<tr><td>Изучает&nbsp;Рецепт:</td><td><input class=m_btn type=text name=learn_recipe_id value='$arr[learn_recipe_id]'></td></tr>" );
+	print( "<tr><td>Встроенный бесконечный спелл:</td><td><input class=m_btn type=text name=inner_base_spell_id value='$arr[inner_base_spell_id]'></td></tr>" );
 	print( "<tr><td>Встроенный спелл:</td><td><input class=m_btn type=text name=inner_spell_id value='$arr[inner_spell_id]'></td></tr>" );
 
 	print( "<tr><td>Зарядов:</td><td><input class=m_btn type=text name=charges value='$arr[charges]'></td></tr>" );

@@ -41,11 +41,11 @@ else echo "<td style='$border;width:110px;'>Книга Турниров</td>";
 if ($hog!=2) $border=$b1; else $border=$b2;
 if ($hog!=2) echo "<td style='$border;width:110px;'><a href='game.php?hog=2'><b>Книга Дуэлянтов</b></a></td>";
 else echo "<td style='$border;width:110px;'>Книга Дуэлянтов</td>";
-/*
+
 if ($hog!=3) $border=$b1; else $border=$b2;
-if ($hog!=3) echo "<td style='$border;width:110px;'><a href='game.php?hog=3'><b>Книга еще</b></a></td>";
-else echo "<td style='$border;width:110px;'>Книга еще</td>";
-*/
+if ($hog!=3) echo "<td style='$border;width:110px;'><a href='game.php?hog=3'><b>Книга Мини-Игр</b></a></td>";
+else echo "<td style='$border;width:110px;'>Книга Мини-Игр</td>";
+
 if ($hog!=-1) echo "<td style='border-bottom:1px solid black;'></td>";
 
 echo "</tr></table><br>";
@@ -241,6 +241,63 @@ else if ($hog==2) // Книга Дуэлянтов
 	echo "</table></td>";
 
 	echo "</tr></table><script>FL();</script></td></tr></table>";
+}
+else if($hog==3) // Книга Мини-Игр
+{
+	echo "<table width=100%><tr>";
+
+	echo "<td><script>FUct();</script><form action='game.php' method=GET>";
+	$check_mob = false;
+	$st = "";
+//	$st .= "Выборка: ";
+	$st .= "<select class=m_btn name='mob_id'>";
+	
+	$st .= "<option value=0";
+	if( $mob_id == 0 ) $st .= " selected";
+	$st .= ">Магия";
+	$st .= "<option value=1";
+	if( $mob_id == 1 ) $st .= " selected";
+	$st .= ">Шахматы";
+	$st .= "<option value=3";
+	if( $mob_id == 3 ) $st .= " selected";
+	$st .= ">5 в Ряд";
+	$st .= "<option value=5";
+	if( $mob_id == 5 ) $st .= " selected";
+	$st .= ">Марблс";
+	$st .= "</select>";
+	
+	echo $st;
+	echo "<input type=text name=hog value=3 style='display:none;'>";
+	echo " <input class=m_btn type=submit value='Смотреть'>";
+	
+	echo "</form><script>FL();</script></td></tr>";
+
+	echo "<td><script>FUct();</script>";
+	echo "<b>Славные по мини-играм</b>";
+	echo "<script>FL();</script></td></tr>";
+
+	echo "<tr><td><script>FUct();</script>";
+	echo "<table border=1 align=center>";
+
+	echo "<tr><td width=20 align=center><b>№</b></td><td width=200 align=left><b>Игрок</b></td><td width=60 align=center><b>Побед</b></td></tr>";
+
+	if ($mob_id!=5)
+		$res = f_MQuery("SELECT player_id, wins FROM waste_stats WHERE game_id=$mob_id ORDER BY wins DESC LIMIT 10");
+	else
+		$res = f_MQuery("SELECT * FROM marble_top ORDER BY score DESC LIMIT 10");
+	
+	for ($i=1;$i<=10;$i++)
+	{
+		echo "<tr><td width=20 align=center>$i</td>";
+		$arr = f_MFetch($res);
+		$plr = new Player($arr[0]);
+		echo "<td><script>document.write(".$plr->Nick1().");</script></td><td align=right>$arr[1]</b></td>";
+		echo "</tr>";
+	}
+
+
+	echo "</table>";
+	echo "<script>FL();</script></td></tr></table>";
 }
 
 echo "<script>FLL();</script></td></tr></table>";

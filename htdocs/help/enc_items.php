@@ -98,10 +98,17 @@ if( isset( $_GET['maxlevel'] ) )
 
 if( $where !== "" )
 {
+	if (isset( $_GET['item_id']))
+		if ((int)f_MValue("SELECT parent_id FROM items WHERE item_id=".$id) != $id)
+			$pi_id="";
+		else
+			$pi_id="item_id=parent_id AND";
+	else
+		$pi_id="item_id=parent_id AND";
 	$p_num = (int)(( f_MValue( "SELECT count( item_id ) FROM items WHERE item_id=parent_id AND level < 50 $where" ) - 1 ) / 20) + 1;
 	$page = (int)$_GET['page'];
 	$plim = $page * 20;
-	$res = f_MQuery( "SELECT * FROM items WHERE item_id=parent_id AND level < 50 $where ORDER BY type, level LIMIT $plim, 20" );
+	$res = f_MQuery( "SELECT * FROM items WHERE $pi_id level < 50 $where ORDER BY type, level LIMIT $plim, 20" );
 	if( !f_MNum( $res ) ) echo "<center><i>Нет таких вещей</i></center>";
 	else
 	{

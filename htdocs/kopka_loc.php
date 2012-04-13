@@ -4,6 +4,7 @@ $hodka_time = 10 /*min*/ * 60 /*sec*/;
 
 include( 'prof_exp.php' );
 include_once( 'items.php' );
+include_once( 'phrase.php' );
 
 if( !isset( $mid_php ) )
 {
@@ -169,6 +170,28 @@ if( $player->regime == 104 && ( $player->till - 2 <= time( ) || isset( $_GET['ca
     		// widow quest
 		   	include_once( "quest_race.php" );
 		   	updateQuestStatus ( $player->player_id, 2502 );
+
+            // generic quests that require mining
+            $quest_res = f_MQuery("SELECT * FROM player_quest_mine WHERE player_id={$player->player_id} AND item_id={$kopka->item_id} AND togo > 0");
+            while ($quest_arr = f_MFetch($quest_res))
+            {
+                $new_togo = $quest_arr['togo'] - $kopka->num;
+                if ($new_togo < 0) $new_togo = 0;
+                f_MQuery("UPDATE player_quest_mine SET togo = {$new_togo} WHERE player_id={$player->player_id} AND item_id={$kopka->item_id} AND togo > 0 AND quest_part_id = {$quest_arr[quest_part_id]}");
+                $quest_name = f_MValue("SELECT quests.name FROM quests INNER JOIN quest_parts ON quests.quest_id=quest_parts.quest_id WHERE quest_parts.quest_part_id={$quest_arr[quest_part_id]}");
+                $player->syst("Вы приблизились к цели в выполнении квеста &laquo;{$quest_name}&raquo;");
+                if ($new_togo == 0)
+                {
+                    if ($quest_arr['action_trigger_id'] != 0)
+                    {
+                        $player->SetTrigger($quest_arr['action_trigger_id']);
+                    }
+                    if ($quest_arr['action_phrase_id'] != 0)
+                    {
+                        do_phrase($quest_arr['action_phrase_id']);
+                    }
+                }
+            }
     	}
         // увеличь профу тут!
     	if( !$kopka->num )

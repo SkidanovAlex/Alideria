@@ -19,7 +19,10 @@ f_MConnect( );
 $id = $HTTP_GET_VARS['id'];
 settype( $id, "integer" );
 
-$res = f_MQuery( "SELECT * FROM combat_log WHERE combat_id=$id ORDER BY id DESC" );
+if ($id==1753037)
+	$res = f_MQuery( "SELECT * FROM combat_log WHERE combat_id=$id ORDER BY id DESC LIMIT 50" );
+else
+	$res = f_MQuery( "SELECT * FROM combat_log WHERE combat_id=$id ORDER BY id DESC" );
 while( $arr = f_MFetch( $res ) )
 {
 	if( $arr['string'][0] == ',' ) $arr['string'] = substr( $arr['string'], 1 );

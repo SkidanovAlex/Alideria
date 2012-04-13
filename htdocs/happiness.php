@@ -355,7 +355,7 @@ echo "<td width=50% height=100%>";
 			else
 				echo "<td>&nbsp;</td>";
 			echo "<td rowspan=2 valign=top align=right><br>";
-//			if ($player->Rank() == 1) echo $i." => ".f_MValue("SELECT COUNT(*) FROM paid_smiles WHERE set_id=$i AND expires=-1")."&nbsp;";
+			if ($player->Rank() == 1) echo $i." => ".f_MValue("SELECT COUNT(*) FROM paid_smiles WHERE set_id=$i AND expires=-1")."&nbsp;";
 			foreach($vsmiles[$i] as $b) echo "<img src=images/smiles/{$b}.gif> ";
 			echo "</td>";
 			echo "</tr>";

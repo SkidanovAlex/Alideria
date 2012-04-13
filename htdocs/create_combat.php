@@ -109,8 +109,11 @@ function ccAttackPlayer( $attacker_id, $target_id, $ai, $bloody = true, $lim25 =
 
 		global $player;
 		$combat_id = $arr[0];
-		$side = 1 - $arr[side];
+		$side = 1 - $arr['side'];
 		$lvl = 0;
+
+		if (!($combat_id==1753037 || $combat_id==1755274))
+	{
 
 		$tres = f_MQuery( "SELECT count( player_id ) FROM history_combats WHERE player_id=$attacker_id AND combat_id=$combat_id" );
 		$tarr = f_MFetch( $tres );
@@ -122,7 +125,7 @@ function ccAttackPlayer( $attacker_id, $target_id, $ai, $bloody = true, $lim25 =
 			$combat_last_error = "Нельзя войти в один бой дважды";
 			return 0;
 		}
-
+	}
 		if( $lim25 )
 		{
     		$tres = f_MQuery( "SELECT count( player_id ) FROM combat_players WHERE combat_id=$combat_id AND side=$side AND ready < 2" );

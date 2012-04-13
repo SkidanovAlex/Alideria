@@ -110,6 +110,7 @@ while( $deal = f_MFetch( $allDealsQuery ) )
 					
 					<select name="year">
 						<option value='2011'>2011</option>
+						<option value='2012'>2012</option>
 					</select>
 				
 					<select name="month">

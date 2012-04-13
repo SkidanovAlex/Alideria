@@ -40,58 +40,60 @@ $stats = $player->getAllAttrNames( );
 
 
 <?
-if (!($player->player_id == 6825 || $player->player_id == 868239 || $player->player_id == 67573 ))
-{
+echo "<div onclick=show_pots(1) style='position: absolute;top:285px;left:30px;' width=25 height=25 id=pot1 name=pot1>";
+	echo "<img src='images/items/bg/bg25pot.gif'>";
+echo "</div>";
+echo "<div id=pots1 name=pots1 style='position: absolute;top:320px;left:0px;display: none;'>";
+	echo "<img src='images/rect/panel.jpg'>";
+	echo "<div style='position: absolute;top:3;left:70;'><b>Зелья</b></div>";
+	echo "<img onclick='hide_pots(1);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item13 name=item13>&nbsp;</div>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item14 name=item14>&nbsp;</div>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item15 name=item15>&nbsp;</div>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item16 name=item16>&nbsp;</div>";
-	
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
+echo "</div>";
+echo "<div onclick=show_pots(2) style='position: absolute;top:285px;left:55px;' width=25 height=25 id=pot2 name=pot2>";
+	echo "<img src='images/items/pot_sq/ten_talismana.png'>";
+echo "</div>";
+echo "<div id=pots2 name=pots2 style='position: absolute;top:320px;left:0px;display: none;'>";
+	echo "<img src='images/rect/panel.jpg'>";
+	echo "<div style='position: absolute;top:3;left:70;'><b>Талисманы</b></div>";
+	echo "<img onclick='hide_pots(2);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
+echo "</div>";
+echo "<div onclick=show_pots(3) style='position: absolute;top:285px;left:80px;' width=25 height=25 id=pot3 name=pot3>";
+	echo "<img src='images/items/pot_sq/ten_medaliona.png'>";
+echo "</div>";
+echo "<div id=pots3 name=pots3 style='position: absolute;top:320px;left:0px;display: none;'>";
+	echo "<img src='images/rect/panel.jpg'>";
+	echo "<div style='position: absolute;top:3;left:70;'><b>Медальоны</b></div>";
+	echo "<img onclick='hide_pots(3);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
+echo "</div>";
 
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
+if ($player->player_id == 1)
+{
+	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item25 name=item25>&nbsp;</div>";
+	echo "<div id=pot4 style='display:none;'>&nbsp;</div>";
 }
 else
 {
-	echo "<div onmousemove=show_pots(1) style='position: absolute;top:285px;left:30px;' width=25 height=25 id=pot1 name=pot1>";
+	echo "<div onclick=show_pots(4) style='position: absolute;top:285px;left:105px;' width=25 height=25 id=pot4 name=pot4>";
+//		echo "<img src='images/items/pot_sq/balsam_ten.png'>";
 		echo "<img src='images/items/bg/bg25pot.gif'>";
-		echo "<div onmouseout=hide_pots(1) id=pots1 name=pots1 style='position: absolute;top:-10px;left:-10px;display: none;z-index: 102;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item13 name=item13>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item14 name=item14>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item15 name=item15>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item16 name=item16>&nbsp;</div>";
-		echo "</div>";
 	echo "</div>";
-
-	echo "<div onmousemove=show_pots(2) style='position: absolute;top:285px;left:55px;' width=25 height=25 id=pot2 name=pot2>";
-		echo "<img src='images/items/pot_sq/ten_talismana.png'>";
-		echo "<div onmouseout=hide_pots(2) id=pots2 name=pots2 style='position: absolute;top:-10px;left:-10px;display: none;z-index: 102;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
-		echo "</div>";
+	echo "<div id=pots4 name=pots4 style='position: absolute;top:320px;left:0px;display: none;'>";
+		echo "<img src='images/rect/panel.jpg'>";
+		echo "<div style='position: absolute;top:3;left:70;'><b>Бальзамы</b></div>";
+		echo "<img onclick='hide_pots(4);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item25 name=item25>&nbsp;</div>";
 	echo "</div>";
-
-	echo "<div onmousemove=show_pots(3) style='position: absolute;top:285px;left:80px;' width=25 height=25 id=pot3 name=pot3>";
-		echo "<img src='images/items/pot_sq/ten_medaliona.png'>";
-		echo "<div onmouseout=hide_pots(3) id=pots3 name=pots3 style='position: absolute;top:-10px;left:-10px;display: none;z-index: 102;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
-		echo "</div>";
-	echo "</div>";
-
 }
 ?>
 

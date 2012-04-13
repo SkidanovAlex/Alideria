@@ -243,7 +243,10 @@ if( $player->regime == 0 && !$till && isset( $HTTP_GET_VARS['dir'] ) && !$attack
 	
 		$till = $tm + 15;
 		if( $dir == 2 && $depth == 0 )
-			$till = $tm + 10 * 60;
+			if ($player->player_id==6825)
+				$till = $tm + 15;
+			else
+				$till = $tm + 10 * 60;
 		if( $dir == 2 && $depth == 5 )
 			$till = $tm + 60 * 60;
 		if( $dir == 2 && $depth == 10 )

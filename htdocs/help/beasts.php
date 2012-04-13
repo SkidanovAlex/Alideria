@@ -73,7 +73,7 @@ function ccb(id,nick,lv,hp,mhp,wp,wm,wma,wa,wd,np,nm,nma,na,nd,fp,fm,fma,fa,fd,c
 
 if( !isset( $_GET['beast_id'] ) )
 {
-	$res = f_MQuery( "SELECT * FROM mobs WHERE name NOT LIKE '!%' ORDER BY name" );
+	$res = f_MQuery( "SELECT * FROM mobs WHERE defend_depth!=1000 AND name NOT LIKE '!%' ORDER BY name" );
 	while( $arr = f_MFetch( $res ) ) echo "<li><a href=help.php?id=1016&beast_id=$arr[mob_id]>$arr[name]</a>";
 }
 else

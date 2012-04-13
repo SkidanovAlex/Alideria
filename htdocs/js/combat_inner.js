@@ -740,14 +740,20 @@ function ref_proccess( )
 
 function wheel( event )
 {
+	if( !event ) 
+		event = window.event;
+
 	if( card_num == spells_n || roll_que.length )
+    {
+        if (event.preventDefault)
+                event.preventDefault();
+        event.returnValue = false; // для IE
 		return;
+    }
 	
 	var wheelDelta = 0;
 	var step = 300;
 	
-	if( !event ) 
-		event = window.event;
 	if( event.wheelDelta ) 
 		wheelDelta = event.wheelDelta / 120;
 	else if ( event.detail ) 
@@ -757,6 +763,10 @@ function wheel( event )
 		roll_cards( 1 );
 	else
 		roll_cards( -1 );
+
+    if (event.preventDefault)
+            event.preventDefault();
+    event.returnValue = false; // для IE
 }
 
 var cccs = [];

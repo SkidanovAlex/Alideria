@@ -13,7 +13,8 @@
 
 	$player = new Player( $HTTP_COOKIE_VARS['c_id'] );
 	
-	if( $player->Rank( ) == 0 )
+//	if( !($player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 ))
+	if ($player->Rank( ) == 0)
 	{
 		die( 'У вас недостаточно прав для просмотра этой страницы' );
 	}
@@ -46,7 +47,10 @@
 	</style>
 </head>
 <body style="padding: 5px 10px 20px;">
-	<h3>Контроль персонажа <?=$player_login?></h3>
+	<h3><? echo "<a href='player_control.php?nick=".$player_login."'>"; ?>Контроль персонажа <?=$player_login?></a></h3>
+<?
+	if ($player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5) {
+?>
 	Регистрационная дата: <b><?=( $tmp = f_MValue( "SELECT `regdate` FROM `characters` WHERE `login` = '$player_login'" ) ) ? date( 'd.m.Y H:i', $tmp ) : 'Неведомо'?></b><br />
 	<?=( $tmp = f_MValue( "SELECT `ref_id` FROM `player_invitations` WHERE `player_id` = {$target->player_id}" ) ) ? 'Зарегистрирован по приглашению <b>'.f_MValue( "SELECT `login` FROM `characters` WHERE `player_id` = $tmp" ).'</b>' : ''?>
 	<br />
@@ -57,6 +61,7 @@
 	<br />
 	<br />
 <?
+
 	if( isset( $_GET['dopros'] ) )
 	{
 		$defendant = new Player( $arr[0] );
@@ -85,7 +90,7 @@
 			echo "Бой не висит... : ".$ccarr['turn_done'];
 		}
 	}
-	
+	}
 	?>
 	
 	<a href="javascript://" onclick="$( '#banomet' ).toggle( )"><h3>Баномёт</h3></a>
@@ -96,6 +101,7 @@
 if( isset( $_GET['tp'] ) )
 {
 	foreach( $permissions as $value ) if( $value == $_GET['tp'] )
+	if ($value == 'silence' || $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
 	{
 		$days = (int)$_GET['days'];
 		$hours = (int)$_GET['hours'];
@@ -129,9 +135,12 @@ if( isset( $_GET['tp'] ) )
 							else if( $value == "silence" ) $type = "Наложено молчание";
 							else if( $value == "trade" ) $type = "Наложен запрет на торговлю и обмен";
 							else if( $value == "fights" ) $type = "Наложен запрет на бои";
+							else if( $value == "info" ) $type = "Наложен блок на информацию игрока";
 							else $type = "неизвестное наказание";
 							
 							f_MQuery( "INSERT INTO history_punishments ( time, moderator_login, player_id, reason, duration, type, comments ) VALUES ( ".time( ).", '{$player->login}', {$target->player_id}, '$reason', $delta, '$type', '$comms' )" );
+							
+							if ($value=='info') $target->syst3("Профильная информация вашего персонажа временно заблокированна. Причина: $reason. В течении семи дней устраните указанную информацию из вашего профиля. В противном случае к вам могут быть применены штрафные санкции.");
 							
 							if( $value == "ban" )
 							{ // Выкинем в оффлайн
@@ -166,12 +175,14 @@ ClearCachedValue('USER:' . $target->player_id  . ':scrc_key');
 if( isset( $_GET['clear'] ) )
 {
 	foreach( $permissions as $value ) if( $value == $_GET['clear'] )
+	if ($value == 'silence' || $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
 	{
 		f_MQuery( "UPDATE player_permissions SET $value = 0 WHERE player_id = {$target->player_id}" );
 		if( $value == "ban" ) $type = "Разблокирован";
 		else if( $value == "silence" ) $type = "Снято молчание";
 		else if( $value == "trade" ) $type = "Снят запрет на торговлю и обмен";
 		else if( $value == "fights" ) $type = "Снят запрет на бои";
+		else if( $value == "info" ) $type = "Снят блок на информацию";
 		else $type = "неизвестное наказание";
 		f_MQuery( "INSERT INTO history_punishments ( time, moderator_login, player_id, reason, duration, type ) VALUES ( ".time( ).", '{$player->login}', {$target->player_id}, '', 0, '$type' )" );
 	}
@@ -183,10 +194,21 @@ function moo( $a, $b )
 	$st = '<form method="GET">';
 	$st .= '<input type=hidden name=tp value=' . $b . '>';
 	$st .= '<input type=hidden name=nick value="' . $player_login . '">';
-	$st .= $a.'<input type=text name=days value=0 size=3 maxlength=3> дней, ';
-	$st .= '<input type=text name=hours value=0 size=3 maxlength=3> часов, ';
-	$st .= '<input type=text name=minutes value=0 size=3 maxlength=3> минут, ';
-	$st .= '<input type=text name=seconds value=0 size=3 maxlength=3> секунд ';
+	$st .= $a;
+	if ($b!='info')
+	{
+		$st .= '<input type=text name=days value=0 size=3 maxlength=3> дней, ';
+		$st .= '<input type=text name=hours value=0 size=3 maxlength=3> часов, ';
+		$st .= '<input type=text name=minutes value=0 size=3 maxlength=3> минут, ';
+		$st .= '<input type=text name=seconds value=0 size=3 maxlength=3> секунд ';
+	}
+	else
+	{
+		$st .= '<input hidden type=text name=days value=999 size=3 maxlength=3>';
+		$st .= '<input hidden type=text name=hours value=999 size=3 maxlength=3>';
+		$st .= '<input hidden type=text name=minutes value=999 size=3 maxlength=3>';
+		$st .= '<input hidden type=text name=seconds value=999 size=3 maxlength=3>';
+	}
 	$st .= 'Причина: <input type=text name=reason value="(Укажите причину)" size=20 maxlength=100> ';
 	$st .= 'Комментарии: <input type=text name=comms value="По умолчанию" size=20 maxlength=255>';
 	$st .= '<input type=submit value="Карать!">';
@@ -194,6 +216,17 @@ function moo( $a, $b )
 	return $st;
 }
 
+if ($target->GetPermission( "info" ) > 0)
+{
+	echo "<a href='player_control.php?nick=$player_login&clear=info'>Снять Блокировку Информации Персонажа</a><br />";
+}
+else
+{
+	
+	echo moo( 'Наложить блокировку информации. ', 'info' );
+}
+
+if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
 if( $target->GetPermission( "ban" ) > 0 )
 {
 	echo "<a href='player_control.php?nick=$player_login&clear=ban'>Снять Блокировку Персонажа</a><br />";
@@ -212,6 +245,7 @@ else
 	echo moo( 'Наложить молчанку на: ', 'silence' );
 }
 
+if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
 if( $target->GetPermission( "trade" ) > 0 )
 {
 	echo "<a href='player_control.php?nick=$player_login&clear=trade'>Снять Запрет на Торговлю с Персонажа</a><br />";
@@ -221,6 +255,7 @@ else
 	echo moo( 'Наложить запрет на торговлю на: ', 'trade' );
 }
 
+if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
 if( $target->GetPermission( "fights" ) > 0 )
 {
 	echo "<a href='player_control.php?nick=$player_login&clear=fights'>Снять Запрет на Бои с Персонажа</a><br />";
@@ -231,7 +266,10 @@ else
 }
 
 
-echo "</div><a href=\"javascript://\" onclick=\"$( '#journals' ).toggle( )\"><h3>Журналы</h3></a><div id=\"journals\" class=\"toggleBlock\">";
+echo "</div>";
+if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
+{
+echo "<a href=\"javascript://\" onclick=\"$( '#journals' ).toggle( )\"><h3>Журналы</h3></a><div id=\"journals\" class=\"toggleBlock\">";
 
 print( "<a href=history_visits.php?player_id={$target->player_id} target=_blank>Информация о посещениях игры</a><br>" );
 print( "<a href=history_punishments.php?player_id={$target->player_id} target=_blank>Информация о наказаниях</a><br>" );
@@ -251,9 +289,9 @@ if( $player->Rank( ) == 1 )
 }
 
 echo "</div>";
+}
 
-
-if( true )
+if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
 {
 	print( "<a href=\"javascript://\" onclick=\"$( '#sovpadenija' ).toggle( )\"><h3>Совпадения</h3></a><div id=\"sovpadenija\" class=\"toggleBlock\">" );
    echo "<div style='width:300px; text-align:center;'>" . ScrollLightTableStart() . "<table width='100%' border='0'>";

@@ -29,6 +29,17 @@ while ($arr=f_MFetch($res))
 	$plr->RemoveEffect(5, true);
 }
 */
+
+// Эффект номер восемь, player_quest_values #12900
+
+$res = f_MQuery("SELECT player_id, value FROM player_quest_values WHERE value_id=12900");
+while ($arr=f_MFetch($res))
+{
+	$plr = new Player($arr[0]);
+	$plr->AddMoney($arr[1]);
+	$plr->AddToLogPost(0, $arr[1], 985);
+}
+
 // Зал Славы - Награждение
 
 $t = time();
@@ -41,13 +52,19 @@ $str2= iconv("UTF-8", "CP1251", $str2);
 $res = f_MQuery("SELECT * FROM mobs");
 while ($arr=f_MFetch($res))
 {
-	$arr1 = f_MFetch(f_MQuery("SELECT player_id, wins FROM mob_wins WHERE mob_id=".$arr['mob_id']." ORDER BY wins DESC LIMIT 1"));
-	if ($arr1)
+	$res1 = f_MQuery("SELECT player_id, wins FROM mob_wins WHERE mob_id=".$arr['mob_id']." ORDER BY wins DESC LIMIT 10");
+	$ok = true;
+	while (($arr1=f_MFetch($res1)) && $ok)
 	{
-		$plr = new Player($arr1['player_id']);
-		$plr->AddEffect(5, 0, $str1, $str2."<b>".$arr['name']."</b>", "longbow.png", "", $t+24*3600);
-		$plr->AddMoney(1000);
-		$plr->AddToLogPost(0, 1000, 995);
+		$ar_log = f_MValue("SELECT logout_time FROM history_logon_logout WHERE player_id=".$arr1[0]." ORDER BY entry_id DESC LIMIT 1");
+		if (!$ar_log || ($ar_log+180*24*3600)>time())
+		{
+			$plr = new Player($arr1[0]);
+			$plr->AddEffect(5, 0, $str1, $str2."<b>".$arr['name']."</b>", "longbow.png", "", $t+24*3600);
+			$plr->AddMoney(1000);
+			$plr->AddToLogPost(0, 1000, 995);
+			$ok = false;
+		}
 	}
 }
 
@@ -80,7 +97,7 @@ $plr->AddEffect(5, 0, $str1, $str2, "fight_winner.png", "101:".(25*$plr->level).
 
 $str1 = iconv("UTF-8", "CP1251", "Худший дуэлянт");
 $str2 = iconv("UTF-8", "CP1251", "За максимальное число поражений в боях против игроков");
-$res = f_MQuery("SELECT player_id, pvp_l FROM player_statistics WHERE player_id!=693820 ORDER BY pvp_l DESC LIMIT 1");
+$res = f_MQuery("SELECT player_id, pvp_l FROM player_statistics ORDER BY pvp_l DESC LIMIT 1");
 $arr = f_MFetch($res);
 $plr = new Player($arr[0]);
 $plr->AddEffect(5, 0, $str1, $str2, "fight_luser.png", "101:-10.", $t+24*3600);

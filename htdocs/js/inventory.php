@@ -23,12 +23,7 @@ foreach( $item_types2 as $a=>$b ) printf( "type2_names[$a] = '$b';\n" );
 
 ?>
 
-(new Image()).src='images/btn_l1.png';
-(new Image()).src='images/btn_l2.png';
-(new Image()).src='images/btn_1.png';
-(new Image()).src='images/btn_2.png';
-(new Image()).src='images/btn_n1.png';
-(new Image()).src='images/btn_n2.png';
+
 
 var items2 = new Array( );
 var items = new Array( );
@@ -103,6 +98,12 @@ function add_item( id, nm, img, descr, num, wg, slot, type, type2 )
 	++ n;
 }
 
+function set_descr(id, new_descr)
+{
+	items2[id].descr = new_descr;
+	items[slots[25]].descr = new_descr;
+}
+
 function alter_item( id, slot, _num )
 {
 	for( i = 0; i < n; ++ i ) if( items[i].item_id == id && items[i].slot == slot )
@@ -169,7 +170,7 @@ function get_used_items( )
 	
 	ok = 0;
 	for( i = 0; i < n; ++ i )
-		if( items[i].slot > 0 && items[i].num > 0 )
+		if( items[i].slot > 0 && items[i].num > 0 && (items[i].slot != 1 && items[i].slot < 14) )
 		{
 			ok = 1;
 			break;
@@ -182,7 +183,7 @@ function get_used_items( )
 		for( slot in type_names ) if( slot != 0 )
 		{
 			i = slots[slot];
-			if( items[i] && items[i].slot == slot && items[i].num > 0 )
+			if( items[i] && items[i].slot == slot && items[i].num > 0 && slot!=1 && slot<14 )
 			{
 				moo = myf( items[i].weight / 100.0 );
 				wst += "<tr><td><a href='javascript:i_do(\"item=" + items[i].item_id + "&w=" + slot + "\")'>" + items[i].name + "</a></td><td align=right>" + moo + "</td></tr>";
@@ -194,6 +195,51 @@ function get_used_items( )
 	}
 	else wst = '&nbsp;';
 	return wst;
+}
+
+function get_uping_items()
+{
+	var ok;
+	var total = 0;
+	
+	if( cur_filter != -1 && !( cur_filter < 100 && type_nums[cur_filter] ) && !( cur_filter >= 100 && type2_nums[cur_filter - 100] ) ) cur_filter = -1;
+	
+	ok = 0;
+	for( i = 0; i < n; ++ i )
+		if( items[i].slot > 0 && items[i].num > 0 && (items[i].slot == 1 || items[i].slot >= 14) )
+		{
+			ok = 1;
+			break;
+		};
+	if( ok )
+	{
+		wst = '';
+		wst += '<table width=100%><tr><td align=center>' + fupper + '<b>Усиления:</b><br>' + flower + "</td></tr><tr><td align=center>" + fupper;
+		wst += '<table width=100% cellspacing=0 cellpadding=0>';
+		for( slot in type_names ) if( slot != 0 )
+		{
+			i = slots[slot];
+			if( items[i] && items[i].slot == slot && items[i].num > 0 && (slot==1 || slot>=14) )
+			{
+				moo = myf( items[i].weight / 100.0 );
+				wst += "<tr><td><a href='javascript:i_do(\"item=" + items[i].item_id + "&w=" + slot + "\")'>" + items[i].name + "</a></td><td align=right>" + moo + "</td></tr>";
+			}
+		}
+		wst += '</table>';
+		wst += flower + "</td></tr><tr><td align=center>" + fupper + 'Уровень обмундирования: ' + wear_level + flower;
+		wst += '</td></tr></table>';
+	}
+	else wst = '&nbsp;';
+	return wst;
+}
+
+function insert_into_chat(a, t)
+{
+	t=1;
+	if (t==1)
+		a = ' (вещь:'+a+') ';
+	parent.chat_in.document.getElementById('inp').value += a;
+	parent.chat_in.Cursor( );
 }
 
 function get_sets( )
@@ -257,6 +303,7 @@ var imode = 0;
 function show_sets( )
 {
 	_( 'ifilters' ).style.display = 'none';
+	_( 'ups_items' ).style.display = 'none';
 	if( _( 'isets' ).style.display == 'none' )
 	{
 		_( 'isets' ).style.display = '';
@@ -271,9 +318,28 @@ function show_sets( )
 	}
 }
 
+function show_ups( )
+{
+	_( 'ifilters' ).style.display = 'none';
+	_( 'isets' ).style.display = 'none';
+	if( _( 'ups_items' ).style.display == 'none' )
+	{
+		_( 'ups_items' ).style.display = '';
+		_( 'used_items' ).style.display = 'none';
+		imode = 3;
+	}
+	else
+	{
+		_( 'ups_items' ).style.display = 'none';
+		_( 'used_items' ).style.display = '';
+		imode = 0;
+	}
+}
+
 function show_filters( )
 {
 	_( 'isets' ).style.display = 'none';
+	_( 'ups_items' ).style.display = 'none';
 	if( _( 'ifilters' ).style.display == 'none' )
 	{
 		_( 'ifilters' ).style.display = '';
@@ -293,6 +359,7 @@ var ware = 0;
 function get_inv_html( )
 {
 	var wst = get_used_items( );
+	var wst1 = get_uping_items();
 	var sst = get_sets( );
 	var fst = get_filters( );
 	var has_more = false;
@@ -379,8 +446,9 @@ function get_inv_html( )
 
 	st += '</tr></table>';
 
-	st += '</td><td valign=top><br><table width=100%><colgroup><col width=50%><col width=50%><tr><td>' + fupper + '<a href="javascript:show_filters()">Фильтр</a>' + flower + '</td><td>' + fupper + '<a href="javascript:show_sets()">Комплекты</a>' + flower + '</td></tr></table>';
+	st += '</td><td valign=top><br><table width=100%><colgroup><col width=33%><col width=34%><col width=33%><tr><td>' + fupper + '<a href="javascript:show_filters()">Фильтр</a>' + flower + '</td><td>' + fupper + '<a href="javascript:show_ups()">Усиления</a>' + flower + '</td><td>' + fupper + '<a href="javascript:show_sets()">Комплекты</a>' + flower + '</td></tr></table>';
 	st += '<div id=used_items '+((imode==0)?'':'style="display:none"')+'>' + wst + '</div>';
+	st += '<div id=ups_items '+((imode==3)?'':'style="display:none"')+'>' + wst1 + '</div>';
 	st += '<div id=isets '+((imode==1)?'':'style="display:none"')+'>' + sst + '</div>';
 	st += '<div id=ifilters '+((imode==2)?'':'style="display:none"')+'>' + fst + '</div>';
 	st += '</div>';

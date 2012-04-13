@@ -27,6 +27,7 @@ include( 'admin_header.php' );
 <a href=craft_shops.php target=_top>Магазины Крафтеров</a><br>
 <a href=tournament_editor.php target=_top>Редактор Турниров</a><br>
 <a href=admin_spams_list.php target=_top>Спам-список</a><br>
+<a href=admin_voters.php target=_top>Смотрелка голосов на форуме</a><br>
 <br>
 <center><b>Редакторы квестов</b><br>
 <a href=npc_editor.php target=_top>Редактор NPC</a><br>
@@ -41,6 +42,7 @@ include( 'admin_header.php' );
 <a href=admin_monster_camps_kill.php target=_top>Кемпинги монстров</a><br>
 <a href=loc_editor.php target=_top>Редактор Локаций</a><br>
 <a href=cave_editor.php target=_top>Редактор Пещер</a><br>
+<a href=lab_editor.php target=_top>Редактор Лабиринтов</a><br>
 <a href=lake_editor.php target=_top>Редактор Добывающих Гильдий</a><br>
 <a href=forest_editor_items.php target=_top>Редактор Леса (вещи)</a><br>
 <a href=forest_editor.php target=_top>Редактор Карты Леса</a> (не для IE)<br>

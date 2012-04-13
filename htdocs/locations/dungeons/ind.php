@@ -50,8 +50,11 @@ if ($_GET['leave'] && $_GET['group'])
 
 if ($_GET['start'])
 {
-	$gr_num = $_GET['start'];
-	startDungeon($player->player_id, $gr_num);
+	$res = f_MQuery("SELECT * FROM dungeons_groups WHERE leader_id={$player->player_id}");
+	if ($arr = f_MFetch($res))
+	{
+		startDungeon($player->player_id, $arr[1]);
+	}
 }
 
 ?>

@@ -7,7 +7,7 @@ function iin(a)
 {
 	if( a == 'Астаниэль' ) return '<font color=#0000FF>А</font><font color=#2525FF>с</font><font color=#4545FF>т</font><font color=#7070FF>а</font><font color=#9090FF>н</font><font color=#B0B0FF>и</font><font color=#D0D0FF>э</font><font color=#E0E0FF>л</font><font color=#FFFFFF>ь</font>';
 	if( a == 'Пламени' ) return '<font color=#FF0000>П</font><font color=#FF4040>л</font><font color=#FF7070>а</font><font color=#FF9595>м</font><font color=#FFCCCC>е</font><font color=#FFEEEE>н</font><font color=#FFFFFF>и</font>';
-	if( a == 'Ка-Напис' ) return '<font color=#00FF00>К</font><font color=#40FF40>а</font><font color=#70FF70>-Н</font><font color=#95FF95>а</font><font color=#CCFFCC>п</font><font color=#EEFFEE>и</font><font color=#FFFFFF>с</font>';
+	if( a == 'На-Капис' ) return '<font color=#00FF00>Н</font><font color=#40FF40>а</font><font color=#70FF70>-К</font><font color=#95FF95>а</font><font color=#CCFFCC>п</font><font color=#EEFFEE>и</font><font color=#FFFFFF>с</font>';
 
  if( a == 'Xen' ) return '<font color=#0000FF>X</font><font color=#9090FF>e</font><font color=#E0E0FF>n</font>';
  if( a == 'Reincarnation' ) return '<font color=#870087>R</font><font color=#C800C8>e</font><font color=#FF64FF>i</font><font color=#FFFFFF>n</font>';

@@ -7,12 +7,16 @@ function GetPlaceName( $loc, $depth )
 	{
 		return "Лабиринт";
 	}
-	else if( $loc == 1 )
+	else if( $loc == 1 || $loc == 6 || $loc == 7 )
 	{
 		include_once( 'forest_functions.php' );
 		$res = f_MQuery( "SELECT tile FROM forest_tiles WHERE location=$loc AND depth=$depth" );
 		$arr = f_MFetch( $res );
-		if( !$arr ) $arr[0] = 1;
+		if( !$arr )
+		{
+			if ($loc == 1) $arr[0] = 1;
+			if ($loc == 6) $arr[0] = 100;
+		}
 		return $forest_names[$arr[0]];
 	}
 	else

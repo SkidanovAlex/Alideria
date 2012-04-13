@@ -6,7 +6,10 @@ include_once( 'items.php' );
 
 function secondhand_price( $arr )
 {
-	return floor( $arr[price] / 20.0 * $arr[decay]  / 20.0 * $arr[max_decay] / 3 );
+	if ($arr[decay]>0)
+		return floor( $arr[price] / 20.0 * $arr[decay]  / 20.0 * $arr[max_decay] / 3 );
+	else
+		return 1;
 }
 
 if( isset( $_GET['sell'] ) && isset( $_GET['howmany'] ) )
@@ -14,8 +17,10 @@ if( isset( $_GET['sell'] ) && isset( $_GET['howmany'] ) )
 	$id = $_GET['sell'];
 	settype( $id, 'integer' );
 	$howmany = (int)$_GET['howmany'];
+	if (!checkCanDrop($id))
+		echo "<font color=darked>Нельзя продать непередаваемую вещь вещь.</font><br>";
 	// проверка на орденскую принадлежность вещи
-	if ( !checkOrderItem( $id ) )
+	else if ( !checkOrderItem( $id ) )
 	{
 		$res = f_MQuery( "SELECT items.name, items.price, items.decay, items.max_decay, player_items.number FROM items, player_items WHERE items.item_id=player_items.item_id AND player_items.player_id={$player->player_id} AND player_items.weared = 0 AND items.item_id = $id" );
 		$arr = f_MFetch( $res );
@@ -58,7 +63,7 @@ if( isset( $_GET['sell'] ) && isset( $_GET['howmany'] ) )
 	}
 }
 
-$res = f_MQuery( "SELECT items.type, items.item_id, items.parent_id, items.name, items.price, items.decay, items.max_decay, items.image, items.image_large, player_items.number FROM items, player_items WHERE items.item_id=player_items.item_id AND player_items.player_id={$player->player_id} AND player_items.weared = 0 ORDER BY items.type" );
+$res = f_MQuery( "SELECT items.type, items.item_id, items.parent_id, items.name, items.price, items.decay, items.max_decay, items.image, items.image_large, player_items.number FROM items, player_items WHERE items.item_id=player_items.item_id AND player_items.player_id={$player->player_id} AND player_items.weared = 0 AND items.nodrop=0 ORDER BY items.type" );
 
 echo "<table>";
 $first = true;

@@ -221,8 +221,8 @@ return false;
 			$po = 0;
 			while( $arr = f_MFetch( $res ) )
 			{
-				for( $i = 0; $i < $arr['rank']; ++ $i ) $po += $rank_prices[$i];
-				for( $i = 0; $i < $arr['rating']; ++ $i ) $po += $rank_prices[$i];
+				for( $i = 0; $i < $arr['rank']; $i++ ) $po += $rank_prices[$i];
+				for( $i = 0; $i < $arr['rating']; $i++ ) $po += $rank_prices[$i];
 			}
 			$player->syst2( "Вы получаете $po профессионального опыта." );
 			$last_instant_error = "Вы получаете $po профессионального опыта.";
@@ -286,7 +286,13 @@ return false;
 			$sch1 = $sch1 + $arr[3];
 		}
 		if ($sch1 < $sch) return false;
-		if ($arr[1] == -2)
+		if ($arr[1] == -4) // дублоны
+		{
+			$player->AddToLogPost( 0, $arr[2], 991, $item_id);
+			$player->AddMoney($arr[2]);
+			$last_instant_error .= " Вы получаете ".$arr[2].my_word_str($arr[2], ' дублон', ' дублона', ' дублонов');
+		}
+		elseif ($arr[1] == -2)
 		{
 			$last_instant_error .= " Там ничего нет.";
 		}
@@ -322,7 +328,7 @@ return false;
 			$i_n = f_MValue('SELECT name FROM items WHERE item_id='.$arr[1]);
 			$last_instant_error .= " Вы получаете ".$i_n." {$arr[2]} ".my_word_str( $arr[2], 'штуку', 'штуки', 'штук' );
 
-if ($item_id==76555)
+if (false && $item_id==76555)
 {
 $goog_items = Array (70971, 70972, 70974, 74434, 74796, 74798, 74800, 74864, 74866, 74867, 74868, 74871, 74872, 74873, 74878, 74880, 74881, 75313, 75314, 75315, 75317, 75319, 75320, 75321, 75322, 75332, 75534, 75563);
 

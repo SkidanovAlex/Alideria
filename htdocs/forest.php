@@ -209,6 +209,12 @@ function forest_show_players( )
 	document.getElementById( 'fplr' ).innerHTML = st;
 }
 
+function forest_show_npc(str)
+{
+	document.getElementById( 'here_you_can' ).innerHTML = str;
+	return 0;
+}
+
 forest_go( 0, 0 );
 
 </script>

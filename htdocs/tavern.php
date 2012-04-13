@@ -5,7 +5,8 @@ if( !isset( $mid_php ) ) die( );
 $havkas = Array (
 	Array( "Сырная похлебка", 6, 50, 'сырную похлебку' ),
 	Array( "Котлета", 10, 100, "котлету" ),
-	Array( "Отбивная по-королевски", 18, 200, "отбивную по-королевски" )
+	Array( "Отбивная по-королевски", 18, 200, "отбивную по-королевски" ),
+	Array( "Масленичные блины", 0, 5000, "масленичные блины" ),
 );
 
 if( isset( $_GET['eat'] ) && $player->regime == 0 )
@@ -14,7 +15,10 @@ if( isset( $_GET['eat'] ) && $player->regime == 0 )
 	settype( $id, 'integer' );
 	if( $id < 0 || $id >= count( $havkas ) ) RaiseError( "Попытка съесть отбивную из крысиных хвостиков!", "$id" );
 
-	if( !$player->SpendMoney( $havkas[$id][1] ) )
+	if ($id==3 && $player->GetQuestValue(64)<time())
+		;
+
+	else if( !$player->SpendMoney( $havkas[$id][1] ) )
 		$player->syst( 'У вас недостаточно дублонов' );
 	else
 	{
@@ -34,6 +38,7 @@ ScrollLightTableStart( );
 echo "<table><tr><td>&nbsp;</td><td height=100%>".GetScrollTableStart( )."<b>Стоимость</b>".GetScrollTableEnd( )."</td><td height=100%>".GetScrollTableStart( )."<b>Восстанавливает здоровья</b>".GetScrollTableEnd( )."</td><td>&nbsp;</td></tr>";
 foreach( $havkas as $id=>$arr )
 {
+	if ($id<3 || $player->GetQuestValue(64)>=time())
 	echo "<tr><td height=100%>".GetScrollTableStart( 'left' )."$arr[0]".GetScrollTableEnd( )."</td><td height=100%>".GetScrollTableStart( 'right' )."$arr[1] <img width=11 height=11 border=0 src='images/money.gif'>".GetScrollTableEnd( )."</td><td height=100%>".GetScrollTableStart( 'right' )."$arr[2]".GetScrollTableEnd( )."</td><td>".GetScrollTableStart( )."<a href=game.php?eat=$id>Кушать</a>".GetScrollTableEnd( )."</td></tr>";
 }
 echo "</table>";

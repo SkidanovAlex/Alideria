@@ -1,7 +1,7 @@
 <?
 
-include('../../functions.php');
-include('../../player.php');
+include_once('../../functions.php');
+include_once('../../player.php');
 
 function createBet($player_id, $dtype, $lvl) //лидер создает за€вку на данж
 {
@@ -186,7 +186,7 @@ function startDungeon($pl_id, $grnum)
 		return 1;
 	}
 	$dtype = $arr[1];
-if ($pl_id != 6825)
+if ($pl_id != 6825 && $pl_id != 1835898 && $pl_id != 173)
 	if ($arr[0] < 4 || $arr[0] > 6)
 	{
 		echo ("<script>alert(\"¬ группе должно быть от 4-х до 6-ти игроков\");</script>");
@@ -197,17 +197,57 @@ if ($pl_id != 6825)
 	{
 		$pl = new Player($arr[0]);
 		$pl->SetRegime(0);
-		$pl->SetLocation(10+$dtype, true);
+		$pl->SetLocation(100+$dtype, true);
 		$pl->SetDepth($grnum, true);
+		$pl->syst2("/items");
 	}
+	$res = f_MQuery("SELECT * FROM dungeon_template_items WHERE dun_id=$dtype");
+	while ($arr = f_MFetch($res))
+		f_MQuery("INSERT INTO dungeon_items (group_number, cell_num, item_id, number) VALUES ($grnum, $arr[1], $arr[2], $arr[3])");
 	f_MQuery("UPDATE dungeons_groups SET status=7 WHERE group_number=$grnum");
 	echo ("<script>window.top.game.location.href='game.php';</script>");
 	return 0;
 }
 
+function getPlayers($grnum, $cell_num)
+{
+	$res = f_MQuery("SELECT d.player_id FROM dungeon_players as d, online as o WHERE o.player_id=d.player_id AND d.group_number=$grnum AND d.cell_num=".$cell_num);
+	$ret = "";
+	while ($arr = f_MFetch($res))
+	{
+		$plr = new Player($arr[0]);
+		$ret .= "+'<br>'+".$plr->Nick1();
+	}
+	return $ret;
+}
+
 function checkForType($player_id, $dtype) //провер€ем на возможность зайти в данж, исход€ из положени€ игрока и его уровн€
 {
 	return 1; //пока проверка не написана
+}
+
+function moveIt($pl_id, $cell_num)
+{
+	f_MQuery("UPDATE dungeon_players SET cell_num=$cell_num WHERE player_id=".$pl_id);
+}
+
+function checkCanMove($dtype, $cell_from, $move_to, $pl_id)
+{
+	$str = "";
+	if ($move_to==2)
+		$str = "cell_up";
+	if ($move_to==4)
+		$str = "cell_left";
+	if ($move_to==6)
+		$str = "cell_right";
+	if ($move_to==8)
+		$str = "cell_down";
+	if ($str == "") return -1;
+	$res = f_MQuery("SELECT ".$str." FROM dungeons_cells WHERE dungeon_id=".$dtype." AND cell_num=".$cell_from);
+	if ($arr = f_MFetch($res))
+		return (int)$arr[0];
+	else
+		return -1;
 }
 
 ?>

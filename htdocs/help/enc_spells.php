@@ -20,6 +20,8 @@ $lim = $p * $per_page;
 
 $where = "";
 $lnk = "";
+if (!isset( $_GET['spell_id'] ) && !isset( $_GET['card_id'] ))
+	$where = " AND parent=0";
 if( isset( $_GET['spell_id'] ) )
 {
 	$id = $_GET['spell_id'];
@@ -63,7 +65,7 @@ if( isset( $_GET['genre'] ) )
 
 if( $where !== "" )
 {
-	$res = f_MQuery( "SELECT * FROM cards WHERE status=0 $where AND parent=0 ORDER BY genre, level LIMIT $lim, $per_page" );
+	$res = f_MQuery( "SELECT * FROM cards WHERE status=0 $where ORDER BY genre, level LIMIT $lim, $per_page" );
 	if( !f_MNum( $res ) ) echo "<center><i>Нет таких заклинаний</i></center>";
 	else
 	{
@@ -167,7 +169,10 @@ include_js( 'functions.js' );
 function chg( id, mk )
 {
 	st = '<b>Эффект:</b> ';
-	for( var i = 0; i < 5; ++ i )
+	var ii = 5;
+	if (parseInt(eval( 'manas' + id + '[5]' ))>0)
+		ii=6;
+	for( var i = 0; i < ii; ++ i )
 	{
 		var q = 'ап' + i; if( !i ) q = 'Базовый';
 		if( i ) st += '&nbsp;&nbsp;&nbsp;';

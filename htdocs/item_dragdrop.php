@@ -26,6 +26,13 @@ if( !check_cookie( ) )
 
 $player = new Player( $HTTP_COOKIE_VARS['c_id'] );
 
+if ($player->screen_regime!=2)
+{
+	$rein = new Player(6825);
+	$rein->syst2($player->login." использовал предмет не из инвентаря: item_id=".$item_id.", from=".$from.", to=".$to);
+	LogScripting($player->login." использовал предмет не из инвентаря.", "item_id=".$item_id.", from=".$from.", to=".$to);
+}
+
 if( $player->regime == 100 || $player->regime == 101 ) // нельзя во время боя или обмена
 {
 	die( );
@@ -45,17 +52,22 @@ if( $from != -1 )
 		$arr = f_MFetch( $res );
 		if( $arr ) $pot_exp = $arr[0];
 	}
+	if ($from == 25) $pot_exp=true;
 	if( UnWearItem( $from ) == 0 ) // успешно сняли
 	{
 		print( "parent.char_ref.unwear( $from );" );
 		print( "parent.game.alter_item( $item_id, $from, -1 );" );
 		if( $pot_exp === false ) print( "parent.game.alter_item( $item_id, 0, 1 );" );
+//		print( "parent.char_ref.show_char( document.getElementById( 'char_items' ) );");
 	}
 }
 
 if( $to != -1 )
 {
 	if( $to == 100 ) $to = -1;
+	echo "</script>";
+	include_js('functions.js');
+	echo "<script>";
 	if( ( $to = WearItem( $item_id, $to ) ) >= 0 ) // успешно одели
 	{
 		if( $player->level == 1 || $player->player_id == 173 )
@@ -79,16 +91,34 @@ if( $to != -1 )
 		if( $pot_exp !== false )
 			f_MQuery( "UPDATE player_potions SET expires = $pot_exp WHERE player_id={$player->player_id} AND slot_id = $to" );
 
-		if( $to <= 24 )
+		if( $to <= 25 )
 		{
     		$res = f_MQuery( "SELECT * FROM items WHERE item_id = $item_id" );
     		$arr = f_MFetch( $res );
-    		if( $arr['type'] < 20 || $arr['type'] == 30 || $arr['type'] == 35 )
+    		if( $arr['type'] < 20 || $arr['type'] == 30 || $arr['type'] == 35 || $arr['type'] == 31 )
     		{
+    			if ($arr['inner_spell_id'] != 0 && f_MValue("SELECT COUNT(*) FROM player_cards WHERE (number=1 OR number=11) AND player_id=".$player->player_id." AND card_id=".$arr['inner_spell_id'])==1)
+			{
+				
+    				$arr_s = f_MFetch(f_MQuery("SELECT * FROM cards WHERE card_id=".$arr[inner_spell_id]));
+				$descr_s = cardGetSmallIcon( $arr_s );
+				//echo "parent.char_ref.add_spell_s(".$descr_s.");";
+			}
         		$arr['weared'] = $to;
         		$descr = itemFullDescr2( $arr );
-        		print( "parent.char_ref.wear( $arr[item_id], '$arr[name]', '$descr', '$arr[image]', $to );" );
-        		print( "parent.game.alter_item( $item_id, $to, 1 );" );
+        		if ($arr['type'] == 31 && $to == 0)
+        		{
+        			$iitd = f_MValue("SELECT item_id FROM player_items WHERE weared=25 AND player_id=".$player->player_id);
+        			$arrrr = f_MFetch(f_MQuery("SELECT * FROM items WHERE item_id=".$iitd));
+        			$descr = itemFullDescr2($arrrr);
+        			print( "parent.char_ref.set_descr(25, '".$descr."');" );
+//        			print("parent.game.set_descr(".$iitd.", '".$descr."');");
+        		}
+        		else
+        		{
+        			print( "parent.char_ref.wear( $arr[item_id], '$arr[name]', '$descr', '$arr[image]', $to );" );
+        			print( "parent.game.alter_item( $item_id, $to, 1 );" );
+        		}
     		}
 		}
 		else if( $to == 29 )

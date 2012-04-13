@@ -39,7 +39,7 @@ echo "<a href=index.php>На главную</a><br><br>";
 <?
 echo "<table>";
 echo "<tr><td>Спам строка</td><td>Удалить?</td></tr>";
-$res = f_MQuery("SELECT * FROM spams");
+$res = f_MQuery("SELECT * FROM spams ORDER BY spam_name");
 while ($arr = mysql_fetch_array($res))
 {
     echo "<tr><td>$arr[1]</td><td><a href='admin_spams_list.php?del=".$arr[0]."'>Удалить</a></td></tr>";

@@ -16,7 +16,9 @@ if( isset( $_GET['chosen'] ) )
 			$player->SetValue(62, $v_62+1);
 			$numSm = f_MValue("SELECT COUNT(*) FROM paid_smiles WHERE player_id={$player->player_id} AND set_id>=10 AND expires=-1");
 			$lck = 0;
-			if ($numSm >= 60) $lck=7;
+			if ($numSm >= 150) $lck=15;
+			elseif ($numSm >= 100) $lck=10;
+			elseif ($numSm >= 60) $lck=7;
 			elseif ($numSm >=40) $lck=5;
 			elseif ($numSm >=25) $lck=3;
 			elseif ($numSm >=10) $lck=2;

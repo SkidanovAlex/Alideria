@@ -77,6 +77,9 @@ if (isset($_GET['t1']) && isset($_GET['t2']))
 
 	$dif_ = f_MValue("SELECT SUM(have-had) FROM player_log WHERE player_id!=6825 AND player_id!=868239 AND player_id!=67573 AND item_id=0 AND time>=".$t1." AND time<=".$t2." AND type=42");
 	echo "<tr><td>Ремонт</td><td>{$dif_}</td></tr>";
+	
+	$dif_ = f_MValue("SELECT SUM(have-had) FROM player_log WHERE player_id!=6825 AND player_id!=868239 AND player_id!=67573 AND item_id=0 AND time>=".$t1." AND time<=".$t2." AND type=43");
+	echo "<tr><td>Ремонтный Цех</td><td>{$dif_}</td></tr>";
 
 	$dif_ = f_MValue("SELECT SUM(have-had) FROM player_log WHERE player_id!=6825 AND player_id!=868239 AND player_id!=67573 AND item_id=0 AND time>=".$t1." AND time<=".$t2." AND type=1001");
 	echo "<tr><td>Штраф Демиургом</td><td>{$dif_}</td></tr>";

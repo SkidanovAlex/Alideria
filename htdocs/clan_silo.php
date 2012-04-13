@@ -32,7 +32,7 @@ else if( isset( $_GET['do_put'] ) )
 	echo "<script>put_id = -1; function doSilo(id){ put_id = id; o = document.getElementById( 'color_choose' ); pos = getAP( document.getElementById( 'place'+id ) );o.style.display='';o.style.left=pos.x;o.style.top=pos.y+20; }</script>";
 	echo "<script>function DoPut(clr){doMoo();query('clan_silo_ref.php',''+put_id+'|'+document.getElementById('place'+put_id).value + '|' + clr);}</script>";
 	echo "Добавление вещей на склад - <a href=game.php?order=silo>Назад</a></br>";
-	$res = f_MQuery( "SELECT items.*,player_items.number FROM player_items,items WHERE player_id={$player->player_id} AND weared=0 AND items.item_id=player_items.item_id" );
+	$res = f_MQuery( "SELECT items.*,player_items.number FROM player_items,items WHERE player_id={$player->player_id} AND weared=0 AND nodrop=0 AND items.item_id=player_items.item_id" );
 	echo "<script>\n";
 	echo "item_err = 'У вас нет ни одной вещи';";
 	while( $arr = f_MFetch( $res ) )
@@ -92,7 +92,7 @@ else if( isset( $_GET['do_weaponary'] ) )
 	echo "<div id=silo_taken_items>&nbsp;</div>";
 	echo "<script>FLL();</script></td></tr></table><img src='images/e_none.gif' width=0 height=0><img src='images/e_check.gif' width=0 height=0>";
 	
-	$res = f_MQuery( "SELECT items.*,SUM(clan_items.number) AS number,clan_items.color FROM clan_items,items WHERE clan_id=$clan_id AND items.item_id=clan_items.item_id AND items.type >= 1 AND items.type < 20 GROUP BY parent_id, decay, max_decay, color ORDER BY level" );
+	$res = f_MQuery( "SELECT items.*,SUM(clan_items.number) AS number,clan_items.color FROM clan_items,items WHERE clan_id=$clan_id AND items.item_id=clan_items.item_id AND (items.type >= 1 AND items.type < 20 OR items.type = 30 OR items.type = 35) GROUP BY parent_id, decay, max_decay, color ORDER BY level" );
 	echo "<script>\n"; ?>
 	var items = [];
 	var types = [];

@@ -31,7 +31,7 @@ if( $_GET['new_lot'] )
 
    	include_js( "js/items_renderer.js" );
 	echo "<script>function doLot(id){location.href='game.php?go_on=1&id='+id+'&num='+document.getElementById('place'+id).value;}</script>";
-	$res = f_MQuery( "SELECT items.*,player_items.number FROM player_items,items WHERE player_id={$player->player_id} AND items.item_id=player_items.item_id AND weared=0" );
+	$res = f_MQuery( "SELECT items.*,player_items.number FROM player_items,items WHERE player_id={$player->player_id} AND items.item_id=player_items.item_id AND weared=0 AND nodrop=0" );
 	echo "<script>\n";
 	while( $arr = f_MFetch( $res ) )
 	{
@@ -51,8 +51,8 @@ else if( isset( $_GET['go_on'] ) )
 	$number = $_GET['num'];
 	settype( $item_id, 'integer' );
 	settype( $number, 'integer' );
-	$arr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$item_id" ) );
-   	if( !$arr ) RaiseError( "Попытка поставить на аукцион несуществующую вещь", "$item_id" );
+	$arr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$item_id AND nodrop=0" ) );
+   	if( !$arr ) RaiseError( "Попытка поставить на аукцион несуществующую или непередаваемую вещь", "$item_id" );
 	if( $number > 0 )
 	{
     	$price = $arr['price'] * $number;
@@ -81,8 +81,8 @@ else if( $_GET['fin'] == 1 )
 	settype( $buy_price, 'integer' );
 	settype( $duration, 'integer' );
 
-	$arr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$item_id" ) );
-   	if( !$arr ) RaiseError( "Попытка поставить на аукцион несуществующую вещь", "$item_id" );
+	$arr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$item_id AND nodrop=0" ) );
+   	if( !$arr ) RaiseError( "Попытка поставить на аукцион несуществующую непередаваемую вещь", "$item_id" );
 	if( $number > 0 && $start_price > 0 && $step > 0 && $buy_price > 0 )
 	{
     	echo "<form action=game.php?fin=2 method=post><input type=hidden name=number value=$number><input type=hidden name=item_id value=$item_id><table><tr><td>Лот:</td><td>[$number] <b>$arr[name]</b></td></tr>";
@@ -114,8 +114,8 @@ else if( $_GET['fin'] == 2 )
 		RaiseError( "Попытка выставить неверное время торгов на аукционе" );
 	}
 
-	$arr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$item_id" ) );
-   	if( !$arr ) RaiseError( "Попытка поставить на аукцион несуществующую вещь", "$item_id" );
+	$arr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$item_id AND nodrop=0" ) );
+   	if( !$arr ) RaiseError( "Попытка поставить на аукцион несуществующую или непередаваемую вещь", "$item_id" );
 	if( $number > 0 && $start_price > 0 && $step > 0 && $buy_price > 0 )
 	{
 		// проверка на орденскую пометку

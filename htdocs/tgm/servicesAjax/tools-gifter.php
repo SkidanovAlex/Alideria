@@ -21,10 +21,10 @@
 		// Вынимаем нужных кадриков из базы
 		$playersList = f_MQuery( 'SELECT player_id FROM characters WHERE login = "'.$happyPlayers.'"' );
 	}
-	elseif( $happyPlayers == '%' ) // Если премиумы дарятся всем игрокам
+	elseif( $happyPlayers == '%' ) // Если подарки дарятся всем игрокам
 	{
 		// Получаем список всех игроков (у мобов вместо хэша пароля стоит цифра, равная их типу)
-		$playersList = f_MQuery( 'SELECT player_id FROM characters WHERE length( pswrddmd5 ) = 32 AND sex = 1' );
+		$playersList = f_MQuery( 'SELECT player_id FROM characters WHERE length( pswrddmd5 ) = 32' );
 	}
 	else // Прислали никнейм одного счастливчика
 	{
@@ -32,14 +32,22 @@
 		$playersList = f_MQuery( 'SELECT player_id FROM characters WHERE login = "'.$happyPlayers.'"' );
 	}
 
-	// Одариваем премиумами по списку
+	if ($presentDeadline>=0)
+		$tm = time() + $presentDeadline;
+	elseif ($presentDeadline==-1)
+		$tm = 2147483647;
+	else
+		$tm=0;
+		
+	// Одариваем подарками по списку
 	while( $playerId = f_MFetch( $playersList ) )
 	{
 		$playersCounter ++; // Ведём учёт числа обдарованных игроков
 		
 		$playerId = $playerId['player_id']; // Психоделично, да и необходимо
 		
-		f_MQuery( 'INSERT INTO player_presents( player_id, img, txt, author, deadline ) VALUES ( '.$playerId.', "'.$presentImage.'", "'.$presentText.'" ,"'.$fromWho.'", '.$presentDeadline.' )' );
+		f_MQuery( 'INSERT INTO player_presents( player_id, img, txt, author, deadline ) VALUES ( '.$playerId.', "'.$presentImage.'", "'.$presentText.'" ,"'.$fromWho.'", '.$tm.' )' );
+		f_MQuery("INSERT INTO post (sender_id, receiver_id, title, content) VALUES (69055, ".$playerId.", 'Вы получили подарок от ".$fromWho."', '".$presentText."')");
 	}
 
 	// Сообщаем об результате

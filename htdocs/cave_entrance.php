@@ -532,6 +532,7 @@ if( $player->level >= 4 )
                     $add_exp = '';
     				$cstage = f_MValue( "SELECT stage FROM player_caveexp WHERE player_id={$plr->player_id}" );
     				$coef = 1.5; if( $number == 5 ) $coef = 2.0;
+                    $coef *= 0.98;
     				$exp = (int)($cstage * $plr->level * $coef * 6 * mt_rand( 80, 120 ) / 100);
 				$exp_to_log = $exp;
     				if( $blvl )
@@ -541,7 +542,7 @@ if( $player->level >= 4 )
 					$add_exp = ". Ваша академия приносит вам дополнительно <b>$bonus</b> ".my_word_str( $bonus, "единицу опыта", "единицы опыта", "единиц опыта" );
 					f_MQuery( "UPDATE characters SET exp = exp + $bonus WHERE player_id = $plr->player_id" );
 				}
-				if( $plr->HasTrigger(12303) || f_MValue( 'SELECT * FROM `premiums` WHERE `player_id` = '.$plr->player_id.' AND `premium_id` = 0' ) ) // прем включен для всех
+				if( f_MValue( 'SELECT * FROM `premiums` WHERE `player_id` = '.$plr->player_id.' AND `premium_id` = 0' ) )
 				{
 					$premiumExp = round( $exp / 2 );
 					$exp_to_log += $premiumExp;

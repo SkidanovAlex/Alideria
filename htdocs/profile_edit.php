@@ -27,7 +27,7 @@ if( isset( $_POST['nm'] ) )
 
 	// «апрет на изменение дн€ рождени€ больше одного раза
 	$curBirthday = f_MValue( 'SELECT birthday FROM player_profile WHERE player_id = '.$player->player_id );
-	if( $player->HasTrigger( 2013 ) && $birtday != $curBirthday )
+	if( $player->HasTrigger( 2013 ) && $birthday != $curBirthday )
 	{
 		echo '<span style="color: darkred; font-weight: bold;">Ѕольше нельз€ изменить дату своего дн€ рождени€.</span><br />';
 		$birthday = $curBirthday;

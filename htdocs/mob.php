@@ -94,6 +94,10 @@ class Mob
 
 		$res = f_MQuery( "SELECT card_id, parent FROM cards WHERE status=0 AND multy=0 AND card_id > 58 AND ( genre=0 AND ( level )*(mk+2) <= {$attrs[30]}*2 OR genre=1 AND ( level )*(mk+2) <= {$attrs[40]}*2 OR genre=2 AND ( level )*(mk+2) <= {$attrs[50]}*2 ) AND level<=$level ORDER BY (level)*(2+mk) DESC" );
 		$gotten = array( );
+		for ($ij=0;$ij<2000 ;$ij++ ) $gotten[$ij]=0;
+		{
+		  
+		}
 		while( $arr = f_MFetch( $res ) )
 		{
 			if( $arr[0] == 302 || $arr[1] == 302 ) continue;
@@ -208,12 +212,20 @@ function mobDrop2( $mob_id, $loc, $depth, $combat_id, $player_id = 0, $login = '
 	$player_id = (int)$player_id;
 	while( $arr = f_MFetch( $res ) )
 	{
+		if ($arr[item_id]==76397)
+		if ($player_id>0 && f_MValue("SELECT value FROM player_quest_values WHERE value_id=12200 AND player_id=".$player_id)==1)
+		{
+			f_MQuery("UPDATE player_quest_values SET value=2 WHERE value_id=12200 AND player_id=".$player_id);
+			$arr['chance']=10000;
+		}
+		else
+			$arr['chance']=0;
 		if( mt_rand( 0, 9999 ) < ( $arr['chance'] * $chsans / 100 ) )
 		{
 			if( $arr['name13'] == '' )  $arr['name13']  = $arr['name'];
 			if( $arr['name2_m'] == '' )  $arr['name2_m']  = $arr['name'];
 			$num = mt_rand( 1, $arr['number'] );
-			if( ($premium) && mt_rand( 0, 99 ) < 50 && $arr[item_id] != 77083 ) $num = $num * 2;
+			if( ($premium) && mt_rand( 0, 99 ) < 50 && $arr[item_id] != 77083 && $arr[item_id] != 76397 ) $num = $num * 2;
 			if ($arr[item_id] == 77083)
 			{
 				f_MQuery("UPDATE mob_items SET mob_id=(SELECT mob_id FROM mobs WHERE level>5 AND level<25 ORDER BY RAND() LIMIT 1) WHERE item_id=77083");
@@ -225,6 +237,54 @@ function mobDrop2( $mob_id, $loc, $depth, $combat_id, $player_id = 0, $login = '
 			f_MQuery( "INSERT INTO combat_loot( combat_id, item_id, number, player_id, expires ) VALUES ( $combat_id, $arr[item_id], $num, $player_id, ".(time()+15)." )" );
 			$eid = mysql_insert_id( );
 			$ret .= ", <a href=help.php?id=1010&item_id=$arr[item_id] target=_blank>".my_word_form( $num, $arr['name'], $arr['name13'], $arr['name2_m'] )."</a>\" + tstr( $eid ) + \"";
+		}
+	}
+	if ($mob_id==54 && f_MValue("SELECT effect_id FROM player_effects WHERE effect_id=12 AND player_id=".$player_id))
+	{
+		if (mt_rand(1, 5) == 1)
+		{
+			include_once("player.php");
+			$plr = new Player($player_id);
+			$plr->SetTrigger(13110, 0);
+			$plr->RemoveEffect(12, true);
+			$plr->AddItems(79572);
+			$plr->syst3('Вы получаете Ключ Природы');
+		}
+	}
+	if ($mob_id==57 && f_MValue("SELECT effect_id FROM player_effects WHERE effect_id=13 AND player_id=".$player_id))
+	{
+		if (mt_rand(1, 5) == 1)
+		{
+			include_once("player.php");
+			$plr = new Player($player_id);
+			$plr->SetTrigger(13110, 0);
+			$plr->RemoveEffect(13, true);
+			$plr->AddItems(79572);
+			$plr->syst3('Вы получаете Ключ Природы');
+		}
+	}
+	if ($mob_id==36 && f_MValue("SELECT effect_id FROM player_effects WHERE effect_id=14 AND player_id=".$player_id))
+	{
+		if (mt_rand(1, 5) == 1)
+		{
+			include_once("player.php");
+			$plr = new Player($player_id);
+			$plr->SetTrigger(13110, 0);
+			$plr->RemoveEffect(14, true);
+			$plr->AddItems(79572);
+			$plr->syst3('Вы получаете Ключ Природы');
+		}
+	}
+	if ($mob_id==39 && f_MValue("SELECT trigger_id FROM player_triggers WHERE trigger_id=13211 AND player_id=".$player_id)==13211)
+	{
+		if (mt_rand(1, 20) <= 9)
+		{
+			include_once("player.php");
+			$plr = new Player($player_id);
+			$plr->SetTrigger(13211, 0);
+			$plr->SetTrigger(13213, 1);
+			$plr->AddItems(81272);
+			$plr->syst3('Вы получаете Кувшин молока');
 		}
 	}
 	$adds = '';

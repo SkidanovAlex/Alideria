@@ -107,6 +107,8 @@ class Player
 
 			checkZhorik( $this, 1, 1 );
 		}
+
+//        $this->SetTrigger(12345, 0);
 	}
 
 	function UploadInfoToJavaServer($ses_crc = null)
@@ -230,6 +232,15 @@ class Player
 		return "window.top.ii2( $this->level, '$this->login', '$this->nick_clr', $this->clan_id, $this->player_id )";
 	}
 
+	function checkWearLevel()
+	{
+		f_MQuery("LOCK TABLE characters WRITE, items WRITE, player_items WRITE");
+		$wl = f_MValue("SELECT SUM(items.level) FROM items, player_items WHERE player_items.player_id={$this->player_id} AND player_items.item_id=items.item_id AND player_items.weared>0");
+		if (!$wl) $wl = 0;
+		f_MQuery("UPDATE characters SET wear_level=$wl WHERE player_id=".$this->player_id);
+		f_MQuery("UNLOCK TABLES");
+	}
+
 	function syst( $a, $script_tags = true )
 	{
 		$tm = date( 'H:i', time( ) );
@@ -254,7 +265,7 @@ file_put_contents("log_syst2.txt", "say\n{$a}\n0\n{$this->player_id}\n0\n{$tm}\n
         // ---------------------
 	}
 
-	function syst3( $a ) // do offline messaging
+	function syst3( $a, $folder_id=0 ) // do offline messaging
 	{
 		global $test_server;
 		if( $test_server ) return;
@@ -268,7 +279,7 @@ file_put_contents("log_syst2.txt", "say\n{$a}\n0\n{$this->player_id}\n0\n{$tm}\n
         socket_close( $sock );
         // ---------------------
 
-        f_MQuery( "INSERT INTO post( sender_id, receiver_id, title, content, money, np, deadline ) VALUES ( 69055, {$this->player_id}, '".substr( $a, 0, 10 )."...', '$a', '0', '0', '0' )" );
+        f_MQuery( "INSERT INTO post( sender_id, receiver_id, title, content, money, np, deadline, folder_id ) VALUES ( 69055, {$this->player_id}, '".substr( $a, 0, 10 )."...', '$a', '0', '0', '0', {$folder_id} )" );
 	}
 
 	var $bet_type = false;
@@ -335,7 +346,7 @@ file_put_contents("log_syst2.txt", "say\n{$a}\n0\n{$this->player_id}\n0\n{$tm}\n
 
 					// Атака шамахан
 
-					if( $this->location == 2 && $this->depth != 50 && $this->depth != 49 && $P > mt_rand( 0, 100 ) ) // Рассчёт вероятности атаки
+					if( $this->location == 2 && $this->depth != 50 && $this->depth != 46 && $this->depth != 49 && $P > mt_rand( 0, 100 ) ) // Рассчёт вероятности атаки
 					{
 						$kind = 2;
 						if( $this->level < 11 )
@@ -940,6 +951,49 @@ file_put_contents("log_syst2.txt", "say\n{$a}\n0\n{$this->player_id}\n0\n{$tm}\n
 		f_MQuery( "DELETE FROM combat_turn_desc WHERE player_id={$this->player_id}" );
 
 
+		if ( $arr['win_action'] != 3)
+		{
+			$bal_id = f_MValue("SELECT item_id FROM player_items WHERE weared=25 AND player_id=".$this->player_id);
+			if ($bal_id>0)
+			{
+				$bal_arr = f_MValue("SELECT decay FROM items WHERE item_id=".$bal_id);
+				$mlhp = f_MValue("SELECT value FROM player_attributes WHERE attribute_id=101 AND player_id=".$this->player_id);
+				$thp = f_MValue("SELECT value FROM player_attributes WHERE attribute_id=1 AND player_id=".$this->player_id);
+				if ($thp>0)
+					$lhp = $mlhp - $thp;
+				else
+					$lhp = $mlhp;
+				$bal_arr = $bal_arr - $lhp;
+				if ($lhp > 0)
+				{
+//					$bal_arr = $bal_arr - $lhp;
+					if ($bal_arr>0)
+					{
+						if ($thp>0)
+							f_MQuery("UPDATE player_attributes SET value=value+$lhp WHERE attribute_id=1 AND player_id=".$this->player_id);
+						else
+							f_MQuery("UPDATE player_attributes SET value=$lhp WHERE attribute_id=1 AND player_id=".$this->player_id);
+						$this->syst2("Целебный бальзам восстановил Вам <b>".$lhp."</b> ".my_word_str($lhp, 'единицу', 'единицы', 'единиц')." здоровья.");
+						f_MQuery("UPDATE items SET decay=".$bal_arr." WHERE item_id=".$bal_id);
+					}
+					else
+					{
+						$lhp=$lhp+$bal_arr;
+						if ($thp>0)
+							f_MQuery("UPDATE player_attributes SET value=value+$lhp WHERE attribute_id=1 AND player_id=".$this->player_id);
+						else
+							f_MQuery("UPDATE player_attributes SET value=$lhp WHERE attribute_id=1 AND player_id=".$this->player_id);
+						$this->syst2("Целебный бальзам восстановил Вам <b>".$lhp."</b> ".my_word_str($lhp, 'единицу', 'единицы', 'единиц')." здоровья.");
+						f_MQuery("DELETE FROM player_items WHERE player_id=".$this->player_id." AND weared=25");
+						f_MQuery("DELETE FROM items WHERE item_id=".$bal_id);
+						$this->syst2("Целебный бальзам выпит до дна.");
+					}
+				}
+				
+			}
+		}
+
+
 		if( $a == -1 ) $a = $arr['combat_id']; // вызывает смутные сомнения необходимости параметра $a вообще :оО
 
 		$log_str = "";
@@ -1100,8 +1154,8 @@ file_put_contents("log_syst2.txt", "say\n{$a}\n0\n{$this->player_id}\n0\n{$tm}\n
 			include( 'leave_combat_quest.php' );
 			if( $arr['win_action'] == 6 && $arr['win_action_param'] == 1 )
 			{
-				if( f_MValue("SELECT count(player_id) FROM combat_players WHERE combat_id=$a AND ready = 3 AND ai=1") )
-					f_MQuery( "UPDATE forest_monster_camps SET combat_id=0 WHERE combat_id=$a" );
+				if( f_MValue("SELECT count(player_id) FROM combat_players WHERE combat_id=$a AND ready = 3 AND ai=1") || f_MValue("SELECT count(player_id) FROM combat_players WHERE combat_id=$a AND ready < 2 AND ai=0")==0 )
+					f_MQuery( "DELETE FROM forest_monster_camps WHERE combat_id=$a" );
 			}
 			if( $arr['win_action'] == 8 ) // подземелье
 			{

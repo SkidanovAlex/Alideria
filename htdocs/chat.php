@@ -80,7 +80,7 @@ function show_menu( l1, e, msgId )
 	st += "<tr><td id=ft3 onmousemove='item_mover(this)' onmouseout='item_mout(this)' onClick='f3()' style='cursor: pointer; background-color: #BBBBBB;'>Добавить персонажа " + l1 + " в игнор</td></tr>";
 	st += "<tr><td id=ft4 onmousemove='item_mover(this)' onmouseout='item_mout(this)' onClick='f4()' style='cursor: pointer; background-color: #BBBBBB;'>Информация о персонаже " + l1 + "</td></tr>";
 
-	<? if( $player->Rank( ) > 0 ) { ?>
+	<? if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 || $player->Rank( ) == 3 ) { ?>
 
 		st += "<tr><td id=ft5 onmousemove='item_mover(this)' onmouseout='item_mout(this)' onClick='f5()' style='cursor: pointer; background-color: #BBBBBB;'>Контроль персонажа " + l1 + "</td></tr>";
 

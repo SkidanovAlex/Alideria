@@ -109,10 +109,12 @@ if( 0 != ( getPlayerPermitions( $clan_id, $player->player_id ) & $CAN_COOK ) || 
 			}
 			if( $ok )
 			{
+				$inum = 2;
 				foreach( $arr[1] as $item_id=>$num )
 				{
 					f_MQuery( "UPDATE clan_items SET number=number-".( ( $fast ) ? $fast : $num )." WHERE clan_id=$clan_id AND item_id=$item_id AND color=0" );
 					f_MQuery( "DELETE FROM clan_items WHERE clan_id=$clan_id AND item_id=$item_id AND color=0 AND number=0" );
+					$inum = $num;
 				}
 				//f_MQuery( "UNLOCK TABLES" );
 
@@ -121,7 +123,7 @@ if( 0 != ( getPlayerPermitions( $clan_id, $player->player_id ) & $CAN_COOK ) || 
 					$player->SetTill(time() + 5);
 				else
 					$player->SetTill( time( ) + ( ( $fast ) ? 0 : 120 ) );
-				$player->SetValue( 300, ( ( $fast ) ? $food_types[$_GET['cook']][2] * $fast / 2  : $food_types[$_GET['cook']][2] ) );
+				$player->SetValue( 300, ( ( $fast ) ? (int)($food_types[$_GET['cook']][2] * $fast / $inum)  : $food_types[$_GET['cook']][2] ) );
 			}
 			else
 			{

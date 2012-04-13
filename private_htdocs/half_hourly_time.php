@@ -28,6 +28,7 @@ while( $efid = f_MFetch( $plef ) )
 $wishingToDivorce = f_MQuery( 'SELECT * FROM wishing_to_divorce WHERE divorce_time < '.$tm );
 while( $wishing = f_MFetch( $wishingToDivorce ) )
 {
+	f_MQuery("DELETE FROM player_triggers WHERE (trigger_id>=12000 AND trigger_id<=12005) AND player_id=".$wishing[p1]);
 	// Проверяем, участвовала ли пара в Лабиринте Влюблённых
 	$labId = f_MValue( 'SELECT id FROM labyrinth_of_love WHERE p0 = '.$wishing[p0].' OR p1 = '.$wishing[p1] );
 	if( $labId )

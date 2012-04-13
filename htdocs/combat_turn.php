@@ -142,6 +142,9 @@ class Combat
 			$arr = f_MFetch( $res );
 			if( $arr && $arr[0] != 0 )
 			{
+				$ibv = f_MValue("SELECT COUNT(*) FROM player_items, items WHERE player_id={$p1->player->player_id} AND weared > 1 AND weared < 14 AND items.inner_base_spell_id={$p1->card->card_id} AND items.item_id=player_items.item_id");
+				if (!$ibv)
+				{
 				//LogError( "Moo: player_id={$p1->player->player_id} AND card_id={$p1->card->card_id}" );
 				$iires = f_MQuery( "SELECT items.*, player_items.weared FROM player_items,items WHERE weared > 1 AND weared < 14 AND charges > 0 AND items.inner_spell_id={$p1->card->card_id} AND items.item_id=player_items.item_id AND player_id={$p1->player->player_id} ORDER BY rand() LIMIT 1" );
     			$iiarr = f_MFetch( $iires );
@@ -156,6 +159,7 @@ class Combat
     				f_MQuery( "UPDATE items SET charges_spent=charges_spent+1, charges = $charges WHERE item_id=$item_id" );
     			}
     			else return ",[5,'{$p1->player->login}']";
+    			}
 			}
 			// расход заряда - конец
 
@@ -453,6 +457,7 @@ class Combat
 
 			$p1 = $this->cplayers[$this->sides[0][$i]];
 			$p2 = $this->cplayers[$this->sides[1][$i]];
+
 			if( $p1->card === null || $p2->card === null )
 			{
 				$bg .= $this->processCard( $p1, $p2, 0 );
@@ -470,21 +475,7 @@ class Combat
 
 					$bg .= $this->processCard( $p1, $p2, 0 );
 					$w1 = true; $w2 = false;
-				}				
-				if( $p1->card->genre == ( $p2->card->genre + 1 ) % 3 )
-				{
-					$p1->turns_successfull ++;
-					$p2->turns_unsuccessfull ++;
-
-					$bg .= $this->processCard( $p1, $p2, 0 );
-					$koef_otd = f_MValue("SELECT koef_value FROM koefs WHERE koef_id = 4");
-					if( mt_rand( 1, 1000 ) <= $p2->attributes[15] * 100 / $p2->player->level ) // расчет отдачи
-					{
-						$bg .= ",[10,'{$p2->player->login}']";
-						$bg .= $this->processCard( $p2, $p1, 1, false );
-					}
-					$w1 = true; $w2 = false;
-				}
+				}else
 				if ( $p2->card->genre == 3 && $p1->card->genre != 3 )
 				{
 					$p2->turns_successfull ++;
@@ -492,7 +483,21 @@ class Combat
 
 					$bg .= $this->processCard( $p2, $p1, 1 );
 					$w2 = true; $w1 = false;
-				}
+				}else
+				if( $p1->card->genre == ( $p2->card->genre + 1 ) % 3 )
+				{
+					$p1->turns_successfull ++;
+					$p2->turns_unsuccessfull ++;
+
+					$bg .= $this->processCard( $p1, $p2, 0 );
+					$koef_otd = f_MValue("SELECT koef_value FROM koefs WHERE koef_id = 4");
+					if( mt_rand( 1, 1000 ) <= $p2->attributes[15] * $koef_otd / $p2->player->level ) // расчет отдачи
+					{
+						$bg .= ",[10,'{$p2->player->login}']";
+						$bg .= $this->processCard( $p2, $p1, 1, false );
+					}
+					$w1 = true; $w2 = false;
+				}else
 				if( $p2->card->genre == ( $p1->card->genre + 1 ) % 3 )
 				{
 					$p2->turns_successfull ++;
@@ -506,7 +511,7 @@ class Combat
 						$bg .= $this->processCard( $p1, $p2, 0, false );
 					}
 					$w2 = true; $w1 = false;
-				}
+				}else
 				if( $p2->card->genre == $p1->card->genre ) // свитки одинаковые, навернем магией
 				{
 					$p1->turns_draw ++;
@@ -713,6 +718,7 @@ class Combat
 						$pid = $cplayer->opponent_id;
 						$login = $this->cplayers[$pid]->player->login;
 					}
+
 /*
 					if ($cplayer->opponent_id==6825);
 					{
@@ -862,8 +868,29 @@ class Combat
 						//$undefined->syst2( 'SELECT login FROM characters WHERE player_id = '.$Mob[player_id] );
 						$shamName = f_MValue( 'SELECT login FROM characters WHERE player_id = '.$Mob[player_id] );
 
+						if( strpos( $shamName, 'Снегов' ) !== false )
+						{
+							$snegWins=f_MValue("SELECT value FROM player_quest_values WHERE value_id=12201 AND player_id=".$arr[0]);
+							$snegWins = ( !$snegWins ) ? 1 : $snegWins + 1;
+							if ($snegWins==1)
+								f_MQuery("INSERT INTO player_quest_values (player_id, value_id, value) VALUES (".$arr[0].", 12201, 1)");
+							else
+								f_MQuery("UPDATE player_quest_values SET value=".$snegWins." WHERE value_id=12201 AND player_id=".$arr[0]);
+							if ($snegWins % 10 == 0)
+							{
+								$Player = new Player( $arr[0] );
+								$Player->AddEffect( 6, 0, 'Новогоднее настроение', 'В благодарность от Городской Управы за спасение Нового Года. Так держать!', 'eff_snowflake.png', '13:1:15:1:16:1.', time( ) + 3 * 60 * 60 * 24 );
+								$Player->syst2( 'За победу над ещё одним десятком снеговиков Городская Управа жалует тебе <b>Эффект "Новогоднее настроение"! Благодарим за спасение Нового Года!</b>' );
+							}
+							if ($snegWins % 100 == 0)
+							{
+								$Player = new Player( $arr[0] );
+								$Player->AddEffect( 6, 0, 'Новогодний ажиотаж', 'В благодарность от Городской Управы за спасение Нового Года. Так держать!', 'eff_snowflake.png', '13:10:15:10:16:10.', time( ) + 3 * 60 * 60 * 24 );
+								$Player->syst2( 'За победу над ещё одной сотней снеговиков Городская Управа жалует тебе <b>Эффект "Новогодний ажиотаж"! Благодарим за спасение Нового Года!</b>' );
+							}
+						}
 						// Пробиваем всех мобов на соответствие юзернейму "Шамаханин"
-						if( strpos( $shamName, 'Шамахан' ) !== false )
+						else if( strpos( $shamName, 'Шамахан' ) !== false )
 						{
 							$shamWins = f_MValue( 'SELECT wins FROM sham_wins WHERE player_id = '.$arr[0] );
 							$shamWins = ( !$shamWins ) ? 1 : $shamWins + 1;

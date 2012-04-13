@@ -10,7 +10,7 @@ ScrollLightTableStart("center");
 <table border="0" cellspacing="0" cellpadding="0" align="center" id="LocationTable">
 <tr><td id="LocationCell">
 <div id=capital_content style='position:relative;left:0px;top:0px;'>
-<script language="javascript" src="js/capital_hallowin_.js" type="text/javascript"></script>
+<script language="javascript" src="js/capital_with_traider8m.js" type="text/javascript"></script>
 <?
 if( $noob )
 {
@@ -54,6 +54,22 @@ if( $noob )
 
 include_once( "card.php" );
 
+$Player = new Player( $_COOKIE['c_id'] );
+
+// Водопад
+if( $Player->HasTrigger( 46 ) )
+{// Для нубиков, проходящих квест Дракона
+?>
+	<area shape="poly"coords="99,131,105,137,105,152,122,166,121,198,130,215,85,200,77,181,92,151,92,136" onmousemove="SelShow(event,'Sel15');" onmouseout="SelHide('Sel15');" onclick="LocClick('Sel15');" style='cursor:pointer'>
+<?
+}
+elseif( $Player->HasTrigger( 51 ) or $Player->HasTrigger( 50 ) or $Player->HasTrigger( 49 ) )
+{// Для настоящих мужиков, женящихся на прекрасных Дамах и уже прошедших квест Дракона
+?>
+	<area shape="poly"coords="99,131,105,137,105,152,122,166,121,198,130,215,85,200,77,181,92,151,92,136" onmousemove="SelShow(event,'Sel1001');" onmouseout="SelHide('Sel1001');" onclick="LocClick('Sel1001');" style='cursor:pointer'>
+<?
+}
+// Конец Водопада
 
 $res3 = f_MQuery( "SELECT * FROM player_triggers WHERE player_id=$HTTP_COOKIE_VARS[c_id] AND trigger_id=46" );
 

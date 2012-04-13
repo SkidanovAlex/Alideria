@@ -77,7 +77,7 @@ else
 	
 	$good_type = 1;
 }
-
+if (checkCanDrop($item_id))
 if( $number > 0 )
 {
 	if( $q + $number <= $player_has )

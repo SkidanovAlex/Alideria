@@ -378,7 +378,7 @@ else
     	echo "</div>";
     	echo "<div id=dque style='display:none'><div id=dquet>&nbsp;</div><table cellspacing=0 cellpadding=0 border=0><tr><td><img id=num_img width=90 height=40 src=captcha/code.php></td><td></td><td><input onkeydown='e = event || window.event;if( e.keyCode == 13 ) { sque(); }' class=btn40 maxlength=4 id=dnum></td></tr></table><li><a href='javascript:sque()'>Запустить очередь на производство</a>";
     	echo "<br>(Если вы не можете разобрать цифр, нажмите <a href=# onclick='reload();'>сюда</a>, чтобы обновить картинку).<br>";
-		echo "<script src='js/numkeyboard.js'></script><script>showkeyboard('dnum');</script>";
+		echo "<script src='js/numkeyboard2.js'></script><script>showkeyboard('dnum');</script>";
 
     	echo "</div>";
 

@@ -5,7 +5,7 @@
  */
  
 	// Источники прибыли
-	$providers = array( 0 => 'SMS', 1 => 'WebMoney', 3 => 'RBK Money', 4 => '2-Pay', 173 => 'Администратор Ishamael', 174 => 'Администратор Пламени' );
+	$providers = array( 0 => 'SMS', 1 => 'WebMoney', 3 => 'RBK Money', 4 => '2-Pay', 173 => 'Администратор Ishamael', 174 => 'Администратор Пламени', 6825 => 'Администратор Reincarnation' );
 	// Названия месяцев
 	$monthNames = array( '', 'января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря' );
  
@@ -115,6 +115,7 @@
 					<input type="hidden" name="service" value="<?=$serviceIdentity?>" />
 					
 					<select name="year">
+						<option value='2012'>2012</option>
 						<option value='2011'>2011</option>
 						<option value='2010'>2010</option>
 						<option value='2009'>2009</option>

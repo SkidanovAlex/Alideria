@@ -24,6 +24,16 @@ if( isset( $_GET['pid'] ) )
 	$pid = (int)$_GET['pid'];
 	if( $pid != -1 ) { $filter .= " AND player_id=$pid"; $lnk .= "&pid=$pid"; }
 }
+if ($pid==-1 && isset($_GET['pname']))
+{
+	$pid = f_MValue("SELECT player_id FROM characters WHERE login='".$_GET['pname']."'");
+	if ($pid > 0)
+	{
+		$filter .= " AND player_id=$pid"; $lnk .= "&pid=$pid";
+	}
+	else
+		$pid = -1;
+}
 if( isset( $_GET['act'] ) )
 {
 	$act = (int)$_GET['act'];
@@ -161,7 +171,9 @@ while( $arr = f_MFetch( $res ) ) $pids[$arr[0]] = $arr[1];
 
 $acts = array( -1 => "Все записи", 1 => "История Построек", 2 => "История Страниц Ордена", 3 => "История Званий и Должностей (кроме прав)", 4 => "История Изменения Прав", 5 => "История Управления Составом", 6 => "История Склада", 7 => "История Казначейства", 8 => "История Столовой" );
 
-echo "<tr><td>Персонаж:</td><td>".create_select_global( 'pid', $pids, $pid )."</td></tr>";
+echo "<tr><td valign=top>Персонаж:</td><td>".create_select_global( 'pid', $pids, $pid );
+echo "<br><input type=text class=edit_box name=pname style='width: 100%'>";
+echo "</td></tr>";
 echo "<tr><td>Логи:</td><td>".create_select_global( 'act', $acts, $act )."</td></tr>";
 echo "<tr><td>&nbsp;</td><td><input type=submit class=s_btn value=Показать></td></tr>";
 

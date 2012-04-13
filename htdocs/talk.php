@@ -240,7 +240,7 @@ else // нормальный толк
 
     if( $talk_id == 187 )  include( "quest_scripts/phrase187_flowers.php" );
     else if( $talk_id == 536 )  include( "quest_scripts/phrase536_presents.php" );
-	else if( $talk_id == 599 )  include( "quest_scripts/phrase599_8m_presents.php" );
+	else if( $talk_id == 1001 )  include( "quest_scripts/phrase771_presents.php" );
 	else if( $talk_id == 602 )  include( "quest_scripts/phrase602_flowers_smiles.php" );
 
 	else if( !$attack )

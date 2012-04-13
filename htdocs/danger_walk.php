@@ -3,6 +3,7 @@
 if( !$mid_php )
 	die( );
 
+echo "<script src='js/numkeyboard2.js'></script>";
 if( $noob ) echo "<script>var ready_to_go_further = false;</script>";
 
 $till = $player->till;

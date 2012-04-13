@@ -37,7 +37,7 @@ UpdateTitle( );
 $tm = time( );
 f_MQuery( "UPDATE online SET last_ping = $tm WHERE player_id = {$player->player_id}" );
 
-$mini_games = Array( 0 => "Магия", 1 => "Шахматы", 3 => "5 в Ряд", 2 => "Камушки", 4 => "Покер", 5 => "Марблс", 100 => "Вернуться" );
+$mini_games = Array( 0 => "Магия", 1 => "Шахматы", 3 => "5 в Ряд", 2 => "Камушки", /* 4 => "Покер", */ 5 => "Марблс", 100 => "Вернуться" );
 
 f_MQuery( "LOCK TABLE player_waste WRITE" );
 $res = f_MQuery( "SELECT * FROM player_waste WHERE player_id={$player->player_id}" );

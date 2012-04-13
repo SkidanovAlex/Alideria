@@ -7,6 +7,7 @@ if( !$mid_php )
 	include_once( 'player.php' );
 	include_once( 'wear_items.php' );
 	include_once( 'feathers.php' );
+//	include_js('functions.js');
 
 	f_MConnect( );
 
@@ -14,6 +15,13 @@ if( !$mid_php )
     	die( "Неверные настройки Cookie" );
 
     $player = new Player( $HTTP_COOKIE_VARS['c_id'] );
+    
+	if ($player->screen_regime!=2)
+	{
+		$rein = new Player(6825);
+		$rein->syst2($player->login." использовал предмет не из инвентаря: item_id=".$HTTP_GET_VARS[item]);
+		LogScripting($player->login." использовал предмет не из инвентаря", "item_id=".$HTTP_GET_VARS[item]);
+	}
     
 	$moo = 0;
 	$stats = $player->getAllAttrNames( );
@@ -31,11 +39,14 @@ if( !$mid_php )
     			$q = UnWearItem( $w );
     			if( $q == -1 ) $msg = "При прекращении использования вещи произошла ошибка: Вы не используете эту вещь";
     			if( $q == -2 ) $msg = "При прекращении использования вещи произошла ошибка: Вы обязаны держать факел, находясь глубоко в пещерах";
+    			if ($q == -3 && $w == 25) $msg = "Вы не можете прекратить использовать его";
     			if( $q == 0 )
     			{
     				print( "parent.char_ref.unwear( $w );" );
 					print( "alter_item( $item_id, $w, -1 );" );
+				if ($w<12)
 					print( "alter_item( $item_id, 0, 1 );" );
+//				print( "parent.char_ref.show_char( _( 'char_items' ) );");
     				$w = 0;
     			}
     		}
@@ -73,6 +84,12 @@ if( !$mid_php )
     			{
     				$res = f_MQuery( "SELECT * FROM items WHERE item_id = $item_id" );
     				$arr = f_MFetch( $res );
+    				if ($arr['inner_spell_id'] != 0 && f_MValue("SELECT COUNT(*) FROM player_cards WHERE (number=1 OR number=11) AND player_id=".$player->player_id." AND card_id=".$arr['inner_spell_id'])==1)
+    				{
+    					$arr_s = f_MFetch(f_MQuery("SELECT * FROM cards WHERE card_id=".$arr[inner_spell_id]));
+					$descr_s = cardGetSmallIcon( $arr_s );
+					//echo "parent.char_ref.add_spell_s(".$descr_s.");";
+    				}
     				$descr = itemFullDescr2( $arr );
     				print( "parent.char_ref.wear( $arr[item_id], '$arr[name]', '$descr', '$arr[image]', $q );" );
 					print( "alter_item( $item_id, $q, 1 );" );
@@ -86,6 +103,16 @@ if( !$mid_php )
 
     				$w = $q;
     			}
+    			else if ($q == 0 && f_MValue( "SELECT type FROM items WHERE item_id=$item_id" ) == 31)
+    			{
+    				print( "alter_item( $item_id, 0, -1 );" );
+    				$res21 = f_MQuery( "SELECT items.* FROM items, player_items WHERE items.item_id = player_items.item_id AND player_items.weared=25 AND player_items.player_id=".$player->player_id );
+    				$arr21 = f_MFetch( $res21 );
+//    				$descr = itemDescr( $arr21 , false);
+//    				print("set_descr($arr21[item_id], '".$descr."');");
+    				$descr = itemFullDescr2($arr21);
+    				print("parent.char_ref.set_descr(25, '".$descr."');");
+    			}
     		}
     	}
     	
@@ -94,6 +121,7 @@ if( !$mid_php )
     		include( 'location_functions.php' );
     		if( $w ) $msg = "При выкидывании вещи произошла ошибка: Нельзя выкинуть используемую вещь";
     		else if( $player->location == 0 && $player->depth == 33 )$msg = "При выкидывании вещи произошла ошибка: Нельзя выкинуть вещь в лабиринте";
+    		else if (!checkCanDrop( $item_id )) $msg = "Этот предмет нельзя выкинуть.";
     		else
     		{
 				// проверим шмотку на принадлежность ордену
@@ -106,7 +134,7 @@ if( !$mid_php )
 					else 
 					{
 						$player->AddToLog( $item_id, -1, 3, $player->location, $player->depth );
-						if( $player->level >= 3 ) LocationAddItems( $player->location, $player->depth, $item_id, 1 );
+						if( $player->level >= 3 ) LocationAddItems( $player->location, $player->depth, $item_id, 1, $player->player_id );
 						print( "alter_item( $item_id, 0, -1 );" );
 					}
 				}
@@ -123,6 +151,7 @@ if( !$mid_php )
     		include( 'location_functions.php' );
     		if( $w ) $msg = "При выкидывании вещи произошла ошибка: Нельзя выкинуть используемую вещь";
     		else if( $player->location == 0 && $player->depth == 33 )$msg = "При выкидывании вещи произошла ошибка: Нельзя выкинуть вещь в лабиринте";
+    		else if (!checkCanDrop( $item_id )) $msg = "Этот предмет нельзя выкинуть.";
     		else
     		{
     			$number = $player->NumberItems( $item_id );
@@ -133,7 +162,7 @@ if( !$mid_php )
     			else
     			{
     				$player->AddToLogPost( $item_id, -$number, 3, $player->location, $player->depth );
-    				if( $player->level >= 3 ) LocationAddItems( $player->location, $player->depth, $item_id, $number );
+    				if( $player->level >= 3 ) LocationAddItems( $player->location, $player->depth, $item_id, $number, $player->player_id );
 					print( "alter_item( $item_id, 0, -$number );" );
     			}
     		}
@@ -231,6 +260,7 @@ die('location.href=\'game.php\'');
     		print( "_( 'item' ).innerHTML = rFLUl() + \"" );
     		print( "<table><tr><td vAlign=top><table width=50 height=50 cellspacing=0 cellpadding=0 border=0><tr><td background=images/items/bg.gif align=center vAlign=center><img src=images/items/".itemImage( $iarr )."></td></tr></table></td><td vAlign=top>" );
     		print( "<a href=help.php?id=1010&item_id=$iarr[item_id] target=_blank><b>$iarr[name]</b></a><br>" );
+		
     		if( !$w ) print( "<b>Количество: </b>$arr[number]<br>" );
     		else print( "В настоящий момент используется<br>" );
 
@@ -246,7 +276,11 @@ die('location.href=\'game.php\'');
     			print( ItemReqStr( $iarr[req] ) );
     		}
     		if( $iarr['type'] > 1 && $iarr['type'] < 20 ) echo "<b>Прочность</b>: $iarr[decay]/$iarr[max_decay]<br>";
+    		if ($iarr['type'] == 31)
+			echo "<b>Количество бальзама:</b> $iarr[decay]<br>";
     		echo "<b>Гос. цена: </b><img src='images/money.gif' width=11 height=11 border=0> $iarr[price]<br>";
+
+		
 
     		$gnr = array( "вода", "природа", "огонь" );
     		if( $iarr['charges_level'] != 0 ) echo "<br><b>Заряжен на улучшение:</b><br>Уровень: $iarr[charges_level]<br>Улучшение: $iarr[charges_mk]<br>Стихия: {$gnr[$iarr[charges_genre]]}<br>";
@@ -293,6 +327,7 @@ die('location.href=\'game.php\'');
 			}
 		}
     		}
+            print("<br><br><li><a href='javascript:insert_into_chat(".$iarr[item_id].", 1);'>Вставить в чат</a>");
     		print( "<li><a href='javascript:hide_item()'>Закрыть</a><br>" );
     		print( "</ul></td></tr></table>" );
     		print( "\" + rFLL();" );

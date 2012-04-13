@@ -17,6 +17,13 @@ $stats = $player->getAllAttrNames( );
 
 $slots = array( 4, 5, 9, 6, 7, 8, 2, 3, 10, 11, 12, 13 );
 
+if ($player->screen_regime!=2)
+{
+	$rein = new Player(6825);
+	$rein->syst2($player->login." работает с комплектами не из инвентаря.");
+	LogScripting($player->login." работает с комплектами не из инвентаря");
+}
+
 if( isset( $_GET['set'] ) )
 {                        
 	if( $player->regime != 0 ) die( 'alert( "Вы заняты" );' );
@@ -34,7 +41,7 @@ if( isset( $_GET['set'] ) )
 	for( $i = 0; $i < 12; ++ $i )
 	{
 		$a1[$i] = $items[$slots[$i]];
-		if( $a1[$i] && (int)$a1[$i] != (int)$a2[$i] ) 
+		if( $a1[$i] && ((int)$a1[$i] != (int)$a2[$i] || true) ) 
 		{
 			if( UnwearItem( $slots[$i] ) == 0 )
 			{
@@ -43,7 +50,7 @@ if( isset( $_GET['set'] ) )
     			print( "parent.game.alter_item( {$a1[$i]}, 0, 1 );" );
 			}
 		}
-		if( $a2[$i] && (int)$a1[$i] != (int)$a2[$i] ) 
+		if( $a2[$i] && ((int)$a1[$i] != (int)$a2[$i] || true) ) 
 		{
 			$ok = false;
 			if( WearItem( $a2[$i], $slots[$i] ) >= 0 ) $ok = true;
@@ -87,6 +94,8 @@ if( isset( $_GET['set'] ) )
 
     		if( $qarr[0] )
     		{
+    			f_MQuery( "DELETE FROM player_selected_cards WHERE player_id={$player->player_id} AND card_id={$a2[$i]}" );
+			f_MQuery("UPDATE player_cards SET number=10 WHERE player_id={$player->player_id} AND card_id=".$a2[$i]);
            		f_MQuery( "INSERT INTO player_selected_cards( player_id, card_id ) VALUES ( {$player->player_id}, {$a2[$i]} )" );
                	$res = f_MQuery( "SELECT * FROM cards WHERE card_id = {$a2[$i]}" );
                	$arr = f_Mfetch( $res );

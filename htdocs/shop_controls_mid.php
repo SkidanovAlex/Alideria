@@ -445,7 +445,7 @@ $shop = new Shop( $shop_id );
 		
 	print( "\n" );
 
-	$res = f_MQuery( "SELECT items.* FROM items, player_items WHERE player_id = {$player->player_id} AND items.item_id = player_items.item_id AND weared=0" );
+	$res = f_MQuery( "SELECT items.* FROM items, player_items WHERE player_id = {$player->player_id} AND items.item_id = player_items.item_id AND weared=0 AND nodrop=0" );
 	while( $arr = f_MFetch( $res ) )
 	{
 		$descr = itemDescr( $arr );

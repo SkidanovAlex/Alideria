@@ -5,7 +5,10 @@
 		global $player;
 		$res = f_MQuery( "SELECT * FROM player_items WHERE player_id = {$player->player_id} AND weared=$slot" );
 		if( mysql_num_rows( $res ) )
-			return 1;
+			if ($slot==25)
+				return -1;
+			else
+				return 1;
 		return 0;
 	}
 	
@@ -43,12 +46,13 @@
 				if( $arr[type] == 1 ) $arr[type] = 14;
 				else if ($arr[type] == 30 ) $arr[type] = 17;
 				else if ($arr[type] == 35 ) $arr[type] = 21;
+				else if ($arr[type] == 31 ) $arr[type] = 25;
 				else if( $arr[type] == 13 ) break;
 				else if( $arr[type] == 16 ) break;
 				else if( $arr[type] == 20 ) break;
 				else if( $arr[type] == 24 ) break;
 				else ++ $arr[type];
-			} while( $arr[type] == 3 || $arr[type] == 5 || $arr[type] == 7 || $arr[type] == 14 || $arr[type] == 15 || $arr[type] == 16 || ($arr[type] >= 17 && $arr[type] <= 24) );
+			} while( $arr[type] == 3 || $arr[type] == 5 || $arr[type] == 7 || $arr[type] == 14 || $arr[type] == 15 || $arr[type] == 16 || ($arr[type] >= 17 && $arr[type] <= 24) || $arr[type] == 25 );
 			if( !$ok ) return -7;
 		}
 
@@ -57,7 +61,7 @@
 			if( !$player->CheckItemReq( $arr[req] ) )
 				return -6;
 				
-			$sres = f_MQuery( "SELECT count( card_id ) FROM player_cards WHERE player_id={$player->player_id} AND ( card_id=$arr[learn_spell_id] OR card_id IN ( SELECT card_id FROM cards WHERE parent = $arr[learn_spell_id] ) )" );
+			$sres = f_MQuery( "SELECT count( card_id ) FROM player_cards WHERE player_id={$player->player_id} AND ( card_id=$arr[learn_spell_id] OR card_id IN ( SELECT card_id FROM cards WHERE mk != 5 AND parent = $arr[learn_spell_id] ) )" );
 			$sarr = f_MFetch( $sres );
 			if( $sarr[0] ) return -8;
 			
@@ -98,14 +102,15 @@
 			return -1;
 		}
 
-		if( ($type > 0 && $type < 20) || $type == 30 || $type == 35 )
+		if( ($type > 0 && $type < 20) || $type == 30 || $type == 35 || $type == 31 )
 		{
 			$ok = false;
 			if ($type == 30) $type = 17;
 			if ($type == 35) $type = 21;
+			if ($type == 31) $type = 25;
 			do
 			{
-				if( HasItemInSlot( $type ) == 0 )
+				if( HasItemInSlot( $type ) <= 0 )
 				{
 					$ok = true;
 					break;
@@ -128,6 +133,20 @@
 				return -6;
 			if( $player->DropItems( $item_id ) )
 			{
+				if ($type == 25)
+				{
+					if (HasItemInSlot(25) == 0)
+					{
+						$item_id1 = copyItem($item_id, true);
+						f_MQuery( "INSERT INTO player_items ( player_id, item_id, number, weared ) VALUES ( {$player->player_id}, $item_id1, 1, $type )" );
+						return 25;
+					}
+					else
+					{
+						f_MQuery("UPDATE items SET decay=decay+".$arr[decay]." WHERE item_id=(SELECT item_id FROM player_items WHERE player_id=".$player->player_id." AND weared=25)");
+						return 0;
+					}
+				}
 				f_MQuery( "INSERT INTO player_items ( player_id, item_id, number, weared ) VALUES ( {$player->player_id}, $item_id, 1, $type )" );
 				if( $type == 1 || $type >= 14 && $type <= 24 )
 				{
@@ -158,7 +177,37 @@
 					f_MQuery( "DELETE FROM player_selected_cards WHERE player_id={$player->player_id} AND card_id={$arr[inner_spell_id]}" );
 					f_MQuery( "INSERT INTO player_selected_cards( player_id, card_id, staff ) VALUES ( {$player->player_id}, $arr[inner_spell_id], 1 )" );
 					f_MQuery( "UNLOCK TABLES" );
-					$player->syst2("/items");
+					if (f_MValue("SELECT COUNT(*) FROM player_cards WHERE (number=1 OR number=11) AND player_id=".$player->player_id." AND card_id=".$arr['inner_spell_id'])==1)
+					{
+						$arr_s = f_MFetch(f_MQuery("SELECT * FROM cards WHERE card_id=".$arr['inner_spell_id']));
+						$descr_s = cardGetSmallIcon( $arr_s );
+						echo "parent.char_ref.add_spell_s(".$descr_s.");";
+					}
+//					$player->syst2("/items");
+				}
+				
+				if( $arr[inner_base_spell_id] != 0 ) // встроенный базовый спелл
+				{
+					f_MQuery( "LOCK TABLE player_cards WRITE" );
+					$sres = f_MQuery( "SELECT * FROM player_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_base_spell_id]" );
+					if( f_MNum( $sres ) ) 
+					{
+						f_MQuery( "UPDATE player_cards SET number = number + 1 WHERE player_id = {$player->player_id} AND card_id = $arr[inner_base_spell_id]" );
+					}
+					else
+						f_MQuery( "INSERT INTO player_cards ( player_id, card_id, number ) VALUES ( {$player->player_id}, $arr[inner_base_spell_id], 1 )" );
+					f_MQuery( "UNLOCK TABLES" );
+					f_MQuery( "LOCK TABLE player_selected_cards WRITE" );
+					f_MQuery( "DELETE FROM player_selected_cards WHERE player_id={$player->player_id} AND card_id={$arr[inner_base_spell_id]}" );
+					f_MQuery( "INSERT INTO player_selected_cards( player_id, card_id, staff ) VALUES ( {$player->player_id}, $arr[inner_base_spell_id], 1 )" );
+					f_MQuery( "UNLOCK TABLES" );
+					if (f_MValue("SELECT COUNT(*) FROM player_cards WHERE (number=1 OR number=11) AND player_id=".$player->player_id." AND card_id=".$arr['inner_base_spell_id'])==1)
+					{
+						$arr_s = f_MFetch(f_MQuery("SELECT * FROM cards WHERE card_id=".$arr['inner_base_spell_id']));
+						$descr_s = cardGetSmallIcon( $arr_s );
+						echo "parent.char_ref.add_spell_s(".$descr_s.");";
+					}
+//					$player->syst2("/items");
 				}
 
 				return $type;
@@ -173,7 +222,7 @@
 		global $player;
 		
 		if( $slot == 0 ) return 0;
-		
+		if ($slot == 25) return -3;
 		$res = f_MQuery( "SELECT player_items.*, items.parent_id FROM player_items, items WHERE player_id = {$player->player_id} AND items.item_id=player_items.item_id AND weared=$slot" );
 		$arr = f_MFetch( $res );
 		if( $arr )
@@ -186,7 +235,7 @@
 			f_MQuery( "DELETE FROM player_items WHERE player_id = {$player->player_id} AND weared=$slot" );
 			if( $slot == 1 || $slot >= 14 && $slot <= 24 )
 				f_MQuery( "DELETE FROM player_potions WHERE player_id={$player->player_id} AND slot_id=$slot" );
-			if( $slot != 1 && ( $slot < 14 || $slot > 24 ) ) $player->AddItems( $arr['item_id'] );
+			if( $slot != 1 && ( $slot < 14 || $slot > 25 ) ) $player->AddItems( $arr['item_id'] );
 			$res = f_MQuery( "SELECT * FROM items WHERE item_id = $arr[item_id]" );
 			$arr = f_MFetch( $res );
 			f_MQuery( "UPDATE characters SET items_weight =items_weight - $arr[weight], wear_level = wear_level - $arr[level] WHERE player_id = {$player->player_id}" );
@@ -200,28 +249,63 @@
 				f_MQuery( "LOCK TABLES player_cards WRITE, player_selected_cards WRITE" );
 				$sres = f_MQuery( "SELECT number FROM player_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_spell_id]" );
 				$sarr = f_MFetch( $sres );
-				if( $sarr[0] > 1 ) 
-					f_MQuery( "UPDATE player_cards SET number = number - 1 WHERE player_id = {$player->player_id} AND card_id = $arr[inner_spell_id]" );
-				else
+				if ($sarr[0]!=10)
 				{
-					f_MQuery( "DELETE FROM player_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_spell_id]" );
+					if( $sarr[0] > 1 ) 
+						f_MQuery( "UPDATE player_cards SET number = number - 1 WHERE player_id = {$player->player_id} AND card_id = $arr[inner_spell_id]" );
+					else
+					{
+						f_MQuery( "DELETE FROM player_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_spell_id]" );
+					}
 				}
 				if ( $sarr[0] == 1 || $sarr[0] == 11)
 				{
-					$res_s = f_MQuery("SELECT * FROM player_selected_cards WHERE player_id = {$player->player_id} AND staff=1");
+					$res_s = f_MQuery("SELECT * FROM player_selected_cards WHERE player_id = {$player->player_id} AND staff=1 ORDER BY entry_id");
 					$_s = true;
 					$_i = 0;
-					while ($_s)
+					while ($_s && $arr_s = f_MFetch($res_s))
 					{
-						$arr_s = f_MFetch($res_s);
+//						$arr_s = f_MFetch($res_s);
 						$_i++;
 						if ($arr_s[card_id] == $arr[inner_spell_id]) $_s = false;
 					}
 					f_MQuery( "DELETE FROM player_selected_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_spell_id] AND staff=1 LIMIT 1" );
-					echo "parent.char_ref.del_spell_s(".$_i.");";
+					echo "parent.char_ref.del_spell_s(".($_i-1).");";
 				}
 				f_MQuery( "UNLOCK TABLES" );
-				$player->syst2("/items");
+//				$player->syst2("/items");
+			}
+			
+			if( $arr[inner_base_spell_id] != 0 )
+			{
+				f_MQuery( "LOCK TABLES player_cards WRITE, player_selected_cards WRITE" );
+				$sres = f_MQuery( "SELECT number FROM player_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_base_spell_id]" );
+				$sarr = f_MFetch( $sres );
+				if ($sarr[0]!=10)
+				{
+					if( $sarr[0] > 1 ) 
+						f_MQuery( "UPDATE player_cards SET number = number - 1 WHERE player_id = {$player->player_id} AND card_id = $arr[inner_base_spell_id]" );
+					else
+					{
+						f_MQuery( "DELETE FROM player_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_base_spell_id]" );
+					}
+				}
+				if ( $sarr[0] == 1 || $sarr[0] == 11)
+				{
+					$res_s = f_MQuery("SELECT * FROM player_selected_cards WHERE player_id = {$player->player_id} AND staff=1 ORDER BY entry_id");
+					$_s = true;
+					$_i = 0;
+					while ($_s && $arr_s = f_MFetch($res_s))
+					{
+//						$arr_s = f_MFetch($res_s);
+						$_i++;
+						if ($arr_s[card_id] == $arr[inner_base_spell_id]) $_s = false;
+					}
+					f_MQuery( "DELETE FROM player_selected_cards WHERE player_id = {$player->player_id} AND card_id = $arr[inner_base_spell_id] AND staff=1 LIMIT 1" );
+					echo "parent.char_ref.del_spell_s(".($_i-1).");";
+				}
+				f_MQuery( "UNLOCK TABLES" );
+//				$player->syst2("/items");
 			}
 
 			return 0;

@@ -12,7 +12,7 @@ include_once( '../player.php' );
 f_MConnect( );
 
 include( 'admin_header.php' );
-
+if ($player->player_id==67573) die();
 if( isset( $HTTP_GET_VARS['login'] ) )
 {
 	$login = $HTTP_GET_VARS['login'];
@@ -38,7 +38,7 @@ if( isset( $HTTP_GET_VARS['login'] ) )
 <table>
 <form action=admin_ranks.php method=get>
 <tr><td>Логин персонажа: </td><td><input type=text name=login class=m_btn></td></tr>
-<tr><td>Права персонажа: </td><td><select class=m_btn name=rank><option value=0 SELECTED>Нет прав<option value=1>Администратор<option value=2>Модератор<option value=5>Глава модераторов</select></td></tr>
+<tr><td>Права персонажа: </td><td><select class=m_btn name=rank><option value=0 SELECTED>Нет прав<option value=1>Администратор<option value=2>Модератор<option value=3>Модератор чата<option value=5>Глава модераторов</select></td></tr>
 <tr><td>&nbsp;</td><td><input type=submit class=s_btn value=OK></td></tr>
 </form>
 </table><br>
@@ -47,7 +47,7 @@ if( isset( $HTTP_GET_VARS['login'] ) )
 
 $res = f_MQuery("SELECT c.player_id, c.login, r.rank FROM characters as c, player_ranks as r WHERE c.player_id=r.player_id ORDER BY r.rank, c.player_id");
 
-$rank_name = Array(0 => "Нет прав", 1 => "Администратор", 2 => "Модератор", 5 => "Глава модераторов");
+$rank_name = Array(0 => "Нет прав", 1 => "Администратор", 2 => "Модератор", 3 => "Модератор чата", 5 => "Глава модераторов");
 
 echo "<br><table border=1><tr><td>ID игрока</td><td>Имя игрока</td><td>Ранг</td><td>Права</td><tr>";
 $prev_rank = -1;

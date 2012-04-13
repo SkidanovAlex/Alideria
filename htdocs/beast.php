@@ -149,7 +149,7 @@
         	{
         		$num = 1;
         		if( $arr['number'] > 1 ) $num = "1 - $arr[number]";
-		if ($arr[item_id] != 77083)
+		if (!($arr[item_id] == 77083 || $arr[item_id]==76397 ))
 	        		echo "<tr><td>[$num] <a href=help.php?id=1010&item_id=$arr[item_id] target=_blank>$arr[name]</a>&nbsp;</td><td align=right>&nbsp;".($arr['chance']/100)."%</td></tr>";	
         		$sum += $arr['price'] * ( $arr['number'] + 1 ) / 2 * $arr['chance'];
         	}  $sum /= 10000; echo "<tr><td><b>—редн€€ прибыль:</b></td><td align=right><img width=11 height=11 border=0 src=images/money.gif> $sum</td></tr>";  }

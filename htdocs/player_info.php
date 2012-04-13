@@ -108,59 +108,66 @@ if($nick != '' || $player_id != -1)
 			<div style='position: absolute;' width=50 height=50 id=item12 name=item12>&nbsp;</div>
 
 <?
-if ($my_id != 6825)
-{
-	echo "<div style='position: absolute;' width=50 height=50 id=item13 name=item13>&nbsp;</div>";
-	echo "<div style='position: absolute;' width=50 height=50 id=item14 name=item14>&nbsp;</div>";
-	echo "<div style='position: absolute;' width=50 height=50 id=item15 name=item15>&nbsp;</div>";
-	echo "<div style='position: absolute;' width=50 height=50 id=item16 name=item16>&nbsp;</div>";
-	
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
+	echo "<div onclick=show_pots(1) style='position: absolute;top:285px;left:30px;' width=25 height=25 id=pot1 name=pot1>";
+		echo "<img src='images/items/bg/bg25pot.gif'>";
+	echo "</div>";
+	echo "<div id=pots1 name=pots1 style='position: absolute;top:320px;left:0px;display: none;'>";
+		echo "<img src='images/rect/panel.jpg'>";
+		echo "<div style='position: absolute;top:3;left:70;'><b>Зелья</b></div>";
+		echo "<img onclick='hide_pots(1);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item13 name=item13>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item14 name=item14>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item15 name=item15>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item16 name=item16>&nbsp;</div>";
+	echo "</div>";
 
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
+
+	echo "<div onclick=show_pots(2) style='position: absolute;top:285px;left:55px;' width=25 height=25 id=pot2 name=pot2>";
+		echo "<img src='images/items/pot_sq/ten_talismana.png'>";
+	echo "</div>";
+	echo "<div id=pots2 name=pots2 style='position: absolute;top:320px;left:0px;display: none;'>";
+		echo "<img src='images/rect/panel.jpg'>";
+		echo "<div style='position: absolute;top:3;left:70;'><b>Талисманы</b></div>";
+		echo "<img onclick='hide_pots(2);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
+	echo "</div>";
+
+
+	echo "<div onclick=show_pots(3) style='position: absolute;top:285px;left:80px;' width=25 height=25 id=pot3 name=pot3>";
+		echo "<img src='images/items/pot_sq/ten_medaliona.png'>";
+	echo "</div>";
+	echo "<div id=pots3 name=pots3 style='position: absolute;top:320px;left:0px;display: none;'>";
+		echo "<img src='images/rect/panel.jpg'>";
+		echo "<div style='position: absolute;top:3;left:70;'><b>Медальоны</b></div>";
+		echo "<img onclick='hide_pots(3);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
+	echo "</div>";
+
+if ($my_id == 1)
+{
+	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item25 name=item25>&nbsp;</div>";
+	echo "<div id=pot4 style='display:none;'>&nbsp;</div>";
 }
 else
 {
-	echo "<div onmousemove=show_pots(1) style='position: absolute;top:285px;left:30px;' width=25 height=25 id=pot1 name=pot1>";
+	echo "<div onclick=show_pots(4) style='position: absolute;top:285px;left:105px;' width=25 height=25 id=pot4 name=pot4>";
+//		echo "<img src='images/items/pot_sq/balsam_ten.png'>";
 		echo "<img src='images/items/bg/bg25pot.gif'>";
-		echo "<div onmouseout=hide_pots(1) id=pots1 name=pots1 style='position: absolute;top:-10px;left:-10px;display: none;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item13 name=item13>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item14 name=item14>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item15 name=item15>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item16 name=item16>&nbsp;</div>";
-		echo "</div>";
 	echo "</div>";
-
-	echo "<div onmousemove=show_pots(2) style='position: absolute;top:285px;left:55px;' width=25 height=25 id=pot2 name=pot2>";
-		echo "<img src='images/items/pot_sq/ten_talismana.png'>";
-		echo "<div onmouseout=hide_pots(2) id=pots2 name=pots2 style='position: absolute;top:-10px;left:-10px;display: none;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
-		echo "</div>";
+	echo "<div id=pots4 name=pots4 style='position: absolute;top:320px;left:0px;display: none;'>";
+		echo "<img src='images/rect/panel.jpg'>";
+		echo "<div style='position: absolute;top:3;left:70;'><b>Бальзамы</b></div>";
+		echo "<img onclick='hide_pots(4);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item25 name=item25>&nbsp;</div>";
 	echo "</div>";
-
-	echo "<div onmousemove=show_pots(3) style='position: absolute;top:285px;left:80px;' width=25 height=25 id=pot3 name=pot3>";
-		echo "<img src='images/items/pot_sq/ten_medaliona.png'>";
-		echo "<div onmouseout=hide_pots(3) id=pots3 name=pots3 style='position: absolute;top:-10px;left:-10px;display: none;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
-		echo "</div>";
-	echo "</div>";
-
 }
+
 ?>
 
 			<div style='position: absolute;' width=50 height=50 id=item_drag name=item_drag>&nbsp;</div>
@@ -296,15 +303,15 @@ else
 			echo "<table width=100%>";
 			echo "<tr><td colspan=2>".GetScrollTableStart()."<b>Личные данные</b>".GetScrollTableEnd()."</td></tr>";
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Имя:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$profile->name}".GetScrollTableEnd()."</td></tr>";
-		if( $my_id == 6825 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."ID:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$player->player_id}".GetScrollTableEnd()."</td></tr>"; }
-		if( $my_id == 6825 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Money: {$player->money}".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."UMoney: {$player->umoney}".GetScrollTableEnd()."</td></tr>"; }
-		if( $my_id == 6825 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Till: ".( $player->till >= time() ? my_time_str($player->till-time()) : $player->till )."".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."Regime: {$player->regime}".GetScrollTableEnd()."</td></tr>"; }
+		if( $my_id == 6825 || $my_id==172 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."ID:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$player->player_id}".GetScrollTableEnd()."</td></tr>"; }
+		if( $my_id == 6825 || $my_id==172 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Money: {$player->money}".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."UMoney: {$player->umoney}".GetScrollTableEnd()."</td></tr>"; }
+		if( $my_id == 6825 || $my_id==172 ) { echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Till: ".( $player->till >= time() ? my_time_str($player->till-time()) : $player->till )."".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."Regime: {$player->regime}".GetScrollTableEnd()."</td></tr>"; }
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Город:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$profile->city}".GetScrollTableEnd()."</td></tr>";
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."День Рождения:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."".date( "d.m.Y", $profile->birthday )."".GetScrollTableEnd()."</td></tr>";
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Девиз:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$profile->quote}".GetScrollTableEnd()."</td></tr>";
 
 		
-			if( $profile->show_email ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."E-mail:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->email}".GetScrollTableEnd()."</td></tr>";
+			if( $profile->show_email || $my_id==6825 || $my_id==172 ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."E-mail:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->email}".GetScrollTableEnd()."</td></tr>";
 			if( $profile->icq ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."ICQ:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->icq}".GetScrollTableEnd()."</td></tr>";
 			if( $profile->skype ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."Skype:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->skype}".GetScrollTableEnd()."</td></tr>";
 
@@ -324,14 +331,16 @@ else
 			if( ( $val = $player->GetPermission( "silence" ) ) > 0 ) $has_punishment = true;
 			if( ( $val = $player->GetPermission( "trade" ) ) > 0 ) $has_punishment = true;
 			if( ( $val = $player->GetPermission( "fights" ) ) > 0 ) $has_punishment = true;
+			if( ( $val = $player->GetPermission( "info" ) ) > 0 ) $has_punishment = true;
 			
 			if( $has_punishment )
 			{
 				echo "<tr><td colspan=2>".GetScrollTableStart()."<b>Наказания</b>".GetScrollTableEnd()."</td></tr>";
+				if( ( $val = $player->GetPermission( "info" ) ) > 0 ) print( "<tr><td colspan=2>".GetScrollTableStart()."<i>Отображение профильной информации пользователя заблокировано. Причина: ".$player->PermissionReason( 'info' )."</i>".GetScrollTableEnd()."</td></tr>" );
 				if( ( $val = $player->GetPermission( "ban" ) ) > 0 ) print( "<tr><td colspan=2>".GetScrollTableStart()."<i>Персонаж заблокирован. Причина: ".$player->PermissionReason( 'ban' ).". До снятия блокировки осталось: ".my_time_str( $val )."</i>".GetScrollTableEnd()."</td></tr>" );
 				if( ( $val = $player->GetPermission( "silence" ) ) > 0 ) print( "<tr><td colspan=2>".GetScrollTableStart()."<i>На персонажа наложен запрет на общение в чате и на форуме. Причина: ".$player->PermissionReason( 'silence' ).". До снятия запрета осталось: ".my_time_str( $val )."</i>".GetScrollTableEnd()."</td></tr>" );
 				if( ( $val = $player->GetPermission( "trade" ) ) > 0 ) print( "<tr><td colspan=2>".GetScrollTableStart()."<i>На персонажа наложен запрет на торговлю и обмен. Причина: ".$player->PermissionReason( 'trade' ).". До снятия запрета осталось: ".my_time_str( $val )."</i>".GetScrollTableEnd()."</td></tr>" );
-				if( ( $val = $player->GetPermission( "fights" ) ) > 0 ) print( "<tr><td colspan=2>".GetScrollTableStart()."<i>Персонаж получает половину опыта и не получает деньги за бои. Причина: ".$player->PermissionReason( 'fights' ).". До снятия запрета осталось: ".my_time_str( $val )."</i>".GetScrollTableEnd()."</td></tr>" );
+				if( ( $val = $player->GetPermission( "fights" ) ) > 0 ) print( "<tr><td colspan=2>".GetScrollTableStart()."<i>Персонаж не получает опыта и денег за бои. Причина: ".$player->PermissionReason( 'fights' ).". До снятия запрета осталось: ".my_time_str( $val )."</i>".GetScrollTableEnd()."</td></tr>" );
 			}
 			// Наказания - конец
 
@@ -341,7 +350,7 @@ else
 			else
 			{
 				echo $loc_names[$player->location];
-				if ($my_id == 6825 || $my_id == 868239) echo " ".$player->location;
+				if ($my_id == 6825 || $my_id == 172) echo " ".$player->location;
 			}
 			echo GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart();
 			if ($player->Rank() == 1 && $my_id != 6825)
@@ -349,7 +358,7 @@ else
 			else
 			{
 				echo GetPlaceName( $player->location, $player->depth );
-				if ($my_id == 6825 || $my_id == 868239) echo " ".$player->depth;
+				if ($my_id == 6825 || $my_id == 172) echo " ".$player->depth;
 			}
 			echo GetScrollTableEnd()."</td></tr>";
 
@@ -516,7 +525,17 @@ else
 			$descr = str_replace( "\n", "<br>", $profile->descr );
 			if( trim( $descr ) != "" )
 			{
-				echo "<tr><td colspan=2>".GetScrollTableStart()."<b>Описание</b>".GetScrollTableEnd()."</td></tr><tr><td colspan=2>".GetScrollTableStart()."<div align=justify>$descr&nbsp;";
+				echo "<tr><td colspan=2>".GetScrollTableStart()."<b>Описание</b>".GetScrollTableEnd()."</td></tr><tr><td colspan=2>".GetScrollTableStart()."<div align=justify>";
+				if (($val = $player->GetPermission( "info" ) ) > 0)
+				{
+					echo "<font color=#FFFFFF>Отображение профильной информации пользователя заблокировано.</font>";
+					$my_pl = new Player($my_id);
+					if ($my_pl->Rank()>0)
+						echo "<hr>".$descr;
+				}
+				else
+					echo $descr;
+				echo "&nbsp;";
 				echo "</div>".GetScrollTableEnd()."</td></tr>";
 			}
 			if( $is_mob )

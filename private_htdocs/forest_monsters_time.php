@@ -12,12 +12,90 @@ f_MQuery( "DELETE FROM forest_monster_camps WHERE expires < ".time()." AND comba
 
 /* Сигнал о Лисьей Охоте */
 $lo_time = f_MValue( 'SELECT `time` FROM `lo` WHERE `time` < '.time().' AND `status` = 0' );
-if( $lo_time )
+if( false && $lo_time )
 {
 	glashSay( "Звучит тревожный горн! Кажется, в Лесу завелась Лиса!" );
 	f_MQuery( 'UPDATE `lo` SET `status` = 1' );
 }
 /* !Сигнал о Лисьей Охоте */
+//die();
+//if (mt_rand(0, 2) == 2)
+for ($i=0;$i<-1 ;$i++ )
+{
+	$mob_id=$i+70;
+	if ($mob_id==70) $nm = "Снеговиков Грабителей";
+	if ($mob_id==71) $nm = "Снеговиков Бандитов";
+	if ($mob_id==72) $nm = "Снеговиков Разбойников";
+	if ($mob_id==73) $nm = "Снеговиков Мародеров";
+	if ($mob_id==74) $nm = "Снеговиков Головорезов";
+
+	$arr = f_MFetch(f_MQuery("SELECT * FROM forest_monster_camps WHERE mob_id=".$mob_id));
+	if ($arr)
+	{
+		$min_level = $arr['min_level'];
+		$max_level = $arr['max_level'];
+		
+		
+		$cell_id = $arr['cell_id'];
+
+		$x = 50 + (int)($cell_id / 100);
+		$x %= 100;
+		$y = $cell_id % 100;
+
+	    	$st = "";
+		if ($arr['combat_id']) $st = " Бой идет прямо сейчас! <a target=_blank href=combat_log.php?id=".$arr['combat_id'].">Смотреть</a>";
+	    	if (((int)date("i")) % 30 == 0) glashSay( "Внимание игроков <b>$min_level - $max_level</b> уровней! По сообщениям дозорных магов, в Лесу на координатах <b>$x.$y</b> обнаружено логово <b>$nm</b>. Городская Управа просит вас посодействовать в наведении порядка на указанных координатах.$st" );
+
+	if( $arr['strazha_helper'] > 0 && time( ) - $arr['strazha_helper'] > 1 * 60 )
+	{
+		$attach_whom = f_MValue( "SELECT player_id FROM combat_players WHERE combat_id=".$arr['combat_id']." AND side=1" );
+		include_once( "mob.php" );
+		
+		$side0 = f_MValue( "SELECT count( player_id ) FROM combat_players WHERE combat_id=".$arr['combat_id']." AND side=0 AND ready < 2" );
+		$side1 = f_MValue( "SELECT count( player_id ) FROM combat_players WHERE combat_id=".$arr['combat_id']." AND side=1 AND ready < 2" );
+		if ($side1>$side0+5) $side1 = $side0 + 5;
+		if( $side0 > 0 )
+		{
+			f_MQuery( "UPDATE forest_monster_camps SET strazha_helper = -1 WHERE mob_id=".$mob_id );
+			for( $i = 0; $i < $side1 - $side0; ++ $i )
+			{
+    			$mob = new Mob;
+				$mob->CreateDungeonMob( $min_level, 2, $min_level, $min_level, $min_level, 1, 10000, "Префект", false );
+				$player = new Player( $attach_whom );
+    			$mob->AttackPlayer( $player->player_id, 6, 1, false );
+			}
+		}
+	}
+	}
+	else
+	{
+		/*if ($mob_id==70 || $mob_id==71) $l=13;
+		if ($mob_id==72 || $mob_id==73) $l=4;
+		if ($mob_id==74) $l=2;
+		$cell_id=f_MValue("SELECT depth FROM forest_tiles WHERE tile=$l ORDER BY RAND() LIMIT 1");
+		*/
+		
+		if ($mob_id==70) $cell_id=8704;
+		if ($mob_id==71) $cell_id=8686;
+		if ($mob_id==72) $cell_id=7008;
+		if ($mob_id==73) $cell_id=7695;
+		if ($mob_id==74) $cell_id=458;
+
+		$expires = time() + 6 * 3600;
+		$x = 50 + (int)($cell_id / 100);
+		$x %= 100;
+		$y = $cell_id % 100;
+		if ($mob_id==70)	{$min_level=3; $max_level=6;}
+		if ($mob_id==71)	{$min_level=7; $max_level=10;}
+		if ($mob_id==72)	{$min_level=11; $max_level=14;}
+		if ($mob_id==73)	{$min_level=15; $max_level=18;}
+		if ($mob_id==74)	{$min_level=19; $max_level=25;}
+		f_MQuery( "INSERT INTO forest_monster_camps (cell_id, mob_id, min_level, max_level, expires, strazha_helper) VALUES ($cell_id, $mob_id, $min_level, $max_level, $expires, 0)" );
+		if (((int)date("i")) % 30 == 0) glashSay( "Внимание игроков <b>$min_level - $max_level</b> уровней! По сообщениям дозорных магов, в Лесу на координатах <b>$x.$y</b> обнаружено логово <b>$nm</b>. Городская Управа просит вас посодействовать в наведении порядка на указанных координатах." );
+	}
+}
+
+//die();
 
 if ($arr = f_MFetch(f_MQuery("SELECT * FROM forest_monster_camps ORDER BY rand() LIMIT 1")))
 {
@@ -55,7 +133,7 @@ if ($arr = f_MFetch(f_MQuery("SELECT * FROM forest_monster_camps ORDER BY rand()
 			for( $i = 0; $i < $side1 - $side0; ++ $i )
 			{
     			$mob = new Mob;
-				$mob->CreateDungeonMob( $min_level, 2, $min_level, $min_level, $min_level, 1, 1000, "Префект", false );
+				$mob->CreateDungeonMob( $min_level, 2, $min_level, $min_level, $min_level, 1, 10000, "Префект", false );
 				$player = new Player( $attach_whom );
     			$mob->AttackPlayer( $player->player_id, 6, 1, true );
 			}

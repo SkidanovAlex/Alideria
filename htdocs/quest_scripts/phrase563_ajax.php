@@ -86,7 +86,7 @@ f_MQuery( "UNLOCK TABLES" );
 if( $moo == 1 )
 {
 	f_MQuery( "UPDATE player_mines SET lost=1 WHERE player_id={$player->player_id}" );
-	$player->SetTrigger( 96 );
+	$player->SetTrigger( 12215 );
 	echo "do_win();";
 }
 

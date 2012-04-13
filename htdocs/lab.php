@@ -2,6 +2,11 @@
 
 include_once( 'functions.php' );
 
+$tex = Array( );
+$tex[1] = imagecreatefrompng( "images/lab/wall.png" );
+$tex[2] = imagecreatefrompng( "images/lab/ceil.png" );
+$tex[3] = imagecreatefrompng( "images/lab/floor.png" );
+
 class Cell
 {
 	var $x;
@@ -91,7 +96,7 @@ class Lab
 		}
 		else
 		{
-			$t = $dx; $dx = - dy; $dy = $t;
+			$t = $dx; $dx = - $dy; $dy = $t;
 		}
 		$l = mt_rand( 1, ceil( $this->w / 5 ) );
 		for( $i = 0; $i < $l; ++ $i )
@@ -135,6 +140,22 @@ class Lab
 				    	$this->cells[$z][$y][$x]->tex = 2;
 				    }
         		}
+            if ($z != 0)
+            {
+                for( $i = 0; $i < 1000; ++ $i )
+                {
+                    $x = mt_rand( 1, $this->w - 1 );
+                    $y = mt_rand( 0, $this->h - 1 );
+                    if( !$this->Ocuppied( $z, $x, $y ) && !$this->Ocuppied( $z, $x - 1, $y ) &&
+                        !$this->Ocuppied( $z - 1, $x, $y ) && !$this->Ocuppied( $z - 1, $x - 1, $y ) &&
+                        $this->cells[$z - 1][$y][$x]->dir == 0 )
+                    {
+                        $this->cells[$z][$y][$x]->dir = -1;
+                        $this->cells[$z - 1][$y][$x]->dir = 1;
+                        break;
+                    }
+                }
+            }
         }
         for( $i = 0; $i < 1000; ++ $i )
         {

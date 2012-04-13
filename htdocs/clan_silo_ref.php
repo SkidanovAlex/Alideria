@@ -41,8 +41,9 @@ function put_to_silo( $item_id, $number, $clr )
 	$iarr = f_MFetch( $ires );
 	$balance += $iarr[0] * $number;
 
+	if (!checkCanDrop($item_id)) return "Этот предмет нельзя положить на склад ордена.";
 	// проверим пометку ордена на предмете
-	if ( checkOrderItem( $item_id ) )
+	else if ( checkOrderItem( $item_id ) )
 	{
 		$check_res = f_MQuery( "select order_id from items_order where unique_id=$item_id" );
 		if ( mysql_num_rows( $check_res ) > 0 )
@@ -166,7 +167,7 @@ else if( $number < 0 )
 	else
 	{
 		$iiarr = f_MFetch( f_MQuery( "SELECT parent_id, type, name FROM items WHERE item_id=$item_id" ) );
-		if( $number == 1 && $iiarr['type'] > 0 && $iiarr['type'] < 20 )
+		if( $number == 1 && ($iiarr['type'] > 0 && $iiarr['type'] < 20 || $iiarr['type'] ==30 || $iiarr['type'] == 35 ) )
 		{
 			f_MQuery( "INSERT INTO player_clan_items ( player_id, item_id ) VALUES ( {$player->player_id}, {$iiarr[parent_id]} )" );
 			if( isset( $_GET['weap'] ) ) echo "add_taken_item( $iiarr[parent_id], '".addslashes($iiarr[name])."' );";

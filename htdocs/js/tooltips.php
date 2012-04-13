@@ -21,8 +21,18 @@ var tooltip_shown = 0;
 
 function show_pots(a)
 {
+if (document.getElementById( 'pots'+a ).style.display == '')
+	document.getElementById( 'pots'+a ).style.display = 'none';
+else
+{
+	document.getElementById( 'pots1' ).style.display = 'none';
+	document.getElementById( 'pots2' ).style.display = 'none';
+	document.getElementById( 'pots3' ).style.display = 'none';
+	if (document.getElementById( 'pots4' ))
+		document.getElementById( 'pots4' ).style.display = 'none';
 	document.getElementById( 'pots'+a ).style.display = '';
-	document.getElementById( 'pots'+a ).style.zIndex = 102;
+	document.getElementById( 'pots'+a ).style.zIndex = 2;
+}
 }
 
 function hide_pots(a)

@@ -41,6 +41,28 @@ else if( $id < 0 )
 }
 else
 {
+    function showMonstersStatus($part, $opt)
+    {
+        global $player;
+    	$ires = f_MQuery( "SELECT mobs.name, player_quest_monsters.* FROM mobs, player_quest_monsters WHERE quest_part_id = $part AND player_id={$player->player_id} AND mobs.mob_id = player_quest_monsters.mob_id $opt" );
+        if (f_MNum($ires)) echo "<b>Убить:</b>";
+    	while( $iarr = f_MFetch( $ires ) )
+    	{
+    		$num = $iarr['target'] - $iarr['togo'];
+    		print( "<li> [$num/$iarr[target]]&nbsp;&nbsp;$iarr[name]<br>" );
+    	}
+    }
+    function showMineStatus($part, $opt)
+    {
+        global $player;
+    	$ires = f_MQuery( "SELECT items.name, player_quest_mine.* FROM items, player_quest_mine WHERE quest_part_id = $part AND player_id={$player->player_id} AND items.item_id = player_quest_mine.item_id $opt" );
+        if (f_MNum($ires)) echo "<b>Добыть:</b>";
+    	while( $iarr = f_MFetch( $ires ) )
+    	{
+    		$num = $iarr['target'] - $iarr['togo'];
+    		print( "<li> [$num/$iarr[target]]&nbsp;&nbsp;$iarr[name]<br>" );
+    	}
+    }
 
     $res = f_MQuery( "SELECT * FROM player_quests WHERE player_id = {$player->player_id} AND quest_id = $id" );
     if( !mysql_num_rows( $res ) ) return;
@@ -63,6 +85,8 @@ else
     		$parr['text'] = substr( $parr['text'], 0, $t ) . $player->GetQuestValue( (int)substr( $parr['text'], $t + 1, $q - $t - 1 ) ).substr( $parr['text'], $q + 1 );
     	}
     	print( "<b>$k. </b>$parr[text]<br><br>" );
+        showMonstersStatus($parr['quest_part_id'], "");
+        showMineStatus($parr['quest_part_id'], "");
     	$larr = $parr;
     	++ $k;
     }
@@ -70,6 +94,7 @@ else
     if( $larr )
     {
     	$ires = f_MQuery( "SELECT items.name, quest_item_reqs.* FROM items, quest_item_reqs WHERE quest_part_id = $larr[quest_part_id] AND items.item_id = quest_item_reqs.item_id" );
+        if (f_MNum($ires)) echo "<b>Найти:</b>";
     	while( $iarr = f_MFetch( $ires ) )
     	{
     		$num = $player->NumberItems( $iarr[item_id] );

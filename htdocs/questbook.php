@@ -143,9 +143,11 @@ function deleteLetter( id )
 
 <?
 
+$folder_id = (int)$_GET['folder_id'];
+
 if( $_GET['del_all_post'] )
 {
-	$res = f_MQuery( "SELECT p.* FROM post as p WHERE p.receiver_id = {$player->player_id} ORDER BY entry_id DESC" );
+	$res = f_MQuery( "SELECT p.* FROM post as p WHERE p.receiver_id = {$player->player_id} AND p.folder_id={$folder_id} ORDER BY entry_id DESC" );
 	while( $arr = f_MFetch( $res ) ) if( !$arr['money'] )
 	{
 		$val = f_MValue( "SELECT count(entry_id) FROM post_items WHERE entry_id=$arr[entry_id]" );
@@ -153,7 +155,16 @@ if( $_GET['del_all_post'] )
 	}
 }
 
-$res = f_MQuery( "SELECT p.* FROM post as p WHERE p.receiver_id = {$player->player_id} ORDER BY entry_id DESC" );
+
+$res = f_MQuery( "SELECT p.* FROM post as p WHERE p.receiver_id = {$player->player_id} AND p.folder_id={$folder_id} ORDER BY entry_id DESC" );
+
+if ($player->Rank()==5 || $player->Rank()==2 || $player->player_id==6825)
+{
+	echo "<table border=1>";
+	echo "<tr><td><a href='game.php?folder_id=0'>Общие</a></td>";
+	echo "<td><a href='game.php?folder_id=1'>Служебные</a></td></tr>";
+	echo "</table><br>";
+}
 
 if( f_MNum( $res ) )
 {
@@ -161,7 +172,7 @@ if( f_MNum( $res ) )
 	?>
 	<script>function del_all_post()
 	{
-		if(confirm('Удалить все письма без вложений?')) location.href="game.php?del_all_post=1";
+		if(confirm('Удалить все письма без вложений?')) location.href="game.php?folder_id=<?=$folder_id?>&del_all_post=1";
 	}</script>
 	<?
 	echo "<li><a href='javascript:del_all_post();'>Удалить все письма без вложений</a><br>";

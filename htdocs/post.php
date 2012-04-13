@@ -208,7 +208,7 @@ function isRecipients( )
 <div id=attach style='display:none'>
 <?
     	include_js( "js/items_renderer.js" );
-		$res = f_MQuery( "SELECT items.*,player_items.number FROM player_items,items WHERE player_id={$player->player_id} AND weared=0 AND items.item_id=player_items.item_id" );
+		$res = f_MQuery( "SELECT items.*,player_items.number FROM player_items,items WHERE player_id={$player->player_id} AND weared=0 AND nodrop=0 AND items.item_id=player_items.item_id" );
 		echo "<script>\n";
     	while( $arr = f_MFetch( $res ) )
     	{

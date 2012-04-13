@@ -63,58 +63,60 @@ echo "</div>\n\n";
 			<div style='position: absolute;' width=50 height=50 id=item12 name=item12>&nbsp;</div>
 
 <?
-if ($id != 6825)
-{
+echo "<div onclick=show_pots(1) style='position: absolute;top:285px;left:30px;' width=25 height=25 id=pot1 name=pot1>";
+	echo "<img src='images/items/bg/bg25pot.gif'>";
+echo "</div>";
+echo "<div id=pots1 name=pots1 style='position: absolute;top:320px;left:0px;display: none;'>";
+	echo "<img src='images/rect/panel.jpg'>";
+	echo "<div style='position: absolute;top:3;left:70;'><b>Зелья</b></div>";
+	echo "<img onclick='hide_pots(1);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item13 name=item13>&nbsp;</div>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item14 name=item14>&nbsp;</div>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item15 name=item15>&nbsp;</div>";
 	echo "<div style='position: absolute;' width=50 height=50 id=item16 name=item16>&nbsp;</div>";
-	
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
+echo "</div>";
+echo "<div onclick=show_pots(2) style='position: absolute;top:285px;left:55px;' width=25 height=25 id=pot2 name=pot2>";
+	echo "<img src='images/items/pot_sq/ten_talismana.png'>";
+echo "</div>";
+echo "<div id=pots2 name=pots2 style='position: absolute;top:320px;left:0px;display: none;'>";
+	echo "<img src='images/rect/panel.jpg'>";
+	echo "<div style='position: absolute;top:3;left:70;'><b>Талисманы</b></div>";
+	echo "<img onclick='hide_pots(2);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
+echo "</div>";
+echo "<div onclick=show_pots(3) style='position: absolute;top:285px;left:80px;' width=25 height=25 id=pot3 name=pot3>";
+	echo "<img src='images/items/pot_sq/ten_medaliona.png'>";
+echo "</div>";
+echo "<div id=pots3 name=pots3 style='position: absolute;top:320px;left:0px;display: none;'>";
+	echo "<img src='images/rect/panel.jpg'>";
+	echo "<div style='position: absolute;top:3;left:70;'><b>Медальоны</b></div>";
+	echo "<img onclick='hide_pots(3);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
+	echo "<div style='position: absolute;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
+echo "</div>";
 
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
-	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
+if ($player->player_id == 1)
+{
+	echo "<div style='position: absolute;display: none;' width=50 height=50 id=item25 name=item25>&nbsp;</div>";
+	echo "<div id=pot4 style='display:none;'>&nbsp;</div>";
 }
 else
 {
-	echo "<div onmousemove=show_pots(1) style='position: absolute;top:285px;left:30px;' width=25 height=25 id=pot1 name=pot1>";
+	echo "<div onclick=show_pots(4) style='position: absolute;top:285px;left:105px;' width=25 height=25 id=pot4 name=pot4>";
+//		echo "<img src='images/items/pot_sq/balsam_ten.png'>";
 		echo "<img src='images/items/bg/bg25pot.gif'>";
-		echo "<div onmouseout=hide_pots(1) id=pots1 name=pots1 style='position: absolute;top:-10px;left:-10px;display: none;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item13 name=item13>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item14 name=item14>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item15 name=item15>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item16 name=item16>&nbsp;</div>";
-		echo "</div>";
 	echo "</div>";
-
-	echo "<div onmousemove=show_pots(2) style='position: absolute;top:285px;left:55px;' width=25 height=25 id=pot2 name=pot2>";
-		echo "<img src='images/items/pot_sq/ten_talismana.png'>";
-		echo "<div onmouseout=hide_pots(2) id=pots2 name=pots2 style='position: absolute;top:-10px;left:-10px;display: none;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item17 name=item17>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item18 name=item18>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item19 name=item19>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item20 name=item20>&nbsp;</div>";
-		echo "</div>";
+	echo "<div id=pots4 name=pots4 style='position: absolute;top:320px;left:0px;display: none;'>";
+		echo "<img src='images/rect/panel.jpg'>";
+		echo "<div style='position: absolute;top:3;left:70;'><b>Бальзамы</b></div>";
+		echo "<img onclick='hide_pots(4);' src='images/e_close.gif' style='position: absolute;top:4;right:4' title='Закрыть'>";
+		echo "<div style='position: absolute;' width=50 height=50 id=item25 name=item25>&nbsp;</div>";
 	echo "</div>";
-
-	echo "<div onmousemove=show_pots(3) style='position: absolute;top:285px;left:80px;' width=25 height=25 id=pot3 name=pot3>";
-		echo "<img src='images/items/pot_sq/ten_medaliona.png'>";
-		echo "<div onmouseout=hide_pots(3) id=pots3 name=pots3 style='position: absolute;top:-10px;left:-10px;display: none;'>";
-			echo "<img src='images/rect/panel.jpg'>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item21 name=item21>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item22 name=item22>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item23 name=item23>&nbsp;</div>";
-			echo "<div style='position: absolute;' width=50 height=50 id=item24 name=item24>&nbsp;</div>";
-		echo "</div>";
-	echo "</div>";
-
 }
 ?>
 
@@ -140,7 +142,7 @@ else
     	<select id=itype class=m_btn>
     		<?
 
-    		foreach( $item_types as $key=>$value ) if( $key > 0 && $key < 20 )
+    		foreach( $item_types as $key=>$value ) if( $key > 0 && $key < 20 || $key == 30 || $key == 35 )
     			echo "<option value=$key>$value";
 
     		?>
@@ -221,7 +223,7 @@ function refr( )
 	st += '</table>' + rFL();
 	_( 'seco' ).innerHTML = st;
 
-	for( var i = 1; i <= 16; ++ i ) if( ppp[i] )
+	for( var i = 1; i <= 25; ++ i ) if( ppp[i] )
 	{
 		document.getElementById( 'item' + (convert_slot( i )+1) ).onclick = make_undo_f( i );
 		document.getElementById( 'item' + (convert_slot( i )+1) ).style.cursor = 'pointer';
@@ -331,15 +333,19 @@ function do_item( eff, req, id, name, descr, img, slot )
 	var ok = false;
 	do
 	{
-		if( !ppp[slot] )
+		if( !ppp[slot] && slot!=30 && slot!=35 )
 		{
 			ok = true;
 			break;
 		}
 		if( slot == 1 ) slot = 14;
+		else if (slot == 30 ) slot = 17;
+		else if (slot == 35 ) slot = 21;
 		else if( slot == 13 ) break;
+		else if ( slot == 20 ) break;
+		else if ( slot == 25 ) break;
 		else ++ slot;
-	} while( slot == 3 || slot == 5 || slot == 7 || slot == 14 || slot == 15 || slot == 16 );
+	} while( slot == 3 || slot == 5 || slot == 7 || (slot >= 14 && slot <= 24) );
 
 	if( !ok )
 	{

@@ -316,6 +316,26 @@ function LogError( $a, $b = false )
 	fclose( $f );
 }
 
+function LogScripting( $a, $b = false )
+{
+	global $HTTP_COOKIE_VARS;
+	global $_SERVER;
+	
+	if( $b !== false ) $a .= ". Доп. информация: $b";
+	
+	$tm = date( "d.m.Y H:i", time( ) );
+	
+
+
+	$s = $tm.": ".$_SERVER['PHP_SELF'].": ".getenv( "HTTP_X_REAL_IP" )."(".getenv( "HTTP_X_FORWARDED_FOR" ).")".": "."[".$HTTP_COOKIE_VARS['c_id']."] ".$a;
+
+	$s = str_replace(array("\n", "\r"), array(" \\n", " "), $s)."\n";
+			
+	$f = fopen(LOGS_PATH . "log_scripting.txt", "a" );
+	fwrite( $f, $s );
+	fclose( $f );
+}
+
 function LogErrorSql( $a, $b = false )
 {
 	global $HTTP_COOKIE_VARS;

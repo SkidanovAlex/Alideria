@@ -135,7 +135,7 @@ if ($player->Rank()==1)
 		st +=  window.top.ii( levs[names[i]], names[i], clrs[names[i]], clans[names[i]], sex[names[i]] );
 <?
 
-if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 )
+if( $player->Rank( ) == 1 || $player->Rank( ) == 2 || $player->Rank( ) == 5 || $player->Rank( ) == 3 )
 {
 	?>
 	

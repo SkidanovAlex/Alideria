@@ -8,7 +8,7 @@ f_MConnect( );
 
 $item_id = $HTTP_RAW_POST_DATA;
 settype( $item_id, 'integer' );
-
+//$item_id=f_MValue("SELECT parent_id FROM items WHERE item_id=$item_id LIMIT 1");
 $st = '';
 
 $res = f_MQuery( "SELECT npcs.* FROM npc_items, npcs WHERE item_id=$item_id AND npcs.npc_id=npc_items.npc_id" );
@@ -23,12 +23,13 @@ while( $arr = f_MFetch( $res ) )
 	$st .= "<li>Купить в магазине &quot;<b>$arr[name]</b>&quot;<br>";
 }
 
-if ($item_id != 77083)
+if (!($item_id == 77083 || $item_id == 76397 ))
 {
-	$res = f_MQuery( "SELECT mobs.name FROM mobs INNER JOIN mob_items ON mobs.mob_id=mob_items.mob_id WHERE item_id=$item_id" );
+	$res = f_MQuery( "SELECT mobs.mob_id, mobs.name, mob_items.chance FROM mobs, mob_items WHERE mobs.mob_id=mob_items.mob_id AND mob_items.item_id=$item_id" );
 	while( $arr = f_MFetch( $res ) )
 	{
-		$st .= "<li>Дроп из монстра <b>$arr[name]</b><br>";
+		$arr[2] = $arr[2]/100;
+		$st .= "<li>Дроп из монстра <b><a href=\"help.php?id=1016&beast_id={$arr[0]}\">{$arr[1]}</a></b> с шансом <b>{$arr[2]}%</b><br>";
 	}
 }
 

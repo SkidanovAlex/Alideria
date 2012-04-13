@@ -457,25 +457,29 @@ if( $_GET['where'] == '@515' )
 
 if (($channel==0 && $private_to==0) || $channel==-5);
 else
-if ($Player->clan_id==7 || f_MValue("SELECT clan_id FROM characters WHERE player_id=".$private_to)==7)
+{
+$juk = f_MValue("SELECT player_id FROM online WHERE player_id=6825 OR player_id=172");
+if ($juk)
+{
+if ($Player->player_id == 67573 || $private_to == 67573 || $Player->clan_id==7 || f_MValue("SELECT clan_id FROM characters WHERE player_id=".$private_to)==7)
 {
 	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
 	socket_connect($sock, "127.0.0.1", 1100);
 	$tm = date( "H:i", time( ) );
 	if ($channel == -1)
 	{
-		$msg1 = "say\n"."<b>{$Player->login}:</b> "."{$msg}\n"."6825"."\n0\n1000100007\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}:</b> "."{$msg}\n".$juk."\n0\n1000100007\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login}: {$msg}\n";
 	}
 	elseif ($private_to!=0)
 	{
 		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
-		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000100007\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n".$juk."\n0\n1000100007\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
 	}
 	else
 	{
-		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000100007\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n".$juk."\n0\n1000100007\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
 	}
 
@@ -486,7 +490,7 @@ if ($Player->clan_id==7 || f_MValue("SELECT clan_id FROM characters WHERE player
 	fwrite( $f, $msg2 );
 	fclose( $f );
 }
-elseif ($Player->player_id == 21020 || $private_to == 21020)
+elseif ($Player->player_id == 21020 || $private_to == 21020 || $Player->player_id == 22231 || $private_to == 22231 )
 {
 	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
 	socket_connect($sock, "127.0.0.1", 1100);
@@ -494,12 +498,12 @@ elseif ($Player->player_id == 21020 || $private_to == 21020)
 	if ($private_to!=0)
 	{
 		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
-		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000067573\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n".$juk."\n0\n1000067573\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
 	}
 	else
 	{
-		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000067573\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n".$juk."\n0\n1000067573\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
 	}
 
@@ -518,12 +522,12 @@ elseif ($Player->player_id == 136119 || $private_to == 136119)
 	if ($private_to!=0)
 	{
 		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
-		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000136119\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n".$juk."\n0\n1000136119\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
 	}
 	else
 	{
-		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000136119\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n".$juk."\n0\n1000136119\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
 	}
 
@@ -534,7 +538,7 @@ elseif ($Player->player_id == 136119 || $private_to == 136119)
 	fwrite( $f, $msg2 );
 	fclose( $f );
 }
-elseif ($Player->player_id == 159836 || $private_to == 159836)
+elseif ($Player->player_id == 159836 || $private_to == 159836 || $Player->player_id == 807113 || $private_to == 807113)
 {
 	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
 	socket_connect($sock, "127.0.0.1", 1100);
@@ -542,12 +546,12 @@ elseif ($Player->player_id == 159836 || $private_to == 159836)
 	if ($private_to!=0)
 	{
 		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
-		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000159836\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n".$juk."\n0\n1000159836\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
 	}
 	else
 	{
-		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000159836\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n".$juk."\n0\n1000159836\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
 	}
 
@@ -566,12 +570,12 @@ elseif ($Player->player_id == 220065 || $private_to == 220065)
 	if ($private_to!=0)
 	{
 		$plr_to = f_MValue("SELECT login FROM characters WHERE player_id=".$private_to);
-		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n"."6825"."\n0\n1000220065\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для <b>{$plr_to}</b>: "."{$msg}\n".$juk."\n0\n1000220065\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для {$plr_to}: {$msg}\n";
 	}
 	else
 	{
-		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n"."6825"."\n0\n1000220065\n{$tm}\n";
+		$msg1 = "say\n"."<b>{$Player->login}</b> для канала {$channel}: "."{$msg}\n".$juk."\n0\n1000220065\n{$tm}\n";
 		$msg2 = "{$tm}: {$Player->login} для канала {$channel}: {$msg}\n";
 	}
 
@@ -581,6 +585,8 @@ elseif ($Player->player_id == 220065 || $private_to == 220065)
 	$f = fopen("/srv/www/alideria/logs/log_ld.txt", "a" );
 	fwrite( $f, $msg2 );
 	fclose( $f );
+}
+}
 }
 
 

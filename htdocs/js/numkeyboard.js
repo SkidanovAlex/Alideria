@@ -69,5 +69,6 @@ function showkeyboard( id )
   function do_hide( ) { el2.style.display = 'none'; }
   function do_hide_tm( ) { hide_iv = setTimeout( do_hide, 150 ); }
   el.onfocus = do_show;
+  el.onclick = do_show;
   el.onblur = do_hide_tm;
 }

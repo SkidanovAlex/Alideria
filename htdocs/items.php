@@ -73,6 +73,11 @@ function itemDescr( $arr, $need_descr = true )
 
 	$st = "";
 	$st .= ItemEffectStr( $effect );
+	if( $arr[inner_base_spell_id] )
+	{
+		$card = new Card( $arr[inner_base_spell_id] );
+		$st .= "Встроенное базовое заклинание:<br><a href=help.php?id=1011&card_id=$arr[inner_base_spell_id] target=_blank>".$card->name."</a><br>";
+	}
 	if( $arr[inner_spell_id] )
 	{
 		$card = new Card( $arr[inner_spell_id] );
@@ -92,6 +97,8 @@ function itemDescr( $arr, $need_descr = true )
 	}
 
 	if( $arr['type'] > 1 && $arr['type'] < 20 ) $st .= "<b>Прочность</b>: $arr[decay]/$arr[max_decay]<br>";
+	
+	if ($arr['type'] == 31) $st .= "<b>Количество бальзама:</b> $arr[decay]<br>";
 
 	$gnr = array( "вода", "природа", "огонь" );
 	if( $arr['charges_level'] != 0 ) $st .= "<br><b>Заряжен на улучшение:</b><br>Уровень: $arr[charges_level]<br>Улучшение: $arr[charges_mk]<br>Стихия: {$gnr[$arr[charges_genre]]}<br>";
@@ -126,7 +133,7 @@ function itemFullDescr2( $arr, $need_descr = true )
 {
 	global $player;
 	$ret = itemFullDescr( $arr, $need_descr );
-	if( $arr['weared'] && $arr['type'] == 1 )
+	if( $arr['weared'] && ($arr['type'] == 1 || $arr['type'] == 30 || $arr['type'] == 35) )
 	{
 		$eres = f_MQuery( "SELECT expires FROM player_potions WHERE player_id={$player->player_id} AND slot_id=$arr[weared]" );
 		$earr = f_MFetch( $eres );
@@ -192,6 +199,14 @@ function getItemNameForm( $item_id, $form )
 	return $arr[0];
 }
 
+
+function checkCanDrop($item_id)
+{
+	if (f_MValue("SELECT nodrop FROM items WHERE item_id=".$item_id) == 0)
+		return true;
+	else
+		return false;
+}
 
 // проверка орденской принадлежности вещи
 // возвращает имя ордена для принадлежащей ордену вещи

@@ -96,6 +96,8 @@ else
 					$number = $_GET["num$id"];
 					settype( $item_id, 'integer' );
 					settype( $number, 'integer' );
+					if (!checkCanDrop($item_id))
+						$ok = false;
 					if( $player->NumberItems( $item_id ) < $number )
 						$ok = false;
 					if( $number <= 0 )

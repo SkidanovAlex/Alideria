@@ -81,7 +81,7 @@ if( $arr )
 
 <?
 
-$qres = f_MQuery( "SELECT items.*, player_items.number FROM items, player_items WHERE player_id = $player->player_id AND items.item_id = player_items.item_id AND weared=0" );
+$qres = f_MQuery( "SELECT items.*, player_items.number FROM items, player_items WHERE player_id = $player->player_id AND items.item_id = player_items.item_id AND weared=0 AND nodrop=0" );
 OutCol( $player->money, $qres, 1, $player->umoney );
 
 ?>

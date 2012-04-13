@@ -110,7 +110,7 @@ if( $player->regime != 0 )
 	   		}
 		}
 	}
-	else if( $_GET['cancel'] )
+	else if( $_GET['cancel'] && $player->regime>=-1 )
 	{
 		$player->SetTill( 0 );
 		$player->SetRegime( 0 );
@@ -152,7 +152,8 @@ else if( $player->regime != 0 )
 		echo "<i>".$text."</i><br><br>";
 	}
 	echo "<script>document.write( InsertTimer( $rem, 'Осталось: <b>', '</b>', 0, 'location.href=\"game.php\"' ) );</script>";
-	echo "<a href=game.php?cancel=1>Остановиться</a>";
+	if ($player->regime>=-1)
+		echo "<a href=game.php?cancel=1>Остановиться</a>";
 }
 else if( $depth == 2 )
 {

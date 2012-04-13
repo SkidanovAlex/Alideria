@@ -31,7 +31,7 @@ if (f_MValue("SELECT COUNT(*) FROM player_triggers WHERE trigger_id=12345 AND pl
 $depth = $place = $player->depth;
 $loc = $player->location;
 
-if( $loc != 1 ) die( );
+if( $loc != 1 && $loc != 6 && $loc != 7 ) die( );
 
 $ut = new ForestUtils( $loc );
 
@@ -325,13 +325,33 @@ else if( $till && $_GET['cancel'] && $fpd->status == 9 )
 
 else if( !$till && ( $dx != 0 || $dy != 0 ) && $player->regime == 0 )
 {
-	if( $x == 0 && $y == 0 && $dx == 2 )
+	if( $cur_tile == 10 && $dx == 2 )
 	{
 		$fpr = new ForestPlayerRiddle( $player->player_id );
 		$fpd->CleanUp( );
 		$fpr->CleanUp( );
 		$player->SetLocation( 2 );
 		$player->SetDepth( 3 );
+		die( "location.href='game.php';" );
+	}
+	
+	else if ( $cur_tile == 110 && $dx == 2 )
+	{
+		$fpr = new ForestPlayerRiddle( $player->player_id );
+		$fpd->CleanUp( );
+		$fpr->CleanUp( );
+		$player->SetLocation( 3 );
+		$player->SetDepth( 6 );
+		die( "location.href='game.php';" );
+	}
+	
+	else if ( $cur_tile == 210 && $dx == 2 )
+	{
+		$fpr = new ForestPlayerRiddle( $player->player_id );
+		$fpd->CleanUp( );
+		$fpr->CleanUp( );
+		$player->SetLocation( 0 );
+		$player->SetDepth( 11 );
 		die( "location.href='game.php';" );
 	}
 	
@@ -482,14 +502,22 @@ else if( !$till && ( $dx != 0 || $dy != 0 ) && $player->regime == 0 )
 			$new_tile = $ut->getTile( $x, $y );
 			if( $new_tile == 6 ) $ok = false;
 			if( $cur_tile == 5 ) if( $new_tile == 5 ) $ok = false;
-			if( $new_tile == 1 && $player->level < 2 )
+			if( $new_tile == 100 ) $ok = false;
+			if( !($new_tile == 0 || $new_tile == 10 ) && $player->level < 2 )
 			{
-				echo "alert( 'Вы не можете войти в дремучий лес раньше, чем достигнете второго уровня' );";
+				echo "alert( 'Вы не можете покинуть Опушку Леса раньше, чем достигнете второго уровня' );";
 				$ok = false;
 			}
+			/*
 			if( $new_tile == 7 )
 			{
 				echo "alert( 'Деревня Эльфов находится в разработке, пройти на нее нельзя' );";
+				$ok = false;
+			}
+			*/
+			if ($new_tile == 14)// && !($player->HasTrigger(12900) || $player->HasTrigger(12901)))
+			{
+				echo "alert( 'Вы натыкаетесь на невидимую стену и не можете пройти дальше' );";
 				$ok = false;
 			}
 			if( $new_tile == 2 && $player->level < 4 )
@@ -663,7 +691,23 @@ $st .= "<br>";
 		}
 		print( "show_loc_items( );" );
 	}
-
+	
+	// NPC тут
+	$npc_show = "";
+	if ($player->regime==0 && $fpd->status==0)
+	{
+		$nres = f_MQuery( "SELECT * FROM npcs WHERE location = {$player->location} AND depth = {$player->depth}" );
+		if( mysql_num_rows( $nres ) )
+		{
+			while( $narr = f_MFetch( $nres ) )
+				if( $narr[condition_id] == -1 || allow_phrase( $narr[condition_id] ) )
+    					$npc_show .= "<li><a href='game.php?talk=$narr[npc_id]'>$narr[name]</a><br>";
+				if( $npc_show != '' )
+					$npc_show = "<b>Здесь можно поговорить с:</b><br><ul>".$npc_show."</ul>";
+		}
+	}
+	echo "forest_show_npc(\"".$npc_show."\");";
+		
 	// игроки тут
 	echo "forest_clear_players( );";
 	$ares = f_MQuery( "SELECT characters.login, characters.regime, characters.player_id, combat_id, 0 as mobik FROM characters INNER JOIN online ON characters.player_id = online.player_id LEFT JOIN combat_players ON characters.player_id = combat_players.player_id WHERE characters.loc = $loc AND characters.depth = $depth UNION
@@ -688,8 +732,13 @@ $st .= "<br>";
 	if( $till || $player->regime != 0 ) echo( "forest_dirs( 0, 0, 0, 0, 0, 0, 0, 0 );" );
 	else
 	{
-		if( $depth == 0 )
+//		if( $depth == 0 )
+		if( $cur_tile == 10 )
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>Идти по тропинке в столицу</li></a>';
+		if( $cur_tile == 110 )
+			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>Плыть в Омут</li></a>';
+		if( $cur_tile == 210 )
+			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>Выход в Пещеры Столицы</li></a>';
 		if( $cur_tile == 0 )
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>Искать цветы</li></a>';
 		if( $cur_tile == 1 || $cur_tile == 13 || $cur_tile == 12 )
@@ -698,7 +747,7 @@ $st .= "<br>";
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 3, 0 );" style="cursor:pointer"><li>Искать частицы</li></a>';
 
         // Доп. действия
-		$res = f_MQuery( "SELECT * FROM forest_additional_actions WHERE cell_type = $cur_tile" );
+		$res = f_MQuery( "SELECT * FROM forest_additional_actions WHERE cell_type = $cur_tile OR loc=$player->location AND depth=$player->depth" );
 		while( $arr = f_MFetch( $res ) )
 		{
 			if( allow_phrase( $arr['condition_id'] ) )
@@ -781,7 +830,7 @@ $st .= "<br>";
 					$dy = $jj - $y;
 
 					if( $comma ) echo( ', ' );
-					if( $tiles[$ny][$nx] != 6 && ( $tiles[$ny][$nx] != 5 || $cur_tile != 5 ) ) echo "1";
+					if( $tiles[$ny][$nx] != 200 && $tiles[$ny][$nx] != 100 && $tiles[$ny][$nx] != 6 && ( $tiles[$ny][$nx] != 5 || $cur_tile != 5 ) ) echo "1";
 					else echo "0";
 					
 					$comma = true;
@@ -795,7 +844,13 @@ $st .= "<br>";
 if( $player->regime == 150 )	
 {
 	$fpr = new ForestPlayerRiddle( $player->player_id );
-	echo "forest_text( '<b>Хранители Леса</b><br>К вам незаметно подкрались хранители леса. Вам не удастся покинуть их, пока вы правильно не ответите на их загадку:<br><i>" . $fpr->riddle . "</i><br><br><table cellspacing=0 cellpadding=0 border=0><tr><td>Ваш ответ: </td><td><input type=text class=m_btn id=answr></td><td><button onclick=\"forest_answer()\" class=ss_btn>Ответить</button></td></tr></table>' );";
+	if ($player->location == 1)
+		$hran_tekst = "<b>Хранители Леса</b><br>К вам незаметно подкрались хранители леса.";
+	if ($player->location == 6)
+		$hran_tekst = "<b>Хранители Реки</b><br>К вам незаметно подкрались хранители реки.";
+	if ($player->location == 7)
+		$hran_tekst = "<b>Хранители Пещер</b><br>К вам незаметно подкрались хранители пещер.";
+	echo "forest_text( '".$hran_tekst." Вам не удастся покинуть их, пока вы правильно не ответите на их загадку:<br><i>" . $fpr->riddle . "</i><br><br><table cellspacing=0 cellpadding=0 border=0><tr><td>Ваш ответ: </td><td><input type=text class=m_btn id=answr></td><td><button onclick=\"forest_answer()\" class=ss_btn>Ответить</button></td></tr></table>' );";
 }
 else if( $player->regime == 120 )
 {
