@@ -108,6 +108,11 @@ function query_go( )
 	query( 'lab_do_dev.php?do=go', 'a' );
 }
 
+function query_quest_attack( )
+{
+	query( 'lab_do_dev.php?do=quest_attack', 'a' );
+}
+
 function query_leave( )
 {
 	query( 'lab_do_dev.php?do=leave', 'a' );
@@ -163,10 +168,7 @@ $res = f_MQuery( "SELECT cell_id, dir FROM player_labs WHERE player_id={$player-
 $arr = f_MFetch( $res );
 if( !$arr )
 {
-	$res = f_MQuery( "SELECT cell_id FROM lab WHERE lab_id=$lab_id AND z=0 AND dir=-1" );
-	$arr = f_MFetch( $res );
-	if( !$arr ) RaiseError( "А где собственно вход в лабиринт $lab_id?" );
-	f_MQuery( "INSERT INTO player_labs ( player_id, lab_id, cell_id, dir ) VALUES ( {$player->player_id}, $lab_id, $arr[0], 0 )" );
+    enterLab($lab_id);
 	$dir = 0;
 }
 else $dir = $arr[1];

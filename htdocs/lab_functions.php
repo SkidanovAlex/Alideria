@@ -17,14 +17,19 @@ function getNextStepInfo( $lab_id, $x, $y, $z, $dir )
     $hasMonsters = f_MNum($monsters);
     while ($monster = mysql_fetch_array($monsters))
     {
-        $updown .= "<li><a href=#>Напасть на: $monster[1]</a>";
+        $updown .= "<li><a href=# onclick='query_quest_attack();'>Напасть на: $monster[1]</a>";
     }
 
-    $npcs = f_MQuery("SELECT n.npc_id, n.name FROM npcs n INNER JOIN lab_quest_npcs q ON n.npc_id = q.npc_id WHERE q.player_id={$player->player_id} AND q.lab_id=$lab_id AND q.cell_id=$larr[1]");
+    $npcs = f_MQuery("SELECT n.npc_id, n.name, n.condition_id FROM npcs n INNER JOIN lab_quest_npcs q ON n.npc_id = q.npc_id WHERE q.player_id={$player->player_id} AND q.lab_id=$lab_id AND q.cell_id=$larr[1]");
     while ($npc = mysql_fetch_array($npcs))
     {
-        if ($hasMonsters) $updown .= "<li><font color='#4e4e4e'>Поговорить с: $npc[1]</font>";
-        else $updown .= "<li><a href='game_d.php?talk=$npc[0]'>Поговорить с: $npc[1]</a>";
+        include_once( "phrase.php" );
+
+        if( $npc['condition_id'] == -1 || allow_phrase( $npc['condition_id'], false ) )
+        {
+            if ($hasMonsters) $updown .= "<li><font color='#4e4e4e'>Поговорить с: $npc[1]</font>";
+            else $updown .= "<li><a href='game_d.php?talk=$npc[0]'>Поговорить с: $npc[1]</a>";
+        }
     }
     $updown = addslashes($updown);
     
@@ -46,6 +51,31 @@ function getNextStepInfo( $lab_id, $x, $y, $z, $dir )
 		$st .= ' + '.$plr->Nick( ).' + "<br>"';
 	}
 	echo "_( 'addinfo' ).innerHTML = '$updown<br><b>Перед вами идет бой:</b><br>' + ".substr( $st , 2 ).";";
+}
+
+// Когда эта функция вызывается, lab и players_labs залочены. их можно разлочить когда в лаб уже вошли
+function enterLab($lab_id)
+{
+    global $player;
+	$res = f_MQuery( "SELECT cell_id FROM lab WHERE lab_id=$lab_id AND z=0 AND dir=-1" );
+	$arr = f_MFetch( $res );
+	if( !$arr ) RaiseError( "А где собственно вход в лабиринт $lab_id?" );
+	f_MQuery( "INSERT INTO player_labs ( player_id, lab_id, cell_id, dir ) VALUES ( {$player->player_id}, $lab_id, $arr[0], 0 )" );
+
+    f_MQuery("UNLOCK TABLES");
+
+    f_MQuery("DELETE FROM lab_quest_monsters WHERE player_id={$player->player_id}");
+    f_MQuery("DELETE FROM lab_quest_npcs WHERE player_id={$player->player_id}");
+    // квест Пропавшая Девочка
+    if ($player->HasTrigger(255) && $lab_id == 1)
+    {
+        $cell_id = 1155908;
+        $mob_id = 18; $mob_img = "pp3.png";
+        $npc_id = 166; $npc_img = "f1n.png";
+        f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, 18, {$player->player_id}, '$mob_img');");
+        f_MQuery("insert into lab_quest_npcs values(null, $lab_id, $cell_id, $npc_id, {$player->player_id}, '$npc_img');");
+    }
+    f_MQuery("LOCK TABLES lab WRITE"); // вызывающий код ожидает, что есть что разлочить
 }
 
 ?>

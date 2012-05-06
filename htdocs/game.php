@@ -421,7 +421,7 @@ if( $screen_regime == 0 ) // Îבחמנ - םאקאכמ
 		    }
 			else if( $player->location == 0 )
 			{
-				if( $player->depth >= 33 && $player->depth <= 40 ) include( ($player->player_id == 173) ? "lab_loc_dev.php" : "lab_loc.php" );
+				if( $player->depth >= 33 && $player->depth <= 40 ) include( ($player->Rank() == 1) ? "lab_loc_dev.php" : "lab_loc.php" );
 				else if( $player->depth <= 20 ) include( "danger_walk.php" );
 				else include( "basic_location.php" );
 			}

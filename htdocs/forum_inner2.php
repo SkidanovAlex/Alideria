@@ -137,7 +137,7 @@ function delete_alowed($room_id, $author)
 
 	if ($author == 6825 && $player->player_id != 6825) return false;
 
-	if ($player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 ) return true;
+	if ($player->player_id == 6825 || $player->player_id == 67573 || $player->player_id == 173 ) return true;
 }
 
 function forum_permission_denied( )
@@ -179,6 +179,7 @@ if( isset( $_GET['ajax'] ) )
 		$txt = process_str_none( $arr[0] );
 		$txt = str_replace( "\n", '<br>', $txt );
 		$txt = str_replace( "\r", '', $txt );
+        $txt = addslashes($txt);
 		$cut = 500;
 		$cut2 = strpos( strtolower( $txt ), '<table>' );
 		if( $cut2 !== false ) $cut = $cut2;
@@ -195,7 +196,7 @@ if( isset( $_GET['ajax'] ) )
 	    echo "var st = '";
 		while( $arr = f_MFetch( $res ) )
 		{
-			echo "<a href=forum.php?thread=$arr[thread_id]&f=0>$arr[title]</a><br>";
+			echo "<a href=forum.php?thread=$arr[thread_id]&f=0>".addslashes($arr[title])."</a><br>";
 		}
 			
 		echo "';";
@@ -339,10 +340,10 @@ if( isset( $_GET['mode'] ) )
 				else $fname = "p{$player->player_id}.jpg";
 				$errno = unlink( "images/forum_avatars/$fname" );
 //				exec("DEL /F/Q \"images/forum_avatars/$fname\"", $lines, $errno);
-				if( $player->player_id == 173 || $player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 ) echo "[$errno]";
+				if( $player->player_id == 173 || $player->player_id == 6825 || $player->player_id == 67573 || $player->player_id == 173 ) echo "[$errno]";
 				$errno = move_uploaded_file($_FILES['ava']['tmp_name'], 'images/forum_avatars/'.$fname );
-				if( $player->player_id == 173 || $player->player_id == 6825  || $player->player_id == 172 || $player->player_id == 173 ) echo "[$errno]";
-				if( $player->player_id != 173 || $player->player_id != 6825  || $player->player_id == 172 || $player->player_id == 173 ) die( "<script>location.href='forum.php?mode=customize';</script>" );
+				if( $player->player_id == 173 || $player->player_id == 6825  || $player->player_id == 67573 || $player->player_id == 173 ) echo "[$errno]";
+				if( $player->player_id != 173 || $player->player_id != 6825  || $player->player_id == 67573 || $player->player_id == 173 ) die( "<script>location.href='forum.php?mode=customize';</script>" );
 			}
 		}
 		else if( isset( $_GET['prolong'] ) && $player->umoney >= 1 )
@@ -844,7 +845,7 @@ else if( isset( $HTTP_GET_VARS[thread] ) )
 				if( isset( $HTTP_POST_VARS['add_post'] ) )
 				{
 					$text = trim( HtmlSpecialChars( $HTTP_POST_VARS['txt'] ) );
-					if ($player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173) $text = trim( $HTTP_POST_VARS['txt'] ) ;
+					if ($player->player_id == 6825 || $player->player_id == 67573 || $player->player_id == 173) $text = trim( $HTTP_POST_VARS['txt'] ) ;
 					$text2 = str_replace( "\n", "<br>", $text );
 					$text2 = f_MEscape(process_str( $text2 ));
 					$author_id = $player->player_id;
@@ -904,7 +905,7 @@ if(!$f_p_h)// если $f_p_h пусто то вносим в историю посещение
 				if( edit_alowed( $room_id, $arr12[author_id] ) )
 				{
 					$text = trim( HtmlSpecialChars( $HTTP_POST_VARS[txt] ) );
-					if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 ) $text = trim( $HTTP_POST_VARS[txt] );
+					if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 67573 || $player->player_id == 173 ) $text = trim( $HTTP_POST_VARS[txt] );
 					$text2 = str_replace( "\n", "<br>", $text );
 					$text2 = f_MEscape(process_str( $text2 ));
 					$tm = date( "d.m.Y H:i", time( ) );
@@ -1037,7 +1038,7 @@ else if( isset( $HTTP_GET_VARS['room'] ) )
 		{
 			$title = f_MEscape(trim( HtmlSpecialChars( $HTTP_POST_VARS[title] ) ));
 			$text = trim( HtmlSpecialChars( $HTTP_POST_VARS[txt] ) );
-			if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 172 || $player->player_id == 173 )
+			if( $player->player_id == 173 || $player->player_id == 3264 || $player->player_id == 6825 || $player->player_id == 67573 || $player->player_id == 173 )
 				$text = trim( $HTTP_POST_VARS[txt] );
 			$text2 = str_replace( "\n", "<br>", $text );
 			$text2 = f_MEscape(process_str( $text2 ));

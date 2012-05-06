@@ -5,6 +5,7 @@ include_once( "functions.php" );
 include_once( "player.php" );
 include_once( "lab.php" );
 include_once( 'items.php' );
+include_once( "lab_functions.php" );
 
 Header("Content-Type: image/jpeg");
 
@@ -28,10 +29,7 @@ $res = f_MQuery( "SELECT cell_id, dir FROM player_labs WHERE player_id={$player-
 $arr = f_MFetch( $res );
 if( !$arr )
 {
-	$res = f_MQuery( "SELECT cell_id FROM lab WHERE lab_id=$lab_id AND z=0 AND dir=-1" );
-	$arr = f_MFetch( $res );
-	if( !$arr ) RaiseError( "А где собственно вход в лабиринт $lab_id?" );
-	f_MQuery( "INSERT INTO player_labs ( player_id, lab_id, cell_id, dir ) VALUES ( {$player->player_id}, $lab_id, $arr[0], 0 )" );
+    enterLab($lab_id);
 	$dir = 0;
 }
 else $dir = $arr[1];
@@ -79,7 +77,19 @@ for( $i = 0; $i < 3; ++ $i )
     		{
     			$items[$i][$j + $moo][] = itemImage( $line );
     		}
-    		$result = f_MQuery( "SELECT img FROM lab_mobs WHERE lab_id=$lab_id AND cell_id=$cell_id UNION ALL SELECT img FROM lab_quest_npcs WHERE player_id={$player->player_id} AND lab_id={$lab_id} AND cell_id={$cell_id} UNION ALL SELECT img FROM lab_quest_monsters WHERE player_id={$player->player_id} AND lab_id={$lab_id} AND cell_id={$cell_id}" );
+            // важно добавить НПЦ до монстров, чтобы НПЦ всегда показывался закытым монстром
+            $result = f_MQuery("SELECT img, npc_id FROM lab_quest_npcs WHERE player_id={$player->player_id} AND lab_id={$lab_id} AND cell_id={$cell_id}");
+    		while( $line = f_MFetch( $result ) )
+    		{
+                include_once( "phrase.php" );
+                $condition_id = f_MValue("SELECT condition_id FROM npcs WHERE npc_id=$line[1]");
+
+                if( $condition_id == -1 || allow_phrase( $condition_id, false ) )
+                {
+                    $mobs[$i][$j + $moo][] = $line['img'];
+                }
+    		}
+    		$result = f_MQuery( "SELECT img FROM lab_mobs WHERE lab_id=$lab_id AND cell_id=$cell_id UNION ALL SELECT img FROM lab_quest_monsters WHERE player_id={$player->player_id} AND lab_id={$lab_id} AND cell_id={$cell_id}" );
     		while( $line = f_MFetch( $result ) )
     		{
     			$mobs[$i][$j + $moo][] = $line['img'];
@@ -108,8 +118,8 @@ function drawItems( $i, $j )
 	foreach( $mobs[$i][$j + $moo] as $src )
 	{
 		if( $id == 0 ) { $dx = 32; $dy = 32; }
-		else if( $id == 1 ) { $dx = 16; $dy = 16; }
-		else if( $id == 2 ) { $dx = 48; $dy = 16; }
+		else if( $id == 1 ) { $dx = 16; $dy = 8; }
+		else if( $id == 2 ) { $dx = 48; $dy = 8; }
 		else if( $id == 3 ) { $dx = 16; $dy = 48; }
 		else if( $id == 4 ) { $dx = 48; $dy = 48; }
 		else break;
