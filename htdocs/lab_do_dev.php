@@ -168,36 +168,17 @@ if( isset( $_GET['do'] ) )
 	}
     if ($do == 'quest_attack')
     {
-        f_MQuery("LOCK TABLES lab_mobs WRITE, lab_combats WRITE, lab_quest_monsters WRITE");
-        $num_monsters = f_MValue("SELECT COUNT(*) FROM lab_mobs WHERE cell_id=$cell_id");
-        $num_fights = f_MValue("SELECT COUNT(*) FROM lab_combats WHERE cell_id=$cell_id");
-        if ($num_monsters)
+        $monster = f_MFetch(f_MQuery("SELECT * FROM lab_quest_monsters WHERE cell_id=$cell_id AND player_id={$player->player_id}"));
+        if ($monster)
         {
-            f_MQuery("UNLOCK TABLES");
-            $player->syst('На клетке появился монстр. Пожалуйста, отойдите с нее и вернитесь обратно.');
-        }
-        else if ($num_fights)
-        {
-            f_MQuery("UNLOCK TABLES");
-            $player->syst('На клетке появился монстр, и начался бой. Пожалуйста, отойдите с клетки и вернитесь на нее обратно.');
-        }
-        else
-        {
-            $monster = f_MFetch(f_MQuery("SELECT * FROM lab_quest_monsters WHERE cell_id=$cell_id AND player_id={$player->player_id}"));
-            if ($monster)
-            {
-                f_MQuery("INSERT INTO lab_mobs (lab_id, cell_id, mob_id, img) VALUES ($lab_id, $cell_id, {$monster[mob_id]}, '{$monster[img]}')");
-                f_MQuery("DELETE FROM lab_quest_monsters WHERE entry_id={$monster[entry_id]}");
-                f_MQuery("UNLOCK TABLES");
-                include_once( "mob.php" );
-                $mob = new Mob( );
-                $mob->CreateMob( $monster['mob_id'], $player->location, $player->depth );
-                // Do insert ignore, since for most of the mobs avatar is already there
-                f_MQuery( "INSERT IGNORE INTO player_avatars ( player_id, avatar ) VALUES ( {$mob->player_id}, '$monster[img]' )" );
-                $mob->AttackPlayer( $player->player_id, 4, $arr[1] );
-                f_MQuery( "INSERT INTO lab_combats ( lab_id, cell_id, combat_id ) VALUES ( $lab_id, $cell_id, {$mob->combat_id} )" );
-                echo "location.href='combat.php';";
-            }
+            // f_MQuery("DELETE FROM lab_quest_monsters WHERE entry_id={$monster[entry_id]}");
+            include_once( "mob.php" );
+            $mob = new Mob( );
+            $mob->CreateMob( $monster['mob_id'], $player->location, $player->depth );
+            // Do insert ignore, since for most of the mobs avatar is already there
+            f_MQuery( "INSERT IGNORE INTO player_avatars ( player_id, avatar ) VALUES ( {$mob->player_id}, '$monster[img]' )" );
+            $mob->AttackPlayer( $player->player_id, 14, $monster['entry_id'], /*real death*/false );
+            echo "location.href='combat.php';";
         }
     }
 	if( $do == 'leave' )

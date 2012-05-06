@@ -53,6 +53,19 @@ function getNextStepInfo( $lab_id, $x, $y, $z, $dir )
 	echo "_( 'addinfo' ).innerHTML = '$updown<br><b>Перед вами идет бой:</b><br>' + ".substr( $st , 2 ).";";
 }
 
+function labQuest1Place()
+{
+    global $player;
+    $lab_id = 1;
+    $cell_id = 1155908;
+    $mob_id = 18; $mob_img = "pp3.png";
+    $npc_id = 166; $npc_img = "f1n.png";
+    f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
+    f_MQuery("delete from lab_quest_npcs where player_id={$player->player_id} AND npc_id=$npc_id");
+    f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, $mob_id, {$player->player_id}, '$mob_img');");
+    f_MQuery("insert into lab_quest_npcs values(null, $lab_id, $cell_id, $npc_id, {$player->player_id}, '$npc_img');");
+}
+
 // Когда эта функция вызывается, lab и players_labs залочены. их можно разлочить когда в лаб уже вошли
 function enterLab($lab_id)
 {
@@ -69,11 +82,7 @@ function enterLab($lab_id)
     // квест Пропавшая Девочка
     if ($player->HasTrigger(255) && $lab_id == 1)
     {
-        $cell_id = 1155908;
-        $mob_id = 18; $mob_img = "pp3.png";
-        $npc_id = 166; $npc_img = "f1n.png";
-        f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, 18, {$player->player_id}, '$mob_img');");
-        f_MQuery("insert into lab_quest_npcs values(null, $lab_id, $cell_id, $npc_id, {$player->player_id}, '$npc_img');");
+        labQuest1Place();
     }
     f_MQuery("LOCK TABLES lab WRITE"); // вызывающий код ожидает, что есть что разлочить
 }

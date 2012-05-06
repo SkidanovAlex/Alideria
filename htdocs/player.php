@@ -1138,6 +1138,10 @@ file_put_contents("log_syst2.txt", "say\n{$a}\n0\n{$this->player_id}\n0\n{$tm}\n
 			else if( $arr['win_action'] == 13 ) // portal maze
 			{
 			}
+            else if ($arr['win_action'] == 14)
+            {
+                f_MQuery("DELETE FROM lab_quest_monsters WHERE entry_id={$arr[win_action_param]}");
+            }
 
 			$i_permit = true;
 			$won = true;

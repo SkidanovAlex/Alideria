@@ -264,6 +264,12 @@ function allow_phrase( $a, $consider_random = true )
 		}
 	}
 
+    if ( $a == 2178 ) // Квест Пропавшая Девочка
+    {
+        include_once("lab_functions.php");
+        labQuest1Place();
+    }
+
 
 	return 1;
 }
