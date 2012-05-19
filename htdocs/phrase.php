@@ -264,13 +264,6 @@ function allow_phrase( $a, $consider_random = true )
 		}
 	}
 
-    if ( $a == 2178 ) // Квест Пропавшая Девочка
-    {
-        include_once("lab_functions.php");
-        labQuest1Place();
-    }
-
-
 	return 1;
 }
 
@@ -602,6 +595,18 @@ function do_phrase( $phrase_id, $script_tags = true )
 		$player->syst2( "Вы получаете один день премиумов!" );
 	}
 */
+
+    if ( $phrase_id == 2220 || $phrase_id == 2177 ) // Квест Пропавшая Девочка
+    {
+        include_once("lab_functions.php");
+        labQuest1Place();
+    }
+    if ( $phrase_id == 2202 ) // Квест Непоседливый ребенок
+    {
+        include_once("lab_functions.php");
+        labQuest2Place();
+    }
+
 
 	return $parr[attack_id];
 }

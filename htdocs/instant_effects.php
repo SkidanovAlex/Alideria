@@ -61,6 +61,7 @@ function useInstant( $item_id )
 				}
 			}
 			// Если свободен, перемещаемся на Главную Улицу
+            f_MQuery("DELETE FROM player_labs WHERE player_id={$player->player_id}");
 			$player->SetLocation( 2, true );
 			$player->SetDepth( 0, true );
 			

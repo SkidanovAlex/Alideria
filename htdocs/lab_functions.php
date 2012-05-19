@@ -66,6 +66,19 @@ function labQuest1Place()
     f_MQuery("insert into lab_quest_npcs values(null, $lab_id, $cell_id, $npc_id, {$player->player_id}, '$npc_img');");
 }
 
+function labQuest2Place()
+{
+    global $player;
+    $lab_id = 1;
+    $cell_id = 1155908;
+    $mob_id = 38; $mob_img = "dwarv.png";
+    $npc_id = 167; $npc_img = "f1n.png";
+    f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
+    f_MQuery("delete from lab_quest_npcs where player_id={$player->player_id} AND npc_id=$npc_id");
+    f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, $mob_id, {$player->player_id}, '$mob_img');");
+    f_MQuery("insert into lab_quest_npcs values(null, $lab_id, $cell_id, $npc_id, {$player->player_id}, '$npc_img');");
+}
+
 // Когда эта функция вызывается, lab и players_labs залочены. их можно разлочить когда в лаб уже вошли
 function enterLab($lab_id)
 {
@@ -83,6 +96,11 @@ function enterLab($lab_id)
     if ($player->HasTrigger(255) && $lab_id == 1)
     {
         labQuest1Place();
+    }
+    // квест Непоседливый ребенок
+    if ($player->HasTrigger(260) && $lab_id == 1)
+    {
+        labQuest2Place();
     }
     f_MQuery("LOCK TABLES lab WRITE"); // вызывающий код ожидает, что есть что разлочить
 }
