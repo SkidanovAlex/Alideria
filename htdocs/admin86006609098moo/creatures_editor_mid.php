@@ -48,6 +48,11 @@ else
 	print( "<tr><td>ѕодавление:</td><td><input type=checkbox name=trample ".( $arr['trample']?'checked':'' )."></td></tr>" );
 
 	print( "<tr><td>—тихи€:</td><td>".create_select( 'genre', $genres, $arr['genre'] )."</td></tr>" );
+/*	print( "<tr><td>Ёффект при уроне по игроку:<br><small>\$slot -- в каком слоте существо</small></td><td><textarea name=effect_dmg_p cols=40 rows=12>{$arr[effect_dmg_p]}</textarea></td></tr>" );
+	print( "<tr><td>Ёффект при уроне по существу:<br><small>\$slot -- в каком слоте существо</small></td><td><textarea name=effect_dmg_c cols=40 rows=12>{$arr[effect_dmg_c]}</textarea></td></tr>" );
+	print( "<tr><td>Ёффект при смерти:<br><small>\$slot -- в каком слоте существо</small></td><td><textarea name=effect_die cols=40 rows=12>{$arr[effect_die]}</textarea></td></tr>" );
+	print( "<tr><td>Ёффект при получении урона:<br><small>\$slot -- в каком слоте существо</small></td><td><textarea name=effect_got_dmg cols=40 rows=12>{$arr[effect_got_dmg]}</textarea></td></tr>" );*/
+	print( "<tr><td>Ёффект каждый ход:<br><small>\$slot -- в каком слоте существо (от 0 до 2)</small></td><td><textarea name=effect_always cols=40 rows=12>{$arr[effect_always]}</textarea></td></tr>" );
 	print( "<tr><td>&nbsp;</td><td><input class=m_btn type=submit value='ѕрименить'></td></tr>" );
 	print( "</form>" );
 	print( "<form action=creatures_editor_apply.php method=post>" );

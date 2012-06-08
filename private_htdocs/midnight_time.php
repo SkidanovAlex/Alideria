@@ -52,7 +52,7 @@ $str2= iconv("UTF-8", "CP1251", $str2);
 $res = f_MQuery("SELECT * FROM mobs");
 while ($arr=f_MFetch($res))
 {
-	$res1 = f_MQuery("SELECT player_id, wins FROM mob_wins WHERE mob_id=".$arr['mob_id']." ORDER BY wins DESC LIMIT 10");
+	$res1 = f_MQuery("SELECT mob_wins.player_id, mob_wins.wins FROM mob_wins, characters, mobs WHERE mob_wins.mob_id=".$arr['mob_id']." AND mobs.mob_id=".$arr['mob_id']." AND characters.player_id=mob_wins.player_id AND (characters.level<mobs.level+3 OR mobs.level>=15 OR (mobs.level>25 AND characters.clan_id=1)) ORDER BY wins DESC LIMIT 10");
 	$ok = true;
 	while (($arr1=f_MFetch($res1)) && $ok)
 	{

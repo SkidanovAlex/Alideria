@@ -14,6 +14,12 @@ class Creature
 	var $firststrike;
 	var $image;
 
+    var $effect_dmg_p;
+    var $effect_dmg_c;
+    var $effect_die;
+    var $effect_got_dmg;
+    var $effect_always;
+
 	var $just_summoned;
 	
 	function Creature( $id )
@@ -30,6 +36,13 @@ class Creature
 		$this->haste = (int)$arr['haste'];
 		$this->firststrike = (int)$arr['firststrike'];
 		$this->image = $arr['image'];
+
+        $this->effect_dmg_p = $arr['effect_dmg_p'];
+        $this->effect_dmg_c = $arr['effect_dmg_c'];
+        $this->effect_die = $arr['effect_die'];
+        $this->effect_got_dmg = $arr['effect_got_dmg'];
+        $this->effect_always = $arr['effect_always'];
+
 		$this->just_summoned = false;
 	}
 	
@@ -43,6 +56,21 @@ class Creature
 	{
 		$this->just_summoned = true;
 		$player->creatures[$slot] = $this;
+	}
+
+	function Process2( $str, $me, $he, $we, $they, $combat_id, &$turn, $slot )
+	{
+		global $global_dmg;
+		$global_dmg = 0;
+
+		include_once( 'combat_sdk2.php' );
+		$sdk = new sdk_t( $me, $he, $we, $they, $turn, $combat_id, $this->genre, false );
+
+        $func = @create_function( '$sdk, $slot', $str );
+        $func( $sdk, $slot );
+        $me->dmg_creatures += $sdk->dmg;
+			
+		return text_sex_parse( '[', '|', ']', text_sex_parse( '{', '|', '}', str_replace( "*victim*", $he->player->login, str_replace( "*player*", $me->player->login, $this->cast_description ) ), $me->player->sex ), $he->player->sex ) . $sdk->log_msg;
 	}
 	
 	function Text( )

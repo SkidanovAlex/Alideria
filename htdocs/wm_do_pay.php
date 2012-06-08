@@ -22,7 +22,7 @@
 		$purse = $_POST['LMI_PAYEE_PURSE'];
 
 		// Валидация кошелька		
-		if( $purse != 'R255933152423' && $purse != 'U313261991121' && $purse != 'Z352663604725' )
+		if( $purse != 'R346197619375' && $purse != 'U426214563258' && $purse != 'Z301545765621' )
 		{
 			LogError( "WM Error: Purse: $purse" );
 			die( 'NO' );
@@ -30,9 +30,9 @@
 		
 		// Валидация суммы в талантах
 		$ammount = $_POST['LMI_PAYMENT_AMOUNT'];
-		if( ( $purse == 'R255933152423' && fmod( $ammount, 10 ) != 0 ) or
-			 ( $purse == 'U313261991121' && fmod( $ammount, 2.7 ) != 0 ) or
-			 ( $purse == 'Z352663604725' && fmod( $ammount, 0.35 ) != 0 )
+		if( ( $purse == 'R346197619375' && fmod( $ammount, 10 ) != 0 ) or
+			 ( $purse == 'U426214563258' && fmod( $ammount, 2.7 ) != 0 ) or
+			 ( $purse == 'Z301545765621' && fmod( $ammount, 0.35 ) != 0 )
 		  )
 		{
 			LogError( "WM Error: Amount: $ammount" );
@@ -66,15 +66,15 @@
 		$player_id = (int)$_POST['LMI_PAYMENT_NO'];
 
 		// Вычисляем сумму в талантах
-		if( $purse == 'R255933152423' ) // Покупаем в рублях
+		if( $purse == 'R346197619375' ) // Покупаем в рублях
 		{	
 			$ammount = floor( ($ammount+0.0000001) / 10 );
 		}
-		elseif( $purse == 'U313261991121' ) // Покупаем в гривнах
+		elseif( $purse == 'U426214563258' ) // Покупаем в гривнах
 		{
 			$ammount = floor( ($ammount+0.0000001) / 2.7 );		
 		}
-		elseif( $purse == 'Z352663604725' ) // Покупаем в долларах
+		elseif( $purse == 'Z301545765621' ) // Покупаем в долларах
 		{
 			$ammount = floor( ($ammount+0.0000001) / 0.35 );
 		}

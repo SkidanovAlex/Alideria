@@ -91,8 +91,8 @@ if ($hog==0) // Книга Монстров
 		$is_mobs = true;
 		if ($mob_id != 0)
 		{
-			$where = " WHERE mob_id=$mob_id ORDER BY wins DESC, player_id LIMIT 10";
-			$res = f_MQuery("SELECT mob_id, player_id, wins FROM mob_wins $where");
+			$where = " WHERE mobs.mob_id=$mob_id AND mob_wins.mob_id=$mob_id AND characters.player_id=mob_wins.player_id AND (characters.level<mobs.level+3 OR mobs.level>=15 OR (mobs.level>25 AND characters.clan_id=1)) ORDER BY mob_wins.wins DESC, mob_wins.player_id LIMIT 10";
+			$res = f_MQuery("SELECT mob_wins.mob_id, mob_wins.player_id, mob_wins.wins FROM mob_wins, characters, mobs $where");
 			if (f_MNum($res) > 0)
 			{
 				$i=0;
@@ -122,7 +122,9 @@ if ($hog==0) // Книга Монстров
 			while ($arr1 = f_MFetch($res1))
 			{
 				$i++;
-				$res = f_MQuery("SELECT mob_id, player_id, wins FROM mob_wins WHERE mob_id=".$arr1[0]." ORDER BY wins DESC LIMIT 1");
+				$m_id = $arr1['mob_id'];
+				$where = "mob_wins.mob_id=$m_id AND mobs.mob_id=$m_id AND characters.player_id=mob_wins.player_id AND (characters.level<mobs.level+3 OR mobs.level>=15 OR (mobs.level>25 AND characters.clan_id=1))";
+				$res = f_MQuery("SELECT mob_wins.mob_id, mob_wins.player_id, mob_wins.wins FROM mob_wins, characters, mobs WHERE $where ORDER BY mob_wins.wins DESC LIMIT 1");
 				if (f_MNum($res) > 0)
 				{
 					$arr = f_MFetch($res);

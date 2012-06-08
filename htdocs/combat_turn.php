@@ -439,6 +439,18 @@ class Combat
 						$c1->creatures[$j] = null;
 					}
 				}
+
+                // actions
+                if ($m1 !== null && $m1->effect_always)
+                {
+                    $str_111 = $m1->Process2( $m1->effect_always, $c1, $c2, $this->side_players[0], $this->side_players[1], $this->combat_id, $this->turn, $j );
+                    $bg .= ",[0,\"".$str_111."<br>\"]";
+                }
+                if ($m2 !== null && $m2->effect_always)
+                {
+                    $str_111 = $m2->Process2( $m2->effect_always, $c2, $c1, $this->side_players[1], $this->side_players[0], $this->combat_id, $this->turn, $j );
+                    $bg .= ",[0,\"".$str_111."<br>\"]";
+                }
 			}
 
 			$this->texts[$i] = $bg.$dd . $this->texts[$i];
@@ -672,7 +684,7 @@ class Combat
 				if( $player->creatures[$i] !== null && $cplayer->creatures[$i] === null )
 					f_MQuery( "DELETE FROM combat_creatures WHERE player_id = $id AND slot_id = $i" );
 				else if( $player->creatures[$i] === null && $cplayer->creatures[$i] !== null )
-					f_MQuery( "INSERT INTO combat_creatures( player_id, slot_id, creature_id, attack, defence, trample, haste, firststrike, genre ) VALUES( $id, $i, {$cplayer->creatures[$i]->creature_id}, {$cplayer->creatures[$i]->attack}, {$cplayer->creatures[$i]->defence}, {$cplayer->creatures[$i]->trample}, {$cplayer->creatures[$i]->haste}, {$cplayer->creatures[$i]->firststrike}, {$cplayer->creatures[$i]->genre} )" );
+					f_MQuery( "INSERT INTO combat_creatures( player_id, slot_id, creature_id, attack, defence, trample, haste, firststrike, genre, effect_dmg_p, effect_dmg_c, effect_die, effect_got_dmg, effect_always ) VALUES( $id, $i, {$cplayer->creatures[$i]->creature_id}, {$cplayer->creatures[$i]->attack}, {$cplayer->creatures[$i]->defence}, {$cplayer->creatures[$i]->trample}, {$cplayer->creatures[$i]->haste}, {$cplayer->creatures[$i]->firststrike}, {$cplayer->creatures[$i]->genre}, '".addslashes($cplayer->creatures[$i]->effect_dmg_p)."', '".addslashes($cplayer->creatures[$i]->effect_dmg_c)."', '".addslashes($cplayer->creatures[$i]->effect_die)."', '".addslashes($cplayer->creatures[$i]->effect_got_dmg)."', '".addslashes($cplayer->creatures[$i]->effect_always)."' )" );
 				else if( $player->creatures[$i] !== null && $cplayer->creatures[$i] !== null )
 				{
 					if( $player->creatures[$i]->creature_id != $cplayer->creatures[$i]->creature_id ||

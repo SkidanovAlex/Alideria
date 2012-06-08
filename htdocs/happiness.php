@@ -560,16 +560,17 @@ K-cell (GSM Kazakhstan) и Билайн Казахстан (Кар-Тел)<br>
     	ScrollTableEnd( );
     	echo "</td></tr><tr><td height=100%>";
     	ScrollTableStart( );
-//	echo "Сервис временно неактивен<br>За подробной информацией обращайтесь к Администрации игры";
+//	echo "Сервис временно неактивен<br>За подробной информацией обращайтесь к Администрации игры<br>";
+//point1
 
     ?>
     <script>
     function wm_update()
     {
     	var coeff = [];// Число валюты за один талант
-    		 coeff['R255933152423'] = 10;   // Рубли
-    		 coeff['U313261991121'] = 2.7;  // Гривны
-    		 coeff['Z352663604725'] = 0.35; // Доллары
+    		 coeff['R346197619375'] = 10;   // Рубли
+    		 coeff['U426214563258'] = 2.7;  // Гривны
+    		 coeff['Z301545765621'] = 0.35; // Доллары
     		  
     	var val = parseInt( document.getElementById( 'wm_num' ).value );
     	var valute = document.getElementById( 'wm_valute' ).value; 
@@ -604,9 +605,9 @@ K-cell (GSM Kazakhstan) и Билайн Казахстан (Кар-Тел)<br>
 				<td style="font-weight: bold; vertical-align: top;">Валюта:</td>
 				<td>
 					<select id="wm_valute" name="LMI_PAYEE_PURSE" class="s_btn" onclick="wm_update()" onchange="wm_update()" onselect="wm_update()">
-						<option value="R255933152423">Рубли</option>
-						<option value="U313261991121">Гривны</option>
-						<option value="Z352663604725">Доллары</option>
+						<option value="R346197619375">Рубли</option>
+						<option value="U426214563258">Гривны</option>
+						<option value="Z301545765621">Доллары</option>
 					</select>
 				</td>
 			</tr>
@@ -620,6 +621,8 @@ K-cell (GSM Kazakhstan) и Билайн Казахстан (Кар-Тел)<br>
 	</form>
 	<span style="font-size: 8px; color: #d36008;"><b>УВЕДОМЛЕНИЕ О РИСКАХ</b><br />Предлагаемые товары и услуги предоставляются не по заказу лица либо предприятия, эксплуатирующего систему WebMoney Transfer. Мы являемся независимым предприятием, оказывающим услуги, и самостоятельно принимаем решения о ценах и предложениях. Предприятия, эксплуатирующие систему WebMoney Transfer, не получают комиссионных вознаграждений или иных вознаграждений за участие в предоставлении услуг и не несут никакой ответственности за нашу деятельность.<br />Аттестация, произведенная со стороны WebMoney Transfer, лишь подтверждает наши реквизиты для связи и удостоверяет личность. Она осуществляется по нашему желанию и не означает, что мы каким-либо образом связаны с продажами операторов системы WebMoney.';
     <?
+
+//point1
     }
     else if( $mode == 'rbk' )
     {

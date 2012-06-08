@@ -163,7 +163,7 @@ for( var i = 0; i < 3; ++ i )
 </div>
 
 <div style='position:absolute;left:35px;top:520px;'>
-	<table background=images/ttl/admin.png style='width:121px;height:44px;' cellspacing=0 cellpadding=0><tr><td><img border=0 src=empty.gif width=121 height=44></td></tr></table>
+	<table background=images/ttl/info4.png style='width:121px;height:44px;' cellspacing=0 cellpadding=0><tr><td><img border=0 src=empty.gif width=121 height=44></td></tr></table>
 </div>                  
 
 <div style='position:absolute;left:218px;top:25<?if (strstr(getenv("HTTP_USER_AGENT"),"MSIE")) echo 3; else echo 4;?>px;'><table cellspacing=0 cellpadding=0 border=0><form method=post name=frm id=frm action=auth_2.php?q=<?=mt_rand( );?> target=auth_frame><tr>
@@ -275,8 +275,11 @@ echo "<div align=right><a href='javascript:reg();'><font color=steelblue size=+1
 	<!--/ Palantir -->
 	
 	<!-- begin WebMoney Transfer : accept label -->
-	<a href="http://www.megastock.ru/" target="_blank"><img src="http://www.megastock.ru/Doc/88x31_accept/orange_rus.gif" alt="www.megastock.ru" border="0"></a>
+	<a href="http://www.megastock.ru/" target="_blank"><img src="http://www.webmoney.ru/img/icons/88x31_wm_white_on_transparent_ru.png" alt="www.megastock.ru" border="0"></a>
 	<!-- end WebMoney Transfer : accept label -->
+	<!-- begin WebMoney Transfer : attestation label --> 
+<a href="https://passport.webmoney.ru/asp/certview.asp?wmid=302895196857" target=_blank><IMG SRC="http://www.webmoney.ru/img/icons/88x31_wm_v_white_on_transparent_ru.png" title="Здесь находится аттестат нашего WM идентификатора 302895196857" border="0"><br><font size=1>Проверить аттестат</font></a>
+<!-- end WebMoney Transfer : attestation label -->
 		
 
 

@@ -92,7 +92,13 @@ function CombatSetReady( $player_id, $turn = false )
     	f_MQuery( "UPDATE combat_players SET ready=1 WHERE player_id={$player->player_id}" );
 
     	include_once( 'combat_functions.php' );
-    	CheckTurnOver( $combat_id, $side, '', true );
+        if ($player->player_id == 173)
+        {
+            include_once( 'combat_functions_dev.php' );
+            CheckTurnOver_dev( $combat_id, 1, 'Ход форсирован автоматически<br>', true );
+        }
+        else
+            CheckTurnOver( $combat_id, $side, '', true );
     }
     else
     {
