@@ -35,9 +35,9 @@ if( $cregime < 0 || $cregime > 3 ) $cregime = 0;
 
 if( $player->clan_id == 0 && $cregime == 3 ) $cregime = 2;
 
-if( $cregime == 1 ) $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.loc = $cloc AND characters.player_id!=172" );
-else if( $cregime == 2 ) $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.loc = $cloc AND characters.depth = $cdepth AND characters.player_id!=172" );
-else if( $cregime == 3 ) $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.clan_id = {$player->clan_id} AND characters.player_id!=172" );
+if( $cregime == 1 ) $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.loc = $cloc AND characters.player_id!=6825" );
+else if( $cregime == 2 ) $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.loc = $cloc AND characters.depth = $cdepth AND characters.player_id!=6825" );
+else if( $cregime == 3 ) $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.clan_id = {$player->clan_id} AND characters.player_id!=6825" );
 
 ?>
 <html style="height: 101%">
