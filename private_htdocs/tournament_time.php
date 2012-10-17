@@ -181,8 +181,16 @@ function processTournament( $id, $name, $prize, $type )
 	while( $arr = f_MFetch( $res ) )
 	{
 		$combat_id = $arr[0];
-		f_MQuery( "UPDATE combat_players SET forces=forces+ 1, ready=1 WHERE combat_id = $combat_id AND ready = 0" );
-		f_MQuery( "UPDATE combat_players SET card_id=56 WHERE combat_id = $combat_id AND ai=1" );
+		if(f_MValue("SELECT forces FROM combat_players WHERE combat_id = $combat_id AND ready = 0 LIMIT 1") >= 5)
+		{
+			f_MQuery( "UPDATE combat_players SET forces=forces+ 1, ready=1 WHERE combat_id = $combat_id AND ready = 0" );
+			f_MQuery( "UPDATE combat_players SET card_id=384 WHERE combat_id = $combat_id AND ai=1" );
+		}
+		else
+		{
+			f_MQuery( "UPDATE combat_players SET forces=forces+ 1, ready=1 WHERE combat_id = $combat_id AND ready = 0" );
+			f_MQuery( "UPDATE combat_players SET card_id=56 WHERE combat_id = $combat_id AND ai=1" );
+		}
     	include_once( 'combat_functions.php' );
     	CheckTurnOver( $combat_id, 0, "<font color=darkblue>Ход форсируется автоматически</font><br>" );
 	}
