@@ -216,6 +216,7 @@ $vsmiles[1100] = array( "hnb" );
 $vsmiles[10004] = array( "orden4" );
 $vsmiles[10007] = array( "orden7" );
 $vsmiles[10002] = array( "orden2" );
+$vsmiles[10041] = array( "orden41" );
 
 ?>
 

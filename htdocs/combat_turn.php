@@ -107,6 +107,7 @@ class Combat
 
 	function neutralDamage( $player, $genre, $cur1=0 )
 	{
+		$player->attributes[130 + $player->card->genre * 10] -= $player->card->cost;
 		$cur = $player->player->level * 5;
 		if ($cur1 > 0) $cur = $cur1 * 2;
 		$cur = $this->calcDamage( false, $player, $cur, $genre, 0/*$player->attributes[132 + 10 * $genre]*/ ); // защита не учитывается при нейтрале
