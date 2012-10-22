@@ -35,22 +35,27 @@ while( $deal = f_MFetch( $allDealsQuery ) )
 	$reportMonth = $monthNames[date( 'n', $allDeals[0]['timestamp'] )];
 	$reportDay = date( 'd', $allDeals[0]['timestamp'] );
 	$dayMoneyBalance = 0;
+	$dayUMoneyBalance = 0;
 	$monthMoneyPlus = 0;
 	$montMoneyMinus = 0;
+	$monthUMoneyPlus = 0;
+	$montUMoneyMinus = 0;
 	for( $i = 0; $i < $dealsCount + 1 && $dealsCount != 0; ++ $i )
 	{
 		// Если начинается новый день, выводим шапку нового дня
 		if( $i == $dealsCount or $reportDay != date( 'd', $allDeals[$i]['timestamp'] ) )
 		{
 			$dayMoneyBalance = ( $dayMoneyBalance > 0 ) ? "<span style=\"color: darkgreen\">+$dayMoneyBalance</span>" : "<span style=\"color: darkred\">$dayMoneyBalance</span>";
+			$dayUMoneyBalance = ( $dayUMoneyBalance > 0 ) ? "<span style=\"color: darkgreen\">+$dayUMoneyBalance</span>" : "<span style=\"color: darkred\">$dayUMoneyBalance</span>";
 			// Выводим шапку дневного отчёта и непосредственно его самого
-			$report .= '<tr class="title"><td>'.$reportDay.' '.$reportMonth.'</td><td></td><td><img src="/images/money.gif" alt="[Дублоны]" /> '.$dayMoneyBalance.'</td><td>Товар</td><td></td></tr>';
+			$report .= '<tr class="title"><td>'.$reportDay.' '.$reportMonth.'</td><td></td><td><img src="/images/money.gif" alt="[Дублоны]" /> '.$dayMoneyBalance.'</td><td><img src="/images/umoney.gif" alt="[Таланты]" /> '.$dayUMoneyBalance.'</td><td>Товар</td><td></td></tr>';
 			$report .= $dayReport;
 			
 			// Обнуляем дневной отчёт
 			$reportDay = date( 'd', $allDeals[$i]['timestamp'] ); // Запоминаем дату следующего отчёта
 			$dayReport = '';
 			$dayMoneyBalance = 0;
+			$dayUMoneyBalance = 0;
 		
 			// Такая вот логика. В принципе, не нагруженно, не очень режет глаза, так что для локального применения сойдёт. @by = undefined
 			if( $i == $dealsCount )
@@ -61,11 +66,13 @@ while( $deal = f_MFetch( $allDealsQuery ) )
 		
 		// Запоминаем общую информацию
 		$dayMoneyBalance += $allDeals[$i][money];
+		$dayUMoneyBalance += $allDeals[$i][umoney];
 
 		// Генерируем информацию по конкретной сделке
 		$time = Date( 'H:i:s', $allDeals[$i]['timestamp'] );
 		$Player = new Player( $allDeals[$i]['player_id'] );
 		$money = ( $allDeals[$i]['money'] > 0 ) ? "<span style=\"color: darkgreen\">+{$allDeals[$i][money]}</span>" : "<span style=\"color: darkred\">{$allDeals[$i][money]}</span>";
+		$umoney = ( $allDeals[$i]['umoney'] > 0 ) ? "<span style=\"color: darkgreen\">+{$allDeals[$i][umoney]}</span>" : "<span style=\"color: darkred\">{$allDeals[$i][umoney]}</span>";
 		if( $allDeals[$i]['money'] > 0 )
 		{
 			$monthMoneyPlus += $allDeals[$i]['money'];
@@ -74,10 +81,18 @@ while( $deal = f_MFetch( $allDealsQuery ) )
 		{
 			$monthMoneyMinus += $allDeals[$i]['money'];		
 		}
+		if( $allDeals[$i]['umoney'] > 0 )
+		{
+			$monthUMoneyPlus += $allDeals[$i]['umoney'];
+		}
+		else
+		{
+			$monthUMoneyMinus += $allDeals[$i]['umoney'];
+		}
 		$itemId = $allDeals[$i][item_id];
 		$itemName = f_MValue( 'SELECT `name` FROM `items` WHERE `item_id` = '.$itemId );
 			
-		$dayReport .= '<tr><td style="width: 75px;">'.$time.'</td><td style="width: 230px;"><script>document.write( '.$Player->Nick( ).' )</script></td><td style="width: 50px;"><img src="/images/money.gif" alt="[Дублоны]" /> '.$money.'</td><td>['.abs( $allDeals[$i]['number'] ).'] <a href="/help.php?id=1010&item_id='.$itemId.'" target="_blank">'.$itemName.'</a></td></tr>';
+		$dayReport .= '<tr><td style="width: 75px;">'.$time.'</td><td style="width: 230px;"><script>document.write( '.$Player->Nick( ).' )</script></td><td style="width: 50px;"><img src="/images/money.gif" alt="[Дублоны]" /> '.$money.'</td><td style="width: 50px;"><img src="/images/umoney.gif" alt="[Таланты]" /> '.$umoney.'</td><td>['.abs( $allDeals[$i]['number'] ).'] <a href="/help.php?id=1010&item_id='.$itemId.'" target="_blank">'.$itemName.'</a></td></tr>';
 	}
 			
 	$report .= '</tbody></table>';
@@ -92,15 +107,18 @@ while( $deal = f_MFetch( $allDealsQuery ) )
 			<table style="width: 200px;">
 				<tr>
 					<td style="font-weight: bold;">Доход: </td><td style="color: darkgreen; text-align: right;">+<?=$monthMoneyPlus?> <img src="/images/money.gif" title="Дублонов" /></td>
+					<td style="font-weight: bold;">Доход: </td><td style="color: darkgreen; text-align: right;">+<?=$monthUMoneyPlus?> <img src="/images/umoney.gif" title="Талантов" /></td>
 				</tr>
 				<tr>
 					<td style="font-weight: bold;">Расход: </td><td style="color: darkred; text-align: right;"><?=$monthMoneyMinus?> <img src="/images/money.gif" title="Дублонов" /></td>
+					<td style="font-weight: bold;">Расход: </td><td style="color: darkred; text-align: right;"><?=$monthUMoneyMinus?> <img src="/images/umoney.gif" title="Талантов" /></td>
 				</tr>
 				<tr>
 					<td colspan="2"><hr /></td>
 				</tr>
 				<tr>
 					<td style="font-weight: bold;">Баланс: </td><td style="color: darkblue; text-align: right;"><?=( $monthMoneyPlus + $monthMoneyMinus )?> <img src="/images/money.gif" title="Дублонов" /></td>
+					<td style="font-weight: bold;">Баланс: </td><td style="color: darkblue; text-align: right;"><?=( $monthUMoneyPlus + $monthUMoneyMinus )?> <img src="/images/umoney.gif" title="Талантов" /></td>
 				</tr>
 			</table>
 			</td>

@@ -47,9 +47,11 @@ $shop = new Shop( $shop_id );
 	var rpb = new Array( );
 	var rps = new Array( );
 	var rgs = new Array( );
+	var valu = new Array( );
 	var orpb = new Array( );
 	var orps = new Array( );
 	var orgs = new Array( );
+	var ovalu = new Array( );
 	var left_filter = -1;
 	var right_filter = -1;
 	
@@ -58,6 +60,8 @@ $shop = new Shop( $shop_id );
 	
 	var player_money;
 	var money_reserve;
+	var player_umoney;
+	var umoney_reserve;
 	
 	function ge( a )
 	{
@@ -84,6 +88,14 @@ $shop = new Shop( $shop_id );
 		if( a % 10 == 1 ) return "монета";
 		if( a % 10 == 2 || a % 10 == 3 || a % 10 == 4 ) return 'монеты';
 		return "монет";
+	}
+	
+	function get_umoney_str( a )
+	{
+		if( toInt( a / 10 ) % 10 == 1 ) return 'талантов';
+		if( a % 10 == 1 ) return "талант";
+		if( a % 10 == 2 || a % 10 == 3 || a % 10 == 4 ) return 'таланта';
+		return "талантов";
 	}
 	
 	function addtype( id, a )
@@ -118,15 +130,17 @@ $shop = new Shop( $shop_id );
 		lnums[id] += num;
 	}
 	
-	function addtor( id, num, sell_price, buy_price, last_regime )
+	function addtor( id, num, sell_price, buy_price, last_regime, last_valuta )
 	{
 		rnums[id] += num;
 		rpb[id] = buy_price;
 		rps[id] = sell_price;
 		rgs[id] = last_regime;
+		valu[id] = last_valuta;
 		orpb[id] = buy_price;
 		orps[id] = sell_price;
 		orgs[id] = last_regime;
+		ovalu[id] = last_valuta;
 	}
 	
 	function item_img( a )
@@ -231,6 +245,18 @@ $shop = new Shop( $shop_id );
 		updateall( );		
 	}
 	
+	function change_valuta(a, i)
+	{
+		q = toInt(ge('valu' + a + '_' + i).selectedIndex);
+		
+		valu[i] = q;
+	
+		parent.bt.ch[i] = 1;
+		parent.bt.refr( );
+		
+		updateall( );
+	}
+	
 	function alter_money( a )
 	{
 		a = toInt( a );
@@ -242,6 +268,22 @@ $shop = new Shop( $shop_id );
 		money_reserve += a;
 		
 		parent.bt.dmoney += a;
+		parent.bt.refr( );
+		
+		updateall( );		
+	}
+	
+	function alter_umoney( a )
+	{
+		a = toInt( a );
+		
+		if( a > 0 ) { if( player_umoney < a ) a = player_umoney; }
+		else { if( umoney_reserve < - a  ) a = - umoney_reserve; }
+		
+		player_umoney -= a;
+		umoney_reserve += a;
+		
+		parent.bt.dumoney += a;
 		parent.bt.refr( );
 		
 		updateall( );		
@@ -260,7 +302,19 @@ $shop = new Shop( $shop_id );
 		nm = 'mli';
 		st += '<nobr>Добавить монеты: <input value=0 class=btn80 maxlength=9 id=' + nm + ' name=' + nm + ' type=text><button class=te_btn onClick="alter_money( ge( \'mli\' ).value );">Ok</button></nobr><br>'
 
-		st += '</td></td></table>';
+		st += '</td></tr>';
+		
+		st += '<tr><td valign=top width=50>';
+		
+		st += '<img src=../images/umoney.gif>';
+		st += '</td><td valign=top width=100%>&nbsp;';
+		st += player_umoney + '&nbsp;' + get_umoney_str( player_umoney );
+		st += '</td><td valign=top align=right>';
+		nm = 'umli';
+		st += '<nobr>Добавить таланты: <input value=0 class=btn80 maxlength=9 id=' + nm + ' name=' + nm + ' type=text><button class=te_btn onClick="alter_umoney( ge( \'umli\' ).value );">Ok</button></nobr><br>'
+		st += '</td></tr>';
+		
+		st += '</table>';
 			
 		return st;
 	}
@@ -278,7 +332,19 @@ $shop = new Shop( $shop_id );
 		nm = 'mri';
 		st += '<nobr>Снять монеты: <input value=0 class=btn80 maxlength=9 id=' + nm + ' name=' + nm + ' type=text><button class=te_btn onClick="alter_money( - ge( \'mri\' ).value );">Ok</button></nobr><br>'
 
-		st += '</td></td></table>';
+		st += '</td></tr>';
+		
+		st += '<tr><td valign=top width=50>';
+		
+		st += '<img src=../images/umoney.gif>';
+		st += '</td><td valign=top width=100%>&nbsp;';
+		st += umoney_reserve + '&nbsp;' + get_umoney_str( player_umoney );
+		st += '</td><td valign=top align=right>';
+		nm = 'umri';
+		st += '<nobr>Снять таланты: <input value=0 class=btn80 maxlength=9 id=' + nm + ' name=' + nm + ' type=text><button class=te_btn onClick="alter_umoney( - ge( \'umri\' ).value );">Ok</button></nobr><br>'
+		st += '</td></tr>';
+		
+		st += '</table>';
 			
 		return st;
 	}
@@ -335,6 +401,8 @@ $shop = new Shop( $shop_id );
 				st += '<tr><td><nobr>Цена&nbsp;покупки (' + getprice( rpb[i], prices[i], parent.tp.price_buy_mul ) + '):</td><td><input class=btn40 size=2 id=' + nm + ' name=' + nm + ' type=text value=' + rpb[i] + '><button class=te_btn onClick="change_buy_price( ' + a + ', ' + i + ' )">Ok</button></nobr></td></tr>'
 				nm = 'rgm' + a + '_' + i;
 				st += '<tr><td><nobr>Сохранять последний:</td><td><select onchange="change_regime( ' + a + ', ' + i + ' );" name=' + nm + ' id=' + nm + '><option value=-1' + ( rgs[i] == -1 ? " SELECTED" : "" ) + '>По умолч.<option value=0' + ( rgs[i] == 0 ? " SELECTED" : "" ) + '>Не сохранять<option value=1' + ( rgs[i] == 1 ? " SELECTED" : "" ) + '>Сохранять</select></nobr></td></tr>'
+				nm = 'valu' + a + '_' + i;
+				st += '<tr><td><nobr>Валюта:</td><td><select onchange="change_valuta( ' + a + ', ' + i + ' );" name=' + nm + ' id=' + nm + '><option value=0' + ( valu[i] == 0 ? " SELECTED" : "" ) + '>Дублоны<option value=1' + ( valu[i] == 1 ? " SELECTED" : "" ) + '>Таланты</select></nobr></td></tr>'
 				st += '</table>';
 				st += '</td>';
 				ok = 1;
@@ -467,14 +535,16 @@ $shop = new Shop( $shop_id );
 	
 	print( "\n" );
 		
-	$res = f_MQuery( "SELECT item_id, number, buy_price, sell_price, regime FROM shop_goods WHERE shop_id = {$shop->shop_id}" );
+	$res = f_MQuery( "SELECT item_id, number, buy_price, sell_price, regime, valuta FROM shop_goods WHERE shop_id = {$shop->shop_id}" );
 	while( $arr = f_MFetch( $res ) )
-		print( "\taddtor( $arr[0], $arr[1], $arr[3], $arr[2], $arr[4] );\n" );
+		print( "\taddtor( $arr[0], $arr[1], $arr[3], $arr[2], $arr[4], $arr[5] );\n" );
 	
 ?>
 	
 	player_money = <? print $player->money; ?>;
 	money_reserve = <? print $shop->money; ?>;
+	player_umoney = <? print $player->umoney; ?>;
+	umoney_reserve = <? print $shop->umoney; ?>;
 	
 	refr( );
 

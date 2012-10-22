@@ -212,6 +212,24 @@ for( $i = 0; ; ++ $i )
 		}
 	}
 	
+	else if( $cmd == 102 )
+	{
+		settype( $a1, 'integer' );
+		settype( $a2, 'integer' );
+		if(( $a2 != 0 && $a2 != 1 ))
+			$error .= "Валюта для одного из товаров указана неверно<br>";
+		else
+		{
+			$item_id = $a1;
+			$good_new_valuta = $a2;
+	
+			f_MQuery("UPDATE shop_goods set valuta=$good_new_valuta WHERE item_id=$item_id AND shop_id=$shop_id");
+			$name = f_MFetch( f_MQuery( "SELECT name FROM items WHERE item_id=$item_id" ) );
+			$valu = array( 0 => "Дублоны", 1=> "Таланты" );
+			$log .= "Изменена валюта для товара <b>$name[0]</b>: <b>{$valu[$good_new_valuta]}</b><br>";
+		}
+	}
+	
 	else if( $cmd == 100 )
 	{
 		settype( $a1, "integer" );
@@ -219,6 +237,7 @@ for( $i = 0; ; ++ $i )
 		{
 			if( $player->SpendMoney( $a1 ) )
 			{
+				$player->AddToLogPost( 0, - $a1, 50 );
 				$had = $shop->money;
 				$shop->AddMoney( $a1 );
 				$have = $shop->money;
@@ -234,11 +253,44 @@ for( $i = 0; ; ++ $i )
 			if( $shop->SpendMoney( $a1 ) )
 			{
 				$player->AddMoney( $a1 );
+				$player->AddToLogPost( 0, $a1, 50 );
 				$have = $shop->money;
 				$log .= "Снято $a1 дбл. Было: $had. Стало: $have.<br>";
 			}
 			else
 				$error .= "В магазине нет столько монет<br>";
+		}
+	}
+	
+	else if( $cmd == 101 )
+	{
+		settype( $a1, "integer" );
+		if( $a1 > 0 ) // Добавить таланты
+		{
+			if( $player->SpendUMoney( $a1 ) )
+			{
+				$player->AddToLogPost( -1, - $a1, 50 );
+				$had = $shop->umoney;
+				$shop->AddUMoney( $a1 );
+				$have = $shop->umoney;
+				$log .= "Добавлено $a1 тал. Было: $had. Стало: $have.<br>";
+			}
+			else
+				$error .= "У вас нет столько талантов<br>";
+		}
+		else if( $a1 < 0 ) // Снять таланты
+		{
+			$a1 = - $a1;
+			$had = $shop->umoney;
+			if( $shop->SpendUMoney( $a1 ) )
+			{
+				$player->AddUMoney( $a1 );
+				$player->AddToLogPost( -1, $a1, 50 );
+				$have = $shop->umoney;
+				$log .= "Снято $a1 тал. Было: $had. Стало: $have.<br>";
+			}
+			else
+				$error .= "В магазине нет столько талантов<br>";
 		}
 	}
 }

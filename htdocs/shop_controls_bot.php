@@ -30,6 +30,7 @@ if( !( $player->IsShopOwner( $shop_id ) ) )
 	var mv = new Array( );
 	var ch = new Array( );
 	var dmoney = 0;
+	var dumoney = 0;
 	
 	var regimes = new Array( );
 	regimes[0] = 'Продажа/Покупка';
@@ -42,6 +43,10 @@ if( !( $player->IsShopOwner( $shop_id ) ) )
 	regimes2[-1] = 'По умолчанию';
 	regimes2[0] = 'Не сохранять';
 	regimes2[1] = 'Сохранять';
+	
+	var valus = new Array();
+	valus[0] = 'Дублоны';
+	valus[1] = 'Таланты';
 	
 	function ge( a )
 	{
@@ -61,6 +66,14 @@ if( !( $player->IsShopOwner( $shop_id ) ) )
 		if( a % 10 == 1 ) return "монету";
 		if( a % 10 == 2 || a % 10 == 3 || a % 10 == 4 ) return 'монеты';
 		return "монет";
+	}
+	
+	function get_umoney_str( a )
+	{
+		if( toInt( a / 10 ) % 10 == 1 ) return 'талантов';
+		if( a % 10 == 1 ) return "талант";
+		if( a % 10 == 2 || a % 10 == 3 || a % 10 == 4 ) return 'таланта';
+		return "талантов";
 	}
 	
 	function move( a, b )
@@ -153,9 +166,11 @@ if( !( $player->IsShopOwner( $shop_id ) ) )
 				st += cmd( '10', i, parent.md.rps[i], cmdn ++ );
 				st += cmd( '11', i, parent.md.rpb[i], cmdn ++ );
 				st += cmd( '12', i, parent.md.rgs[i], cmdn ++ );
+				st += cmd( '102', i, parent.md.valu[i], cmdn ++ );
 			}
 			
 			st += cmd( '100', dmoney, 0, cmdn ++ );
+			st += cmd( '101', dumoney, 0, cmdn ++ );
 			
 			parent.location.href = 'shop_controls_acc.php?shop_id=' + <? print $shop_id; ?> + st;
 		}
@@ -251,6 +266,12 @@ if( !( $player->IsShopOwner( $shop_id ) ) )
 					st += 'Поменять режим сохранения последнего экземпляра товара <b>' + parent.md.names[i] + '</b> на "' + regimes2[parent.md.rgs[i]] + '". Был "' + regimes2[parent.md.orgs[i]] + '".<br>';
 					tok = 1;
 				}
+				if( parent.md.valu[i] != parent.md.ovalu[i] )
+				{
+					st += '<a color=white style="cursor: pointer" onClick="parent.md.valu[' + i + '] = parent.md.ovalu[' + i + ']; parent.md.refr( ); refr( );">[x]</a> ';
+					st += 'Поменять валюту для товара <b>' + parent.md.names[i] + '</b> на "' + valus[parent.md.valu[i]] + '". Был "' + valus[parent.md.ovalu[i]] + '".<br>';
+					tok = 1;
+				}
 				
 				a = parent.md.getprice( parent.md.rps[i], parent.md.prices[i], parent.tp.price_sell_mul );
 				b = parent.md.getprice( parent.md.rpb[i], parent.md.prices[i], parent.tp.price_buy_mul );
@@ -274,6 +295,21 @@ if( !( $player->IsShopOwner( $shop_id ) ) )
 
 			st += '. До изменения у вас: ' + ( parent.md.player_money + dmoney ) + ', в палатке: ' + ( parent.md.money_reserve - dmoney );
 			st += '. После изменения у вас: ' + parent.md.player_money + ', в палатке: ' + parent.md.money_reserve;
+			st += '<br>';
+				
+			ok = 1;
+		}
+		
+		if( dumoney != 0 )
+		{
+			st += '<a color=white style="cursor: pointer" onClick="parent.md.alter_umoney( - dumoney );">[x]</a> ';
+			if( dumoney > 0 )
+				st += 'Положить в палатку ' + dumoney + ' ' + get_umoney_str( dumoney );
+			else
+				st += 'Снять с палатки ' + ( - dumoney ) + ' ' + get_umoney_str( - dumoney );
+
+			st += '. До изменения у вас: ' + ( parent.md.player_umoney + dumoney ) + ', в палатке: ' + ( parent.md.umoney_reserve - dumoney );
+			st += '. После изменения у вас: ' + parent.md.player_umoney + ', в палатке: ' + parent.md.umoney_reserve;
 			st += '<br>';
 				
 			ok = 1;

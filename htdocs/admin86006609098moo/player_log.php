@@ -268,6 +268,13 @@ if( isset( $HTTP_GET_VARS['login'] ) )
 			{
 				$str = "Ремонтный Цех";
 			}
+			else if ($arr['type'] == 50)
+			{
+				if ($arr['have'] > $arr['had'])
+					$str = "Забрал из магазина ордена";
+				else
+					$str = "Положил в магазин ордена";
+			}
 			else if ($arr['type'] == 980)
 			{
 				$str = "Купил смайл у Шамаханского Торговца";

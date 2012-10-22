@@ -33,11 +33,27 @@ function get_money_str( a )
 	return "монет";
 }
 
+function get_umoney_str( a )
+{
+	if( toInt( a / 10 ) % 10 == 1 ) return 'талантов';
+	if( a % 10 == 1 ) return "талант";
+	if( a % 10 == 2 || a % 10 == 3 || a % 10 == 4 ) return 'таланта';
+	return "талантов";
+}
+
+function get_umoney_money_str(valu, a)
+{
+	if (valu == 0)
+		return get_money_str(a);
+	if (valu == 1)
+		return get_umoney_str(a);
+}
+
 function shop_setRegime( a ) {
 	shop_regime = a;
 }
 
-function shop_addItem( _id, _tp, _num, _mnum, _sp, _bp, _nm, _img, _descr, _pos ) {
+function shop_addItem( _id, _tp, _num, _mnum, _sp, _bp, _nm, _img, _descr, _pos, _valuta ) {
 	items[n] = new Object;
 
 	items[n].item_id = _id;
@@ -50,6 +66,7 @@ function shop_addItem( _id, _tp, _num, _mnum, _sp, _bp, _nm, _img, _descr, _pos 
 	items[n].img = _img;
 	items[n].descr = _descr;
 	items[n].pos = _pos;
+	items[n].valuta = _valuta;
 	
 	types[_tp] = ptypes[_tp];
 	
@@ -68,7 +85,7 @@ function bbc( a )
 	if( val >= 0 ) val *= items[a].sp;
 	else val *= items[a].bp;
 	val = toInt( val );
-	document.getElementById( 'bb' + a ).innerHTML = ' = ' + val + ' ' + get_money_str( val );
+	document.getElementById( 'bb' + a ).innerHTML = ' = ' + val + ' ' + get_umoney_money_str(items[a].valuta, val );
 }
 
 function ssc( a )
@@ -77,7 +94,7 @@ function ssc( a )
 	if( val >= 0 ) val *= items[a].bp;
 	else val *= items[a].sp;
 	val = toInt( val );
-	document.getElementById( 'ss' + a ).innerHTML = ' = ' + val + ' ' + get_money_str( val );
+	document.getElementById( 'ss' + a ).innerHTML = ' = ' + val + ' ' + get_umoney_money_str(items[a].valuta, val );
 }
 
 function buy( a )
@@ -131,16 +148,20 @@ function shop_getInnerHtml( )
 		{
 			st += "<td width=80 valign=top><b>Купить:</b><br>";
 			st += "<table border=0 cellspacing=0 cellpadding=0><tr><td><input type=text class=btn40 style='background-color:white' value=1 onKeyUp=bbc(" + i + ") name=buy" + i + " id=buy" + i + "></td><td><button onClick=buy(" + i + ") class=sss_btn>>>></button></td></tr></table>";
-			st += " x " + items[i].sp + " " + get_money_str( items[i].sp ) + "<br>";
-			st += "<div id=bb" + i + "> = " + toInt( items[i].sp ) + " " + get_money_str( items[i].sp ) + "</div>";
+			st += " x " + items[i].sp + " ";
+			st += get_umoney_money_str(items[i].valuta, items[i].sp);
+			st += "<br>";
+			st += "<div id=bb" + i + "> = " + toInt( items[i].sp ) + " " + get_umoney_money_str(items[i].valuta, items[i].sp) + "</div>";
 			st += "</td>";
 		}
 		if( shop_regime != 1 )
 		{
 			st += "<td width=80 valign=top><b>Продать:</b><br>";
 			st += "<table border=0 cellspacing=0 cellpadding=0><tr><td><input type=text class=btn40 style='background-color:white' value=1 onKeyUp=ssc(" + i + ") name=sell" + i + " id=sell" + i + "></td><td><button onClick=sell(" + i + ") class=sss_btn>>>></button></td></tr></table>";
-			st += " x " + items[i].bp + " " + get_money_str( items[i].bp ) + "<br>";
-			st += "<div id=ss" + i + "> = " + toInt( items[i].bp ) + " " + get_money_str( items[i].bp ) + "</div>";
+			st += " x " + items[i].bp + " ";
+			st += get_umoney_money_str(items[i].valuta, items[i].bp);
+			st += "<br>";
+			st += "<div id=ss" + i + "> = " + toInt( items[i].bp ) + " " + get_umoney_money_str(items[i].valuta, items[i].bp) + "</div>";
 			st += "</td>";
 		}
 		st += '</tr>';

@@ -16,7 +16,9 @@ class Shop
 	var $cost;
 	var $owner_id;
 	var $money;
+	var $umoney;
 	var $capacity;
+	var $valuta;
 	
 	function Shop( $shop_id )
 	{
@@ -36,7 +38,9 @@ class Shop
 		$this->cost = $arr['cost'];
 		$this->owner_id = $arr['owner_id'];
 		$this->money = $arr['money'];
+		$this->umoney = $arr['umoney'];
 		$this->capacity = $arr['capacity'];
+		$this->valuta = $arr['valuta'];
 	}
 	
 	function SetName( $a ) {
@@ -61,12 +65,25 @@ class Shop
 		f_MQuery( "UPDATE shops SET money = money + '$a' WHERE shop_id = {$this->shop_id}" );
 		$this->money += $a;
 	}
+	function AddUMoney( $a ) {
+		if( $this->owner_id == -1 ) return;
+		f_MQuery( "UPDATE shops SET umoney = umoney + '$a' WHERE shop_id = {$this->shop_id}" );
+		$this->umoney += $a;
+	}
 	function SpendMoney( $a ) {
 		if( $this->owner_id == -1 ) return true;
 		if( $this->money < $a )
 			return false;
 		f_MQuery( "UPDATE shops SET money = money - '$a' WHERE shop_id = {$this->shop_id}" );
 		$this->money -= $a;
+		return true;
+	}
+	function SpendUMoney( $a ) {
+		if( $this->owner_id == -1 ) return true;
+		if( $this->umoney < $a )
+			return false;
+		f_MQuery( "UPDATE shops SET umoney = umoney - '$a' WHERE shop_id = {$this->shop_id}" );
+		$this->umoney -= $a;
 		return true;
 	}
 	
@@ -144,7 +161,7 @@ class Shop
 		ScrollLightTableStart("left");
 
 		$stats = $player->getAllAttrNames( );
-		$res = f_MQuery( "SELECT items.*, shop_goods.number, shop_goods.sell_price, shop_goods.buy_price, shop_goods.position FROM items, shop_goods WHERE shop_id = {$this->shop_id} AND items.item_id = shop_goods.item_id ORDER BY $ordering" );
+		$res = f_MQuery( "SELECT items.*, shop_goods.number, shop_goods.sell_price, shop_goods.buy_price, shop_goods.position, shop_goods.valuta FROM items, shop_goods WHERE shop_id = {$this->shop_id} AND items.item_id = shop_goods.item_id ORDER BY $ordering" );
 		if( !mysql_num_rows( $res ) ) print( "<i>Прилавок магазина пуст</i><br>" );
 		else if( $this->regime == 3 ) print( "<i>Магазин закрыт</i><br>" );
 		else
@@ -167,7 +184,7 @@ class Shop
 				if( $arr['level'] > $player->level )
 					$descr = str_replace( "Уровень: $arr[level]", "<b><font color=red>Уровень: $arr[level]</font></b>", $descr );
 				
-				print( "\tshop_addItem( $arr[item_id], $arr[type], $arr[number], ".($player->NumberItems($arr['item_id'])).", $sell_price, $buy_price, '$arr[name]', '".itemImage( $arr )."', '$descr', '$arr[position]' );\n" );
+				print( "\tshop_addItem( $arr[item_id], $arr[type], $arr[number], ".($player->NumberItems($arr['item_id'])).", $sell_price, $buy_price, '$arr[name]', '".itemImage( $arr )."', '$descr', '$arr[position]', '$arr[valuta]' );\n" );
 			}
 			print( "\tshop_showHtml( );\n" );
 			print( "</script>\n" );
@@ -211,6 +228,15 @@ class Shop
 		if( $arr['number'] < $number ) return -1;
 		
 		return $sell_price * $number;
+	}
+	
+	function GetTypePrice($item_id)
+	{
+		$res = f_MQuery("SELECT valuta FROM shop_goods WHERE shop_id = {$this->shop_id} AND item_id = $item_id");
+		$arr = f_MFetch($res);
+		
+		if (!$arr) return -1;
+		return $arr['valuta'];
 	}
 }
 
