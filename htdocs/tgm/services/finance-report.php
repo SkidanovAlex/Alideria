@@ -16,7 +16,7 @@
 	// И - получаем сами события в интересующем нас диапазоне
 	$allDeals = array( );	
 	// type != 25 -- убирает из результатов выдачи инфо о партнёрском начислении
-	$allDealsQuery = f_MQuery( 'SELECT time, player_id, ( have - had ) AS money, arg1 FROM player_log WHERE item_id = -1 AND have > had AND type > 2 AND time > '.$fromDay.' AND time < '.$toDay.' AND type != 25 AND type != 1001 AND type != 1006 AND player_id!=6825 AND player_id!=868239 AND player_id!=67573 AND player_id!=1835898 AND player_id!=3264 ORDER BY time DESC' );
+	$allDealsQuery = f_MQuery( 'SELECT time, player_id, ( have - had ) AS money, arg1 FROM player_log WHERE item_id = -1 AND have > had AND type > 2 AND time > '.$fromDay.' AND time < '.$toDay.' AND type != 25 AND type != 1001 AND type != 6 AND type != 50 AND type != 1006 AND player_id!=6825 AND player_id!=868239 AND player_id!=67573 AND player_id!=1835898 AND player_id!=3264 ORDER BY time DESC' );
 	while( $deal = f_MFetch( $allDealsQuery ) )
 	{
 		$allDeals[] = $deal;
