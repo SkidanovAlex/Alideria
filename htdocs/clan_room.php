@@ -227,7 +227,7 @@ if( $mode === 'main' )
     				f_MQuery( "INSERT INTO player_clans ( clan_id, player_id ) VALUES ( $clan_id, $id )" );
     				f_MQuery( "UPDATE characters SET clan_id=$clan_id WHERE player_id=$id" );
   					f_MQuery( "INSERT INTO clan_log ( clan_id, time, player_id, action, arg0, arg1 ) VALUES ( $clan_id, ".time( ).", {$player->player_id}, 10, $id, 1 )" );
-					if ($clan_id == 7 || $clan_id == 2)
+					if ($clan_id == 7 || $clan_id == 2 || $clan_id == 41 || clan_id == 4 || clan_id == 5)
 						f_MQuery("INSERT INTO paid_smiles (player_id, set_id, expires) VALUES ({$id}, ".(10000+$clan_id).", -1)");
 
   					$res = f_MQuery( "SELECT wonder_id FROM clan_wonders WHERE clan_id=$clan_id AND stage=100" );
