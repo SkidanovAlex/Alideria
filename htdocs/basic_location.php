@@ -126,7 +126,7 @@ if( mysql_num_rows( $res ) )
 	{
 		$no_rest = true;
 		print( "<table cellspacing=0 cellpadding=0 width=100%><tr><td valign=top>");
-		if( false) include( "capital_8m.php" ); //include( "capital_9m.php" );
+		if( true) include( "capital_8m.php" ); //include( "capital_9m.php" );
 		else include( "capital.php" ); //  include( "capital.php" );
 	}
 	else if( $loc == 2 && $depth == 50 )

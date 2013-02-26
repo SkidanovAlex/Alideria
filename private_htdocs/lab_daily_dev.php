@@ -14,8 +14,8 @@ f_MQuery( "DELETE FROM lab_items" );
 f_MQuery( "DELETE FROM lab_mobs" );
 
 
-$labir_id = 0;
-$labir_num = 1;
+$labir_id = 1;
+$labir_num = 3;
 
 $lab = new Lab( $labir_id, $labir_num, 30, 30 );
 $lab->Init( );

@@ -17,6 +17,7 @@ selectArray["Sel15"] = new Array(70,  120, "images/locations/capital_sel_15.gif"
 selectArray["Sel16"] = new Array(637, 223, "images/locations/w/capital_sel_16.png", 36,  55,  "Фавн",                "game.php?talk=37");
 selectArray["Sel17"] = new Array(151, 246, "images/locations/w/capital_sel_17.png", 67,  42,  "Река",                "game.php?dir=0&tloc=3");
 selectArray["Sel18"] = new Array(470, 148, "images/locations/w/capital_sel_18.png", 142, 172, "Новогодняя Елка",     "game.php?dir=56&tloc=2");
+selectArray["Sel1001"] = new Array(70,  120, "images/locations/capital_sel_15.gif", 69,  104, "Водопад",             "game.php?dir=1001&tloc=2");
 
 
 

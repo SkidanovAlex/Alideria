@@ -388,7 +388,7 @@ echo "<td width=50% height=100%>";
     	ScrollTableEnd( );
     	echo "</td></tr><tr><td height=100%>";
     	ScrollTableStart( );
-
+             
     	if( !isset( $_GET['country'] ) )
     	{
 	    	echo "Выберите страну:<br>";
@@ -552,7 +552,7 @@ K-cell (GSM Kazakhstan) и Билайн Казахстан (Кар-Тел)<br>
     	echo "</div>"; */
 
 //    	ScrollTableEnd( );
-	}
+	}/**/
     else if( $mode == 'wm' )
     {
     	ScrollTableStart( );
@@ -743,7 +743,7 @@ echo "</td><td width=50% height=100%>";
 	echo "</td></tr><tr><td>";
 
 	ScrollTableStart( 'left' );
-	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=game.php?p=sms>С помощью SMS-сообщения</a>";
+	//echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=game.php?p=sms>С помощью SMS-сообщения</a>";
 	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=http://2pay.ru/oplata/number.html?id=2149&v1={$player->player_id} target=_blank>Через терминалы QiWi</a><br>";
 //	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'>С помощью SMS-сообщения";
 	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=game.php?p=wm>Через систему WebMoney</a>";

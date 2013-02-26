@@ -70,6 +70,9 @@ if ($restreelvl > 1 && $reslt > $min_tree_active) //выдаем эффекты
 		$eff = '30:'.$tref.':40:'.$tref.':50:'.$tref.':13:'.$tref.':15:'.$tref.':16:'.$tref.':101:'.$trefhp.':223:'.$trefv.'.';
 		for ($i = 1;$i < $restreelvl; $i++)
 			$player->AddEffect( 10, 0, 'Божий дар', 'Заряд бодрости был получен под ветвями Древа Жизни', 'tree.png', $eff, time() + 7 * 24 * 60 * 60 );
+		$num_effs = f_MValue("SELECT COUNT(id) FROM player_effects WHERE player_id=".$player->player_id." AND effect_id=10");
+		for($i = 0; $i < $num_effs - $restreelvl; $i++)
+			$player->RemoveEffect(10, false);
 		$player->syst('Постояв немного в тени Древа Жизни, вы ощутили невероятный прилив бодрости. Он продлится около недели.');
 	}
 }

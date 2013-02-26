@@ -11,10 +11,13 @@ Header("Content-Type: image/jpeg");
 
 f_MConnect( );
 
+
 if( !check_cookie( ) )
 	die( );
 
 $player = new Player( $HTTP_COOKIE_VARS['c_id'] );
+
+//$player = new Player(6825);
 
 $lab_id = isLabLoc( $player->location, $player->depth );
 if( $lab_id == -1 )
@@ -72,11 +75,17 @@ for( $i = 0; $i < 3; ++ $i )
 		if( $line )
 		{
 			$cell_id = $line['cell_id'];
-    		$result = f_MQuery( "SELECT items.* FROM items, lab_items WHERE lab_id=$lab_id AND cell_id=$line[cell_id] AND items.item_id=lab_items.item_id" );
+    		$result = f_MQuery( "SELECT items.* FROM items, lab_items WHERE lab_id=$lab_id AND cell_id=$cell_id AND items.item_id=lab_items.item_id" );
     		while( $line = f_MFetch( $result ) )
     		{
     			$items[$i][$j + $moo][] = itemImage( $line );
     		}
+    		$result = f_MQuery( "SELECT * FROM lab_mobs WHERE lab_id=$lab_id AND cell_id=$cell_id" );
+    		while( $line = f_MFetch( $result ) )
+    		{
+    			$mobs[$i][$j + $moo][] = $line['img'];
+    		}
+    		/*
             // важно добавить НПЦ до монстров, чтобы НПЦ всегда показывался закытым монстром
             $result = f_MQuery("SELECT img, npc_id FROM lab_quest_npcs WHERE player_id={$player->player_id} AND lab_id={$lab_id} AND cell_id={$cell_id}");
     		while( $line = f_MFetch( $result ) )
@@ -94,6 +103,7 @@ for( $i = 0; $i < 3; ++ $i )
     		{
     			$mobs[$i][$j + $moo][] = $line['img'];
     		}
+    		*/
 		}
 	}
 }
@@ -315,7 +325,7 @@ for( $i = 2; $i >= 0; -- $i )
 
 ImageJpeg($im);
 /**/
-/*
+/**/
 $im = imagecreate( 384, 256 );
 imagealphablending( $im, true );
 $black = imagecolorallocate(  $im, 0, 0, 0 );
