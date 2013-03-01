@@ -346,7 +346,7 @@ file_put_contents("log_syst2.txt", "say\n{$a}\n0\n{$this->player_id}\n0\n{$tm}\n
 
 					// Атака шамахан
 
-					if( $this->location == 2 && $this->depth != 50 && $this->depth != 46 && $this->depth != 49 && $P > mt_rand( 0, 100 ) ) // Рассчёт вероятности атаки
+					if(false && $this->location == 2 && $this->depth != 50 && $this->depth != 46 && $this->depth != 49 && $P > mt_rand( 0, 100 ) ) // Рассчёт вероятности атаки
 					{
 						$kind = 2;
 						if( $this->level < 11 )

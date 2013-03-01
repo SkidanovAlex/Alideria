@@ -9,8 +9,7 @@ if( !isset( $mid_php ) ) die( );
 <br>
 <li><a href=# onclick='query_left();'>Повернуть Налево</a>
 <li><a href=# onclick='query_go();'>Идти Прямо</a>
-<li><a href=# onclick='query_right();'>Повернуть Направо</a>
-<li><a href=# onclick='if( confirm( "Выйти из лабиринта?" ) ) query_leave();'>Покинуть Лабиринт</a><br>
+<li><a href=# onclick='query_right();'>Повернуть Направо</a><br>
 <span id=addinfo>&nbsp;</span>
 <br><br>
 <small>Вы также можете использовать клавиши со стрелками для передвижения по лабиринту.</small>

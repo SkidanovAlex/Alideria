@@ -13,6 +13,10 @@ function getNextStepInfo( $lab_id, $x, $y, $z, $dir )
     {
        $updown .= "<li><a href=# onclick='query_down();'>Спуститься вниз</a>";
     }
+    if ($larr[0] == -1 && $z == 0)
+    {
+       $updown .= "<li><a href=# onclick='if( confirm( \"Выйти из лабиринта?\" ) ) query_leave();'>Покинуть Лабиринт</a>";
+    }
     $monsters = f_MQuery("SELECT n.mob_id, n.name FROM mobs n INNER JOIN lab_quest_monsters q ON n.mob_id = q.mob_id WHERE q.player_id={$player->player_id} AND q.lab_id=$lab_id AND q.cell_id=$larr[1]");
     $hasMonsters = f_MNum($monsters);
     while ($monster = mysql_fetch_array($monsters))

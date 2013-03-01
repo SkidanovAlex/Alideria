@@ -62,7 +62,13 @@ if( isset( $_GET['do'] ) )
         if ($larr[0] == 1 && $do == 'down')
         {
             $nz = $cz + 1;
-        }
+            if($player->HasTrigger(13300) == 1 && $player->HasTrigger(13301) == 0)
+		{
+			$player->SetTrigger(13301);
+			$player->syst("Информация о квесте <b>На поиски шамахан</b> обновлена.", false);
+			f_MQuery( "INSERT INTO player_quest_parts VALUES ( {$player->player_id}, 278 )" );
+		}
+	}
         if ($cz != $nz)
         {
             $res = f_MQuery( "SELECT tex, cell_id FROM lab WHERE lab_id=$lab_id AND x=$cx AND y=$cy AND z=$nz" );
@@ -183,10 +189,17 @@ if( isset( $_GET['do'] ) )
     }
 	if( $do == 'leave' )
 	{
-		$player->SetLocation( 0 );
-		$player->SetDepth( 1 );
-		f_MQuery( "DELETE FROM player_labs WHERE player_id={$player->player_id}" );
-		echo "location.href='game.php';";
+		if($cz == 0)
+		{
+			$larr = f_MFetch(f_MQuery("SELECT dir FROM lab WHERE lab_id=$lab_id AND x=$cx AND y=$cy AND z=$cz"));
+			if($larr[0] == -1)
+			{
+				$player->SetLocation( 0 );
+				$player->SetDepth( 1 );
+				f_MQuery( "DELETE FROM player_labs WHERE player_id={$player->player_id}" );
+				echo "location.href='game.php';";
+			}
+		}
 	}
 
 	f_MQuery("LOCK TABLE player_triggers WRITE");
