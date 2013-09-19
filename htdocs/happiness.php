@@ -384,7 +384,7 @@ echo "<td width=50% height=100%>";
 	else if( $mode == 'sms' )
 	{
 	   	ScrollTableStart( );
-	   	echo "<b>Покупка с помощью SMS-сообщения</b>";
+	   	echo "<b>Покупка с помощью SMS-сообщения временно приостановлена</b>";
     	ScrollTableEnd( );
     	echo "</td></tr><tr><td height=100%>";
     	ScrollTableStart( );
@@ -666,7 +666,7 @@ K-cell (GSM Kazakhstan) и Билайн Казахстан (Кар-Тел)<br>
 
     	echo "<a href=game.php>Назад</a><br><br>";
     	echo "В настоящий момент автоматизированная система приема платежей не доступна.<br>";
-    	echo "Для приобретения талантов через систему Яндекс.Деньги свяжитесь с администратором <b>Пламени</b>";
+    	echo "Для приобретения талантов через систему Яндекс.Деньги свяжитесь с администратором <b>Reincarnation</b>";
 	}
 	else if( $mode == '2pay' )
 	{
@@ -744,11 +744,11 @@ echo "</td><td width=50% height=100%>";
 
 	ScrollTableStart( 'left' );
 	//echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=game.php?p=sms>С помощью SMS-сообщения</a>";
-	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=http://2pay.ru/oplata/number.html?id=2149&v1={$player->player_id} target=_blank>Через терминалы QiWi</a><br>";
+//	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=http://2pay.ru/oplata/number.html?id=2149&v1={$player->player_id} target=_blank>Через терминалы QiWi</a><br>";
 //	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'>С помощью SMS-сообщения";
 	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=game.php?p=wm>Через систему WebMoney</a>";
-	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=http://2pay.ru/oplata/yandex/?id=2149&v1={$player->player_id} target=_blank>Через систему Yandex.Деньги</a><br>";
-	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=game.php?p=2pay>Еще тысяча и один способ...</a><br>";
+//	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=http://2pay.ru/oplata/yandex/?id=2149&v1={$player->player_id} target=_blank>Через систему Yandex.Деньги</a><br>";
+//	echo "<li STYLE='list-style-image: URL(\"images/dots/dot-generic.gif\")'><a href=game.php?p=2pay>Еще тысяча и один способ...</a><br>";
 	echo "<br><li STYLE='list-style-image: URL(\"images/dots/dot-exit.gif\")'><a href=game.php?phrase=515>Покинуть фавна</a>";
 	ScrollTableEnd( );
 

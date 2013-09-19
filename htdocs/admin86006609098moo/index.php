@@ -15,6 +15,7 @@ include( 'admin_header.php' );
 
 <center><table><tr><td valign=top>
 <center><b>Администраторская Панель</b><br>
+<a href=admin_add_orden_smile.php target=_top>Checking after added orden smile</a><br>
 <a href=admin_pandora.php target=_top>Куб Пандоры</a><br>
 <a href=help_editor.php target=_top>Редактор Справки</a><br>
 <a href=attrib_editor.php target=_top>Редактор Аттрибутов</a><br>

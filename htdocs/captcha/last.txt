@@ -1,1 +1,0 @@
-/captcha/code.php/captcha/code.php?

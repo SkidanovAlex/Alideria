@@ -668,7 +668,7 @@ function checkInt( $a, $b, $c )
 	if( $c == 'on' || $b == 'ajax' || $b == 'q' || $b == 'mode' || $b == 'rank_name' || $b == 'job_name' ||  $b == 'red_black_action' || $b == 'email' || $b == 'text' || $b == 'descr' || $b == 'pwd' || $b == 'txt' || $b == 'nm' || $b == 'where' || $b == 'msg' || $b == 'order' || $b == 'title' || $b == 'pwd_again' ) return;
 	if( $b == 'city' || $b == 'skype' || $b == 'quote' || $b == 'hide_email' ||  $b == 'nick' || $b == 'ref' || $b == 'target' || $b == 'login' ) return;
 	if( $b == 'act' && $_SERVER['PHP_SELF'] == '/post_action.php/post_action.php' ) return;
-	if( $b == 'do' && $_SERVER['PHP_SELF'] == '/lab_do.php/lab_do.php' ) return;
+	if( $b == 'do' && $_SERVER['PHP_SELF'] == '/lab_do_dev.php/lab_do_dev.php' ) return;
 	if( ( $b == 'premium' || $b == 'premium2' ) && $_SERVER['PHP_SELF'] == '/help.php/help.php' ) return;
 	if( $c == 'deleted' || $c == 'sms' || $c == 'undefined' || $c == 'wm' ) return;
 	if ($_SERVER['PHP_SELF'] == '/tgm/ajaxQuery.php/tgm/ajaxQuery.php' || $_SERVER['PHP_SELF'] == '/admin86006609098moo/item_editor_apply.php/admin86006609098moo/item_editor_apply.php' || $_SERVER['PHP_SELF'] == '/admin86006609098moo/talk_editor.php/admin86006609098moo/talk_editor.php') return;
