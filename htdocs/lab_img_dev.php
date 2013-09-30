@@ -80,12 +80,12 @@ for( $i = 0; $i < 3; ++ $i )
     		{
     			$items[$i][$j + $moo][] = itemImage( $line );
     		}
-    		$result = f_MQuery( "SELECT * FROM lab_mobs WHERE lab_id=$lab_id AND cell_id=$cell_id" );
+/*    		$result = f_MQuery( "SELECT * FROM lab_mobs WHERE lab_id=$lab_id AND cell_id=$cell_id" );
     		while( $line = f_MFetch( $result ) )
     		{
     			$mobs[$i][$j + $moo][] = $line['img'];
     		}
-    		/*
+*/    		
             // важно добавить НПЦ до монстров, чтобы НПЦ всегда показывался закытым монстром
             $result = f_MQuery("SELECT img, npc_id FROM lab_quest_npcs WHERE player_id={$player->player_id} AND lab_id={$lab_id} AND cell_id={$cell_id}");
     		while( $line = f_MFetch( $result ) )
@@ -103,7 +103,7 @@ for( $i = 0; $i < 3; ++ $i )
     		{
     			$mobs[$i][$j + $moo][] = $line['img'];
     		}
-    		*/
+    		
 		}
 	}
 }
@@ -125,13 +125,25 @@ function drawItems( $i, $j )
 	$id = 0;
 
 	global $player;
+    $total = count($mobs[$i][$j + $moo]);
 	foreach( $mobs[$i][$j + $moo] as $src )
 	{
-		if( $id == 0 ) { $dx = 32; $dy = 32; }
-		else if( $id == 1 ) { $dx = 16; $dy = 8; }
-		else if( $id == 2 ) { $dx = 48; $dy = 8; }
-		else if( $id == 3 ) { $dx = 16; $dy = 48; }
-		else if( $id == 4 ) { $dx = 48; $dy = 48; }
+        $adjustedId = $id;
+        if ($total >= 4)
+        {
+            if ($id == 1) $adjustedId = 4;
+            else if ($id == 4) $adjustedId = 1;
+        }
+        if ($total >= 5)
+        {
+            if ($id == 2) $adjustedId = 5;
+            else if ($id == 5) $adjustedId = 2;
+        }
+		if( $adjustedId == 0 ) { $dx = 32; $dy = 32; }
+		else if( $adjustedId == 1 ) { $dx = 16; $dy = 8; }
+		else if( $adjustedId == 2 ) { $dx = 48; $dy = 8; }
+		else if( $adjustedId == 3 ) { $dx = 16; $dy = 48; }
+		else if( $adjustedId == 4 ) { $dx = 48; $dy = 48; }
 		else break;
 		++ $id;
 

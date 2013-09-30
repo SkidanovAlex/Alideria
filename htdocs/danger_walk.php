@@ -29,7 +29,7 @@ ScrollLightTableEnd();
 
 print( "</td><td valign=top>" );
 
-print( "<center><b>{$loc_names[$loc]}, глубина: <span id=depth>$depth</span></b><hr width=40% color=gray size=1></center>" );
+print( "<center><b>{$loc_names[$loc]}, глубина: <span id=depth>$depth</span></b><hr width=40% color=black size=1></center>" );
 $res = f_MQuery( "SELECT text FROM loc_texts WHERE loc=$loc AND depth=$depth" );
 $arr = f_MFetch( $res );
 print( "<div align=justify id=loc_desc>$arr[0]</div>" );

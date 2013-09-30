@@ -198,6 +198,18 @@ function addItem(item_id, num)
 	query('dun_ref.php?item_id='+item_id+'&number='+num, dun_id + '|' + x + '|' + y);
 }
 
+function addMob(mob_id, num)
+{
+	var y = cur_cell % 100;
+	var x = Math.round(cur_cell / 100);
+	if (mob_id==0)
+	{
+		mob_id = document.getElementById('mb_id').value;
+		num = 1;
+	}
+	query('dun_ref.php?mob_id='+mob_id+'&number='+num, dun_id + '|' + x + '|' + y);
+}
+
 function selectImage()
 {
 	var ret = "";

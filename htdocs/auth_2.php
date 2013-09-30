@@ -37,7 +37,7 @@ if( f_MNum( $res ) < 1 )
 
 $md = md5( $p_pwd );
 $arr = f_MFetch( $res );
-if( $arr['pswrddmd5'] !== $md )
+if( $arr['pswrddmd5'] !== $md)
 {
 	redir( "Неверный пароль, <a href=javascript:rest()>Забыли?</a>" );
 	return 0;

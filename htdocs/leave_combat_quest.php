@@ -36,9 +36,9 @@ if ($won)
     }
 }
 
-// гонка фавна
 if( $won )
 {
+    // гонка фавна
     $convertedId = -1;
     $questRaceIds = array( 37, 24, 18, 10, 25, 38, 7, 35, 8, 29, 31, 32, 11, 13, 26, 30, 28 );
     for( $i = 0; $i < count( $questRaceIds ); ++ $i )
@@ -48,6 +48,46 @@ if( $won )
     {
     	include_once( "quest_race_update_status.php" );
     	updateQuestStatus ( $this->player_id, 2501, 1, 101 + $convertedId );
+    }
+
+    // квесты подземелий
+    if ($arr['win_action'] == 14)
+    {
+        if ($mob_id == 25) // Квест Сбежавший Паук
+        {
+            $this->AddItems( 15252, 1 );
+            $this->syst( "После победы над пауком вы нашли <a href=/help.php?id=1010&item_id=15252 target=_blank>свиток пчелиного роя</a>" );
+            $this->SetTrigger( 268, 0 );
+            $this->SetTrigger( 269 );
+            $qres = f_MQuery( "SELECT * FROM player_quest_parts WHERE player_id={$this->player_id} AND quest_part_id = 276" );
+            if( !mysql_num_rows( $qres ) )
+            {
+                $this->syst( "Информация о квесте <b>Сбежавший паук</b> обновлена." );
+                f_MQuery( "INSERT INTO player_quest_parts VALUES ( {$this->player_id}, 276 )" );
+            }
+        }
+        else // квест Украденные Пуговицы
+        {
+            $mask = 0;
+            if ($mob_id == 10) { $pugov = 3; $mask = 1; }
+            else if ($mob_id == 18) { $pugov = 3; $mask = 2; }
+            else { $pugov = 4; $mask = 4; }
+
+            $this->AddItems( 81047, $pugov );
+            $this->syst( "После победы над крысой вы нашли <b>$pugov</b> <a href=/help.php?id=1010&item_id=81047 target=_blank>золотыe пуговицы</a>" );
+            $this->SetQuestValue( 70, $this->GetQuestValue( 70 ) | $mask );
+            if ( $this->GetQuestValue( 70 ) == 7 )
+            {
+                $this->SetTrigger( 263, 0 );
+                $this->SetTrigger( 264 );
+                $qres = f_MQuery( "SELECT * FROM player_quest_parts WHERE player_id={$this->player_id} AND quest_part_id = 273" );
+                if( !mysql_num_rows( $qres ) )
+                {
+                    $this->syst( "Информация о квесте <b>Украденные пуговицы</b> обновлена." );
+                    f_MQuery( "INSERT INTO player_quest_parts VALUES ( {$this->player_id}, 273 )" );
+                }
+            }
+        }
     }
 }
 

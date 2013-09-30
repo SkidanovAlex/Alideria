@@ -7,7 +7,7 @@ function getExp( $level, $wear_level, $turns, $my_lvl, $my_num, $his_lvl, $his_n
 	$base_exp = pow( $level, 0.8 ) * 3.0;
 	$time_coef = pow( 1 + $turns, 0.5 );
 	$wear_coef = 1 + $wear_level / ( 12 * $level );
-	$rand_coef = 0.761 + mt_rand( 0, 100 ) * 0.00579;
+	$rand_coef = 0.759 + mt_rand( 0, 100 ) * 0.00578;
 
 	$level_coef = 1;
 

@@ -22,9 +22,9 @@ selectArray["Sel1001"] = new Array(70,  120, "images/locations/capital_sel_15.gi
 
 
 var animArray = new Array();
-/*animArray["Anim1"] = new Array(192,  309, "images/locations/capital_anim_1.png", 20,  11);
-animArray["Anim2"] = new Array(648,  239, "images/locations/capital_anim_2.png", 12,  7);
-animArray["Anim3"] = new Array(292,  287, "images/locations/capital_anim_3.png", 32,  23);
-animArray["Anim4"] = new Array(351,  281, "images/locations/capital_anim_4.png", 32,  23);
-animArray["Anim5"] = new Array(249,  264, "images/locations/capital_anim_5.png", 18,  11);
-*/
+animArray["Anim1"] = new Array(192,  309, "images/locations/capital_anim_1.gif", 20,  11);
+animArray["Anim2"] = new Array(648,  239, "images/locations/capital_anim_2.gif", 12,  7);
+animArray["Anim3"] = new Array(292,  287, "images/locations/capital_anim_3.gif", 32,  23);
+animArray["Anim4"] = new Array(351,  281, "images/locations/capital_anim_4.gif", 32,  23);
+animArray["Anim5"] = new Array(249,  264, "images/locations/capital_anim_5.gif", 18,  11);
+

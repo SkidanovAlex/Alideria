@@ -26,7 +26,7 @@ function chat_who_list( $res )
 
 function chat_update_who_global_list()
 {
-   $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.player_id!=6825" );
+   $res = f_MQuery( "SELECT characters.login, characters.level, characters.player_id, characters.nick_clr, characters.clan_id, characters.sex FROM characters, online WHERE online.player_id=characters.player_id AND characters.player_id!=1" );
    $st = chat_who_list( $res );
 
    $key = 'chat.plist.who_global';

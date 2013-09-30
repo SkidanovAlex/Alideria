@@ -624,7 +624,11 @@ else if( isset( $HTTP_GET_VARS[thread] ) )
 		echo "<script>FLUl();</script>";
 
 		echo "<a href=forum.php id=forums_lnk><b>Форумы Алидерии</b></a>&nbsp;<a href=# onclick='show_rooms();'>&#9660;</a>&nbsp;&raquo;&nbsp;<a href=forum.php?room=$room_id&page=$ret_page id=topics_lnk><b>$forum_room_names[$room_id]</b></a>&nbsp;<a href=# onclick='show_topics($room_id);'>&#9660;</a>&nbsp;&raquo;&nbsp;<a href=forum.php?thread=$thread&f=$ret_page>";
-		if( $arr['important'] != -1 ) print( "<b>$arr[0]</b>" );
+		if( $arr['important'] != -1 ) 
+        {
+            print( "<b>$arr[0]</b>" );
+            print( "<script>document.title = '" . addslashes(strip_tags(htmlspecialchars_decode($arr[0]))) . " - Алидерия - Форум';</script>" );
+        }
 		else print( "<b>Удаленная тема</b>" );
 		echo "</a>";
 		

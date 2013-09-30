@@ -186,7 +186,7 @@ function startDungeon($pl_id, $grnum)
 		return 1;
 	}
 	$dtype = $arr[1];
-if ($pl_id != 6825 && $pl_id != 1835898 && $pl_id != 173)
+if ($pl_id != 6825 && $pl_id != 186 && $pl_id != 1835898 && $pl_id != 173)
 	if ($arr[0] < 4 || $arr[0] > 6)
 	{
 		echo ("<script>alert(\"В группе должно быть от 4-х до 6-ти игроков\");</script>");

@@ -380,6 +380,7 @@ function do_phrase( $phrase_id, $script_tags = true )
 			$dur = time() + $arr['duration'];
 		else
 			$dur = -1;
+        $arr['effect'] = str_replace("<<hp>>", $player->level * 20, $arr['effect']);
 		$player->AddEffect( $arr['effect_id'], $arr['type'], $arr['name'], $arr['description'], $arr['image'], $arr['effect'], $dur );
 		if ($dur == -1)
 			$player->syst("На вас наложен эффект &laquo;$arr[name]&raquo;");

@@ -48,14 +48,26 @@ if (isset($_GET['show']))
 
 if (isset($_GET['get_mobs']))
 {
-	echo "alert('Мобов хочу!');";
+	//echo "alert('Мобов хочу!');";
+	$ret = "";
+	$ret .= "<table border=1><tr><td>Имя монстра</td><td>&nbsp;</td></tr>";
+	$res = f_MQuery("SELECT d.*, m.name FROM dungeon_template_mobs as d, mobs as m WHERE m.mob_id=d.mob_id AND d.dungeon_id=$dun_id AND d.cell_num=".$cell);
+	while ($arr = f_MFetch($res))
+	{
+		$ret .= "<tr><td>$arr[5]</td><td><button onclick=\"addMob(".$arr[3].", -1)\">Удалить</button></td></tr>";
+	}
+	$ret .= "<tr><td colspan=2><hr></td></tr>";
+	$ret .= "<tr><td><input type=text id=mb_id value=0></td><td><button onclick=\"addMob(0, 1)\">Добавить</button></td></tr>";
+	
+	$ret .= "</table>";
+	echo "document.getElementById('dmobs').innerHTML = '".$ret."';";
 	die();
 }
 
 if (isset($_GET['get_items']))
 {
 	$ret = "";
-	$ret .= "<table border=1><tr><td>Имя предмета</td><td>Количество</td></td>&nbsp;</td></tr>";
+	$ret .= "<table border=1><tr><td>Имя предмета</td><td>Количество</td><td>&nbsp;</td></tr>";
 	$res = f_MQuery("SELECT d.*, i.name FROM dungeon_template_items as d, items as i WHERE i.item_id=d.item_id AND d.dun_id=$dun_id AND d.cell_num=".$cell);
 	while ($arr = f_MFetch($res))
 	{
@@ -85,6 +97,24 @@ if (isset($_GET['item_id']) && isset($_GET['number']))
 		f_MQuery("DELETE FROM dungeon_template_items WHERE cell_num=$cell AND dun_id=$dun_id AND item_id=".$item_id);
 	echo ("query('dun_ref.php?get_items=0', dun_id+'|'+Math.round(cur_cell/100)+'|'+(cur_cell%100));");
 }
+
+if (isset($_GET['mob_id']) && isset($_GET['number']))
+{
+	$mob_id = (int)$_GET['mob_id'];
+	$number = (int)$_GET['number'];
+	if (f_MValue("SELECT COUNT(*) FROM dungeons_cells WHERE cell_num=$cell AND dungeon_id=".$dun_id) <= 0)
+		die("alert('Клетка еще не создана!');");
+	if ($number > 0)
+	{
+		if (f_MValue("SELECT COUNT(*) FROM mobs WHERE mob_id=".$mob_id) <= 0)
+			die("alert('Нет такого монстра!');");
+		f_MQuery("INSERT INTO dungeon_template_mobs (dungeon_id, cell_num, mob_id) VALUES ($dun_id, $cell, $mob_id)");
+	}
+	if ($number == -1)
+		f_MQuery("DELETE FROM dungeon_template_mobs WHERE cell_num=$cell AND dungeon_id=$dun_id AND mob_id=$mob_id LIMIT 1");
+	echo ("query('dun_ref.php?get_mobs=0', dun_id+'|'+Math.round(cur_cell/100)+'|'+(cur_cell%100));");
+}
+
 
 if (isset($_GET['get_images']))
 {

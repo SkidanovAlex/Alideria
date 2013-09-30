@@ -18,6 +18,16 @@ function showItems()
 	query('locations/dungeons/func_dun.php?showItems=1');
 }
 
+function showCombats()
+{
+  
+}
+
+function checkForMobs()
+{
+  query('locations/dungeons/func_dun.php?checkForMobs=1');
+}
+
 function refLock()
 {
 	showPlayers();

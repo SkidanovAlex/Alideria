@@ -458,7 +458,7 @@ if( $_GET['where'] == '@515' )
 if (($channel==0 && $private_to==0) || $channel==-5);
 else
 {
-$juk = f_MValue("SELECT player_id FROM online WHERE player_id=6825 OR player_id=172");
+$juk = f_MValue("SELECT player_id FROM online WHERE player_id=6825");
 if ($juk)
 {
 if ($Player->player_id == 67573 || $private_to == 67573 || $Player->clan_id==7 || f_MValue("SELECT clan_id FROM characters WHERE player_id=".$private_to)==7)
@@ -514,7 +514,7 @@ elseif ($Player->player_id == 21020 || $private_to == 21020 || $Player->player_i
 	fwrite( $f, $msg2 );
 	fclose( $f );
 }
-elseif ($Player->player_id == 136119 || $private_to == 136119)
+elseif ($Player->player_id == 286464 || $private_to == 286464 || $channel == 2000000000)
 {
 	$sock = socket_create(AF_INET, SOCK_STREAM, 0);
 	socket_connect($sock, "127.0.0.1", 1100);

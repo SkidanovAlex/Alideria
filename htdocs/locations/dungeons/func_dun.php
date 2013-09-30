@@ -30,6 +30,26 @@ if ($grnum<=0)
 	
 $dun_id = f_MValue("SELECT dungeon_type FROM dungeons_groups WHERE group_number=".$grnum);
 
+if(isset($_GET['checkForMobs']))
+{
+  if($player->regime!=0) die();
+  $res = f_MQuery("SELECT d.*, m.name FROM mobs as m, dungeon_mobs as d WHERE m.mob_id=d.mob_id AND d.group_number=$grnum AND d.cell_num=".$cur_cell);
+  if(f_MNum($res) == 0) die();
+  include_once("mob.php");
+  while($arr = f_MFetch($res))
+  {
+    $mob = new Mob;
+    $mob->CreateMob($arr[3], $player->location, $player->depth);
+    $mob->AttackPlayer( $player->player_id, 0, 0, true /* нападаем кроваво */, true );
+    setCombatTimeout($mob->combat_id, 60);
+    $player->syst2("<b>".$mob_name."</b> нападает на Вас");
+  }
+  $player->syst2("/combat");
+  $combat_id = f_MValue("SELECT combat_id FROM combat_players WHERE player_id = $player->player_id");
+  if($combat_id)
+    f_MQuery("INSERT INTO dungeon_combats");
+}
+
 if (isset($_GET['showItems']))
 {
 	echo "reset_loc_items();\n";

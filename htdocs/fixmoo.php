@@ -1,5 +1,14 @@
 <?
 
+include( 'functions.php' );
+include( 'player.php' ) ;
+
+f_MConnect( );
+
+glashSay( "Сыщик ишет помощников для выполнения нескольких заданий в Лабиринте Кошмаров. <a href=/forum.php?thread=8438&page=0&f=0 target=_blank>Подробнее...</a>" );
+
+die();
+
 include( "player.php" );
 
 f_MConnect( );

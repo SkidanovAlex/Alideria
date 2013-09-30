@@ -9,58 +9,59 @@ f_MConnect( );
 
 $res = f_MQuery( "SELECT * FROM auction ORDER BY rand() LIMIT 3" );
 
-if( !f_MNum( $res ) ) die( );
-
-$random = mt_rand(1,2); // Делаем случайную выборку для вида сообщения
-
-if($random == 1) // Стандартная
+if (f_MNum($res))
 {
-
-$st = "<img src=images/smiles/writer.gif> На Аукционе кипит торговля! Не пропустите!";
-
-while( $arr = f_MFetch( $res ) )
-{
-	$iarr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$arr[item_id]" ) );
-	if( '' == $iarr['name13'] ) $iarr['name13'] = $iarr['name'];
-	if( '' == $iarr['name2_m'] ) $iarr['name2_m'] = $iarr['name'];
-	$nm = my_word_str( $arr['number'], $iarr['name'], $iarr['name13'], $iarr['name2_m'] );
-	if( $arr['number'] > 1 ) $nm = $arr['number'].' '.$nm; 
-
-	$price = min( $arr['immediately_price'], $arr['cur_price'] + $arr['step'] );
-	$st .= " <b>".$nm."</b> всего за <b>$price</b> ".my_word_str( $price, "дублон", "дублона", "дублонов" )."!";
+    $random = mt_rand(1,2); // Делаем случайную выборку для вида сообщения
+    
+    if($random == 1) // Стандартная
+    {
+    
+    $st = "<img src=images/smiles/writer.gif> На Аукционе кипит торговля! Не пропустите!";
+    
+    while( $arr = f_MFetch( $res ) )
+    {
+        $iarr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$arr[item_id]" ) );
+        if( '' == $iarr['name13'] ) $iarr['name13'] = $iarr['name'];
+        if( '' == $iarr['name2_m'] ) $iarr['name2_m'] = $iarr['name'];
+        $nm = my_word_str( $arr['number'], $iarr['name'], $iarr['name13'], $iarr['name2_m'] );
+        if( $arr['number'] > 1 ) $nm = $arr['number'].' '.$nm; 
+    
+        $price = min( $arr['immediately_price'], $arr['cur_price'] + $arr['step'] );
+        $st .= " <b>".$nm."</b> всего за <b>$price</b> ".my_word_str( $price, "дублон", "дублона", "дублонов" )."!";
+    }
+    }
+    else
+    {
+    $st = "Так. Что там у нас сейчас на Аукционе? (развернул свиток) О! ";
+    
+    while( $arr = f_MFetch( $res ) )
+    {
+        $iarr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$arr[item_id]" ) );
+        if( '' == $iarr['name13'] ) $iarr['name13'] = $iarr['name'];
+        if( '' == $iarr['name2_m'] ) $iarr['name2_m'] = $iarr['name'];
+        $nm = my_word_str( $arr['number'], $iarr['name'], $iarr['name13'], $iarr['name2_m'] );
+        if( $arr['number'] > 1 ) $nm = $arr['number'].' '.$nm; 
+    
+        $price = min( $arr['immediately_price'], $arr['cur_price'] + $arr['step'] );
+        $st .= "<b>".$nm."</b> за <b>$price</b> ".my_word_str( $price, "дублон", "дублона", "дублонов" ).", ";
+    }
+    $st .= "и это ещё не всё! Не забудьте заглянуть в Палатку Аукциона на Ярмарке Теллы!";
+    }
+    
+    //echo $st;
+    
+    // ---------------------
+    $plr = new Player( 69055 );
+    $plr->UploadInfoToJavaServer( );
+    
+    $sock = socket_create(AF_INET, SOCK_STREAM, 0);
+    socket_connect($sock, "127.0.0.1", 1100);
+    $tm = date( "H:i", time( ) );
+    $st = "say\n{$st}\n69055\n0\n-5\n{$tm}\n";
+    socket_write( $sock, $st, strlen($st) ); 
+    socket_close( $sock );
+    // ---------------------
 }
-}
-else
-{
-$st = "Так. Что там у нас сейчас на Аукционе? (развернул свиток) О! ";
-
-while( $arr = f_MFetch( $res ) )
-{
-	$iarr = f_MFetch( f_MQuery( "SELECT * FROM items WHERE item_id=$arr[item_id]" ) );
-	if( '' == $iarr['name13'] ) $iarr['name13'] = $iarr['name'];
-	if( '' == $iarr['name2_m'] ) $iarr['name2_m'] = $iarr['name'];
-	$nm = my_word_str( $arr['number'], $iarr['name'], $iarr['name13'], $iarr['name2_m'] );
-	if( $arr['number'] > 1 ) $nm = $arr['number'].' '.$nm; 
-
-	$price = min( $arr['immediately_price'], $arr['cur_price'] + $arr['step'] );
-	$st .= "<b>".$nm."</b> за <b>$price</b> ".my_word_str( $price, "дублон", "дублона", "дублонов" ).", ";
-}
-$st .= "и это ещё не всё! Не забудьте заглянуть в Палатку Аукциона на Ярмарке Теллы!";
-}
-
-//echo $st;
-
-// ---------------------
-$plr = new Player( 69055 );
-$plr->UploadInfoToJavaServer( );
-
-$sock = socket_create(AF_INET, SOCK_STREAM, 0);
-socket_connect($sock, "127.0.0.1", 1100);
-$tm = date( "H:i", time( ) );
-$st = "say\n{$st}\n69055\n0\n-5\n{$tm}\n";
-socket_write( $sock, $st, strlen($st) ); 
-socket_close( $sock );
-// ---------------------
 
 $tm = time( );
 
