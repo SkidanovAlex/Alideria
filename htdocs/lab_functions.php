@@ -57,6 +57,23 @@ function getNextStepInfo( $lab_id, $x, $y, $z, $dir )
 	echo "_( 'addinfo' ).innerHTML = '$updown<br><b>Перед вами идет бой:</b><br>' + ".substr( $st , 2 ).";";
 }
 
+function placeBug()
+{
+    global $player;
+    $lab_id = 1;
+    $x = 0; $y = 0;
+    $res = f_MQuery("SELECT x, y FROM lab WHERE lab_id = 1 AND z = 0 AND dir = -1 LIMIT 1");
+    while ($arr = f_MFetch($res))
+    {
+        $x = $arr['x'];
+        $y = $arr['y'];
+    }
+    $npc_id = 175; $npc_img = "bug.png";
+    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND x = $x - 1 AND y = $y AND z = 0 LIMIT 1");
+    f_MQuery("delete from lab_quest_npcs where player_id={$player->player_id} AND npc_id=$npc_id");
+    f_MQuery("insert into lab_quest_npcs values(null, $lab_id, $cell_id, $npc_id, {$player->player_id}, '$npc_img');");
+}
+
 function labQuest1Place()
 {
     global $player;
@@ -132,6 +149,10 @@ function enterLab($lab_id)
 
     f_MQuery("DELETE FROM lab_quest_monsters WHERE player_id={$player->player_id}");
     f_MQuery("DELETE FROM lab_quest_npcs WHERE player_id={$player->player_id}");
+    if ($lab_id == 1)
+    {
+        placeBug();
+    }
     // квест Пропавшая Девочка
     if ($player->HasTrigger(255) && $lab_id == 1)
     {

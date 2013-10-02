@@ -15,7 +15,7 @@ $player = new Player( $HTTP_COOKIE_VARS['c_id'] );
 $player->UploadInfoToJavaServer( );
 
 ?>
-<html>
+<html style="overflow-x: hidden;">
 <head>
 <meta http-equiv=Content-Type content="text/html; charset=windows-1251">
 <link href="style_chat.css" rel="stylesheet" type="text/css">

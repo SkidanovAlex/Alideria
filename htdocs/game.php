@@ -475,7 +475,7 @@ if( $screen_regime == 0 ) // Обзор - начало
 				if (!($player->location >= 100 && $player->location <= 200))
 					ShowNPCs( );
 				
-				if( $loc == 2 ) showFights( );
+				if( $loc == 2 || $loc == 5 ) showFights( );
 
 				// Магазины:
 				if( $status == 0 ) // если статус не ноль, значит гильдийный магаз или торговые ряды, будет отображет автоматически
@@ -558,6 +558,11 @@ if( $screen_regime == 0 ) // Обзор - начало
 				if( $loc == 2 && $depth == 1004 ) require_once( 'locations/capital/labyrinthOfLove.php' );
 				if( $loc == 2 && $depth == 1006 ) require_once( 'locations/capital/artTrade.php' );
 				if( $loc == 5 && $depth == 0 ) include( 'locations/portal/entr.php' );
+				if( $loc == 5 && ( $depth == 2 || $depth == 10 ) ) include( "locations/portal/entr.php" );
+				if( $loc == 5 && $depth == 3 ) include( "locations/portal/tavern.php" );
+				if( $loc == 5 && $depth == 11 ) include( 'locations/portal/smith_altar.php' );
+				if( $loc == 5 && $depth == 12 ) include( 'locations/portal/jewelry_altar.php' );
+				if( $loc == 5 && $depth == 13 ) include( 'locations/portal/tailors_altar.php' );
 				
 				// Запрет с запретом на торговлю находиться на рынке
 				if( f_MValue( 'SELECT trade FROM player_permissions WHERE player_id = '.$player->player_id ) > time( ) && $loc == 2 && $depth == 2 )

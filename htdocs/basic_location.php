@@ -116,7 +116,9 @@ if( mysql_num_rows( $res ) )
 	}
 	if( $arr['img'] == '' )  $arr['img'] = 'no_logo.gif';
 
-	if( $loc == 5 && ( $depth != 1 ) )
+	//if( $loc == 5 && ( $depth != 1 ) )
+	// @dmitry: 
+	if( $loc == 5 && $depth == 0 )
 	{
 		$no_rest = true;
 		print( "<table cellspacing=0 cellpadding=0 width=100%><tr><td valign=top>");
@@ -186,7 +188,7 @@ if( mysql_num_rows( $res ) )
 			echo "</td></tr>";
 		}
 		
-		if( $player->location == 5 && $player->depth == 0 ) echo "<tr><td><li><a href='javascript:leave_portal();'>В Реальный Мир</a></td></tr>";
+		//if( $player->location == 5 && $player->depth == 0 ) echo "<tr><td><li><a href='javascript:leave_portal();'>В Реальный Мир</a></td></tr>";
 
 		echo "</table>";
 
@@ -194,6 +196,7 @@ if( mysql_num_rows( $res ) )
 
 	}
 	print( "</td></tr></table>" );
+
 	$status = $arr[status];
 }
 else RaiseError( "Несуществующая локация: $loc : $place" );

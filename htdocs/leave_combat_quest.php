@@ -36,6 +36,13 @@ if ($won)
     }
 }
 
+// квест жука в лабиринте кошмаров
+if ($mob_id == 37 && $this->HasTrigger(271))
+{
+    $this->SetTrigger(271, 0);
+    if ($won) $this->SetTrigger(272);
+}
+
 if( $won )
 {
     // гонка фавна

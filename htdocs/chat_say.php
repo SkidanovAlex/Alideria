@@ -57,7 +57,7 @@
 	{
 		$msg = ( $msg2 );
 	}	
-	$msg = htmlspecialchars( addslashes( substr( $msg, 0, 200 ) ) );
+	$msg = htmlspecialchars( addslashes( substr( $msg , 0, 200 ) ) );
 
 	// Защита от бага с системными сообщениями. Полная хуета, защищать надо было на чатсервере.
 	$msg = str_replace( "\n", '', $msg );

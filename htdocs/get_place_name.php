@@ -3,10 +3,10 @@
 function GetPlaceName( $loc, $depth )
 {
 	if( $loc == 0 && $depth <= 20 || $loc == 4 ) return "Глубина $depth";
-	else if( $loc == 5 && $depth == 1 )
+	/*else if( $loc == 5 && $depth == 1 )
 	{
 		return "Лабиринт";
-	}
+	}*/
 	else if( $loc == 1 || $loc == 6 || $loc == 7 )
 	{
 		include_once( 'forest_functions.php' );

@@ -18,6 +18,12 @@ body {
 	SCROLLBAR-DARKSHADOW-COLOR: #b78d58;
 }
 
+::-webkit-scrollbar              { background: #e3ac67; border: 1px solid #651010; }
+::-webkit-scrollbar-button       { background: #e3ac67; border: 1px solid #651010; }
+::-webkit-scrollbar-track        { background: #e0c3a0; border: 1px solid #651010; }
+/*::-webkit-scrollbar-track-piece  { background: #651010; }*/
+::-webkit-scrollbar-thumb        { background: #e3ac67; border: 1px solid #651010; }
+::-webkit-scrollbar-corner       { background: #651010; }
 
 
 td {
