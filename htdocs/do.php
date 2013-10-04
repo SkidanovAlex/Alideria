@@ -15,6 +15,7 @@ if( !check_cookie( ) )
 	die( "window.top.location.href='index.php';" );
 
 $mid_php = 1;	
+$do_php = 1;
 $player = new Player( $HTTP_COOKIE_VARS['c_id'] );
 
 if( $player->regime == 100 )

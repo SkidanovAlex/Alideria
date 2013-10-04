@@ -106,22 +106,22 @@ function labQuest3Place()
     $lab_id = 1;
     $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 1 AND dir = 0 ORDER BY RAND() LIMIT 1");
     $mask = $player->GetQuestValue(70);
+    $mob_id = 10; $mob_img = "pp4.png";
+    f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
     if (($mask & 1) == 0)
     {
-        $mob_id = 10; $mob_img = "pp4.png";
-        f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
         f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, $mob_id, {$player->player_id}, '$mob_img');");
     }
+    $mob_id = 18; $mob_img = "pp3.png";
+    f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
     if (($mask & 2) == 0)
     {
-        $mob_id = 18; $mob_img = "pp3.png";
-        f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
         f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, $mob_id, {$player->player_id}, '$mob_img');");
     }
+    $mob_id = 22; $mob_img = "pp5.png";
+    f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
     if (($mask & 4) == 0)
     {
-        $mob_id = 22; $mob_img = "pp5.png";
-        f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
         f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, $mob_id, {$player->player_id}, '$mob_img');");
     }
 }

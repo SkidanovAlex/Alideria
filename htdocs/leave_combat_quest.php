@@ -73,7 +73,7 @@ if( $won )
                 f_MQuery( "INSERT INTO player_quest_parts VALUES ( {$this->player_id}, 276 )" );
             }
         }
-        else // квест ”краденные ѕуговицы
+        else if ($this->HasTrigger(263)) // квест ”краденные ѕуговицы
         {
             $mask = 0;
             if ($mob_id == 10) { $pugov = 3; $mask = 1; }

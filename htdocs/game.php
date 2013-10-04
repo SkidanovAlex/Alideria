@@ -534,6 +534,7 @@ if( $screen_regime == 0 ) // Îבחמנ - םאקאכמ
 				if( $loc == 2 && $depth == 7 ) include( 'roulette.php' );
 				if( $loc == 2 && $depth == 8 ) include( 'alideros_dice.php' );
 				if( $loc == 2 && $depth == 10 ) include( 'post.php' );
+				if( $loc == 2 && $depth == 12 ) include( 'locations/capital/workshop.php' );
 				if( $loc == 2 && $depth == 13 ) include( 'admin_loc.php' );
 				if( $loc == 2 && $depth == 15 ) include( 'spells_tower.php' );
 				if( $loc == 2 && $depth == 18 ) include( 'charmed_workship.php' );

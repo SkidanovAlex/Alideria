@@ -3,12 +3,12 @@
 if( !$mid_php ) die( );
 
 ?>
-<b>Ent:</b> Rules here
+<b>Энт:</b> Перед тобой игровое поле. Вверху ты видишь три аквамарина, а внизу -- три граната. Твоя задача поменять их местами, чтобы гранаты были наверху, а аквамарины внизу. За один ход ты можешь взять любой камень, и передвинуть его на две клетки в одном направлении и на одну в другом (как ход фигурки рыцаря в шамаханской игре с деревянными фигурками). Если успеешь за три минуты, пройдешь испытание. Не успеешь, головоломку придется решать заново.
 <table><tr><td vAlign=top>
 <div id='here'>&nbsp;</div>
 </td><td vAlign=top>
 <br>
-<div id='proceed'><li> <a href=game.php?phrase=2422>Leave</a></div>
+<div id='proceed'><li> <a href=game.php?phrase=2422>Досрочно уйти (можно будет вернуться)</a></div>
 <div id='tmr'>&nbsp;</div>
 </td></tr></table>
 
@@ -32,7 +32,7 @@ var redraw = function() {
     if (field[3][0] == 1 && field[3][1] == 1 && field[3][2] == 1)
     {
         won = true;
-        _('proceed').innerHTML = '<li> <a href=game.php?phrase=2423>Proceed</a>';
+        _('proceed').innerHTML = '<li> <a href=game.php?phrase=2423>Головоломка решена. Вернуться к Энту</a>';
         _('tmr').style.display = 'none';
     }
 
@@ -84,7 +84,7 @@ var redraw = function() {
 function restart() {
     field = [[1, 1, 1], [0, 0, 0], [0, 0, 0], [2, 2, 2]];
     cx = cy = -1;
-    _('tmr').innerHTML = NewTimer(180, '<b>', '</b>', 0, 'if (!won) { alert("You lost"); restart(); }');
+    _('tmr').innerHTML = NewTimer(180, '<b>', '</b>', 0, 'if (!won) { alert("Три минуты прошло, надо начинать сначала."); restart(); }');
     redraw();
 }
 

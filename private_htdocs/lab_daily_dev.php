@@ -34,6 +34,7 @@ while ($row = f_MFetch($rows))
     f_MQuery("DELETE FROM player_quest_parts WHERE player_id={$row[1]} AND quest_part_id IN {$qparts}");
     f_MQuery("DELETE FROM player_triggers WHERE player_id={$row[1]} AND trigger_id = {$row[0]}");
 }
+f_MQuery("DELETE FROM player_triggers WHERE trigger_id = 286");
 
 
 ?>
