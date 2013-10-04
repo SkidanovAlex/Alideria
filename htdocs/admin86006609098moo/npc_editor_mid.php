@@ -63,6 +63,19 @@ if( isset( $HTTP_GET_VARS[del_redirect] ) )
 	$rid = $HTTP_GET_VARS[del_redirect];
 	f_MQuery( "DELETE FROM talk_redirects WHERE redirect_id = $rid" );
 }
+if( isset( $HTTP_GET_VARS[move_redirect] ) )
+{
+	$rid = $HTTP_GET_VARS[move_redirect];
+    $res5 = f_MQuery( "SELECT * FROM talk_redirects WHERE npc_id={$id} AND redirect_id >= $rid ORDER BY redirect_id LIMIT 2" );
+    if (f_MNum($res5) < 2) echo "<script>alert('Нельзя пододвинуть последний редирект ниже');</script>";
+    else {
+        $arr5 = f_MFetch($res5); $id1 = $arr5[redirect_id];
+        $arr5 = f_MFetch($res5); $id2 = $arr5[redirect_id];
+        f_MQuery("UPDATE talk_redirects SET redirect_id=10000123 WHERE redirect_id = $id1");
+        f_MQuery("UPDATE talk_redirects SET redirect_id=$id1 WHERE redirect_id = $id2");
+        f_MQuery("UPDATE talk_redirects SET redirect_id=$id2 WHERE redirect_id = 10000123");
+    }
+}
 
 if( isset( $_GET['add_item'] ) )
 {
@@ -118,7 +131,7 @@ else
 		else $str = 'Присутствует';
 		if( $rok ) print( "Иначе если " );
 		else print( "Если " );
-		print( "триггер $rarr[trigger_id] $str, перейти к толку $rarr[talk_id] (<a href=npc_editor_mid.php?id=$id&del_redirect=$rarr[redirect_id]>Удалить</a>)<br>\n" );
+		print( "триггер $rarr[trigger_id] $str, перейти к толку $rarr[talk_id] (<a href=npc_editor_mid.php?id=$id&del_redirect=$rarr[redirect_id]>Удалить</a>) (<a href=npc_editor_mid.php?id=$id&move_redirect=$rarr[redirect_id]>вниз</a>)<br>\n" );
 		$rok = 1;
 	}
 	if( $rok ) print( "Иначе открыть толк по умолчанию<br>\n" );

@@ -56,7 +56,7 @@ for ($i = 0; $i < 4; ++ $i) {
                     else $target->syst2("Игрок {$player->login} помогает вам с {$task_help_with[$i]}");
                 }
                 else {
-                    echo "<a href=game.php?help_with=$i&help_whom={$target->player_id}>Помочь</a> игроку <script>document.write({$target->Nick2()});</script> с {$task_help_with[$i]}<br>";
+                    echo "<li><a href=game.php?help_with=$i&help_whom={$target->player_id}>Помочь игроку <b>{$target->login}</b> с {$task_help_with[$i]}</a><br>";
                 }
             }
         }
@@ -96,6 +96,8 @@ if ($player->HasTrigger(279) && !$player->HasTrigger(283)) {
     echo "<script>FL();</script></td></tr>";
 
     echo "</table><script>FLL();</script></td></tr></table>";
+
+    echo "<b><small>Фраза &laquo;Ждем Мастера&raquo; обозначает, что вам надо, чтобы игрок, состоящий в соответствующей гильдии, пришел в Мастерскую и помог вам с заданием.</small></b>";
 }
 
 
