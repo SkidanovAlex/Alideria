@@ -63,7 +63,8 @@ window.onresize = UpdatePositions;
 	echo "</td></tr></table>";
 
 	$sep = " &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; ";
-	echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sep<a href='game.php?dir=2&tloc=5'>В мастерскую</a>$sep<a href='game.php?dir=3&tloc=5'>В трактир</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a><br>";
+	//echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sep<a href='game.php?dir=2&tloc=5'>В мастерскую</a>$sep<a href='game.php?dir=3&tloc=5'>В трактир</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=4791&loc=1'>Покинуть Урочище</a><br>";\
+	echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sepВ трактир</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=4791&loc=1'>Покинуть Урочище</a><br>";
 	echo "</center>";
 }
 else if( $player->depth == 2 )

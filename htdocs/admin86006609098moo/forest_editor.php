@@ -42,7 +42,9 @@ $letters = Array(
 	204 => "<font color=black><b>G</b></font>",
 	205 => "<font color=red><b>G</b></font>",
 	206 => "<font color=yellow><b>G</b></font>",
-	210 => "<font color=#00FF00><b>G</b></font>"
+	210 => "<font color=#00FF00><b>G</b></font>",
+	
+	300 => "<font color=gray><b>+</b></font>"
 );
 
 
@@ -68,7 +70,7 @@ echo "<div id=selected_tile>&nbsp;</div>";
 
 foreach( $forest_names as $a=>$b )
 {
-	if (($locat==1 && $a<100) || ($locat==6 && $a>=100 && $a<200) || ($locat==7 && $a>=200 && $a<300))
+	if (($locat==1 && $a<100) || ($locat==6 && $a>=100 && $a<200) || ($locat==7 && $a>=200 && $a<300) || ($locat==1 && $a>=300 && $a<400))
 	print( "&nbsp;&nbsp;".$letters[$a].": <a style='cursor:pointer' ondoubleclick='fill_tile( $a, \"$b\" )' onclick='select_tile( $a, \"$b\" )'>".$b."</a><br>" );
 }
 echo "<br>";

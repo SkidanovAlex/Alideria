@@ -355,6 +355,16 @@ else if( !$till && ( $dx != 0 || $dy != 0 ) && $player->regime == 0 )
 		die( "location.href='game.php';" );
 	}
 	
+	if( $cur_tile == 300 && $dx == 2 )
+	{
+		$fpr = new ForestPlayerRiddle( $player->player_id );
+		$fpd->CleanUp( );
+		$fpr->CleanUp( );
+		$player->SetLocation( 5 );
+		$player->SetDepth( 0 );
+		die( "location.href='game.php';" );
+	}
+	
 	else if( $dx == 2 )
 	{ // действи€
 		if( $cur_tile == 0 )
@@ -735,6 +745,8 @@ $st .= "<br>";
 //		if( $depth == 0 )
 		if( $cur_tile == 10 )
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>»дти по тропинке в столицу</li></a>';
+		if( $cur_tile == 300 )
+			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>»дти по тропинке в ”рочище</li></a>';
 		if( $cur_tile == 110 )
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>ѕлыть в ќмут</li></a>';
 		if( $cur_tile == 210 )
