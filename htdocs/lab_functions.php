@@ -78,7 +78,7 @@ function labQuest1Place()
 {
     global $player;
     $lab_id = 1;
-    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 0 AND dir = 0 ORDER BY RAND() LIMIT 1");
+    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 0 AND dir = 0 AND tex=0 ORDER BY RAND() LIMIT 1");
     $mob_id = 18; $mob_img = "pp3.png";
     $npc_id = 166; $npc_img = "f1n.png";
     f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
@@ -91,7 +91,7 @@ function labQuest2Place()
 {
     global $player;
     $lab_id = 1;
-    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 0 AND dir = 0 ORDER BY RAND() LIMIT 1");
+    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 0 AND dir = 0 AND tex=0 ORDER BY RAND() LIMIT 1");
     $mob_id = 38; $mob_img = "dwarv.png";
     $npc_id = 167; $npc_img = "f1n.png";
     f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
@@ -104,7 +104,7 @@ function labQuest3Place()
 {
     global $player;
     $lab_id = 1;
-    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 1 AND dir = 0 ORDER BY RAND() LIMIT 1");
+    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 1 AND dir = 0 AND tex=0 ORDER BY RAND() LIMIT 1");
     $mask = $player->GetQuestValue(70);
     $mob_id = 10; $mob_img = "pp4.png";
     f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
@@ -130,7 +130,7 @@ function labQuest4Place()
 {
     global $player;
     $lab_id = 1;
-    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 2 AND dir = 0 ORDER BY RAND() LIMIT 1");
+    $cell_id = f_MValue("SELECT cell_id FROM lab WHERE lab_id = 1 AND z = 2 AND dir = 0 AND tex=0 ORDER BY RAND() LIMIT 1");
     $mob_id = 25; $mob_img = "spider.png";
     f_MQuery("delete from lab_quest_monsters where player_id={$player->player_id} AND mob_id=$mob_id");
     f_MQuery("insert into lab_quest_monsters values(null, $lab_id, $cell_id, $mob_id, {$player->player_id}, '$mob_img');");

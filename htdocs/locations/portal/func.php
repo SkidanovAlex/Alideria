@@ -4,21 +4,21 @@ include_once( 'locations/portal/stuff.php' );
 
 $monsters = array( );
 
-// name, avatar, level(x,x+1), power, respawn
-$monsters[0] = array( "Скелет-Воин",      "skel1",    6,  3, 3600,  36 );
-$monsters[1] = array( "Скелет-Лучник",    "skel2",    8,  4, 4800,  35 );
-$monsters[2] = array( "Скелет-Рыцарь",    "skel3",   10,  5, 7200,   8 );
-$monsters[3] = array( "Леорик",           "skel4",   14, 10, 43200,  7 );
+// name, avatar, level(x,x+1), power, respawn, monsterId (for loot)
+$monsters[0] = array( "Скелет-Воин",      "skel1",   16,  12, 3600,  83 );
+$monsters[1] = array( "Скелет-Лучник",    "skel2",   17,  13, 4800,  85 );
+$monsters[2] = array( "Скелет-Рыцарь",    "skel3",   18,  14, 7200,   85 );
+$monsters[3] = array( "Леорик",           "skelboss",   20, 20, 43200,  84 );
 
-$monsters[4] = array( "Зомби-Каменщик",   "zombie1", 12,  7, 4800 );
-$monsters[5] = array( "Зомби-Охотник",    "zombie2", 14,  8, 7200 );
-$monsters[6] = array( "Зомби-Горец",      "zombie3", 16,  9, 9600 );
-$monsters[7] = array( "Мясник",           "zombie4", 20, 14, 64800 );
+$monsters[4] = array( "Зомби-Каменщик",   "zombie1", 19,  12, 4800 );
+$monsters[5] = array( "Зомби-Охотник",    "zombie2", 20,  13, 7200 );
+$monsters[6] = array( "Зомби-Горец",      "zombie3", 21,  14, 9600 );
+$monsters[7] = array( "Мясник",           "zombieboss", 23, 20, 64800 );
 
-$monsters[8] = array( "Лич-Элементалист", "lich1",   18, 11, 7200 );
-$monsters[9] = array( "Лич-Зверобой",     "lich2",   20, 12, 9600 );
-$monsters[10] = array( "Лич-Кукольщик",   "lich3",   22, 13, 10800 );
-$monsters[11] = array( "Геровирон",       "lich4",   25, 18, 86400 );
+$monsters[8] = array( "Лич-Элементалист", "lich1",   22, 12, 7200 );
+$monsters[9] = array( "Лич-Зверобой",     "lich2",   23, 13, 9600 );
+$monsters[10] = array( "Лич-Кукольщик",   "lich3",   24, 14, 10800 );
+$monsters[11] = array( "Геровирон",       "lichboss",   26, 20, 86400 );
 
 function portal_swap_items( $player_id ) // expensive function
 {

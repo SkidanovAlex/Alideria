@@ -52,7 +52,22 @@ if( $player->depth == 0 )
 	<area shape="poly"coords="115,101,97,107,97,147,133,144,132,108,114,102" onmousemove="SelShow(event,'Sel4');" onmouseout="SelHide('Sel4');" onclick="LocClick('Sel4');" style='cursor:pointer'>
 </map>
 <script>
-window.onload = UpdatePositions;
+var selectArray = new Array();
+<?
+if( $player->HasTrigger( 180594 ) )
+{
+?>
+selectArray["Sel1"]  = new Array(191,  0, "images/locations/portal_sel_1.png", 106,  179 , "Старый Храм", "game.php?dir=10&tloc=5");
+<?
+}
+?>
+selectArray["Sel2"]  = new Array(292,  0, "images/locations/portal_sel_2.png", 199,  200 , "Людвиг",      "game.php?talk=119");
+//selectArray["Sel3"]  = new Array(588, 65, "images/locations/portal_sel_3.png",  56,  108 , "Мастерская",  "game.php?dir=2&tloc=5");
+//selectArray["Sel4"]  = new Array( 85, 89, "images/locations/portal_sel_4.png",  65,   73 , "Трактир" ,    "game.php?dir=3&tloc=5");
+
+var animArray = new Array();
+
+window.onload = UpdatePositions; 
 window.onresize = UpdatePositions;
 
 </script>
@@ -64,7 +79,14 @@ window.onresize = UpdatePositions;
 
 	$sep = " &nbsp; &nbsp;  &nbsp; &nbsp;  &nbsp; ";
 	//echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sep<a href='game.php?dir=2&tloc=5'>В мастерскую</a>$sep<a href='game.php?dir=3&tloc=5'>В трактир</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=4791&loc=1'>Покинуть Урочище</a><br>";\
-	echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sepВ трактир</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=4791&loc=1'>Покинуть Урочище</a><br>";
+	if( $player->HasTrigger( 180594 ) )
+	{
+		echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=6292&tloc=1'>Покинуть Урочище</a><br>";
+	}
+	else
+	{
+		echo "<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=6292&tloc=1'>Покинуть Урочище</a><br>";	
+	}
 	echo "</center>";
 }
 else if( $player->depth == 2 )

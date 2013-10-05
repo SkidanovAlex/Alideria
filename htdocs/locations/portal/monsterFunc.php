@@ -1,7 +1,7 @@
 <?
 
-//include_once( "functions.php" );
-//include_once( "locations/portal/func.php" );
+include_once( "functions.php" );
+include_once( "locations/portal/func.php" );
 
 class PortalMonster
 {
@@ -134,16 +134,5 @@ class PortalMonstersController
 		}
 	}
 }
-
-include_once( "../../functions.php" );
-include_once( "stuff.php" );
-
-f_MConnect( );
-
-$moo = new PortalMonstersController( 1 );
-$moo->Process( );
-$moo->Save( );
-
-echo "Moo!";
 
 ?>

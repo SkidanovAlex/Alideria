@@ -26,20 +26,33 @@ reloadInfo( );
 
 if( $player->regime == 0 )
 {
+    $clan_id = $player->location == 5 ? -1 : $player->clan_id;
+
 	$act = (int)$_GET['a'];
 	if( $act == 1 ) // move
 	{
 		$dir = (int)$_GET['b'];
-		$result = portal_move_player( $player, $dir, $cell, $player->clan_id, $keys );
-		if( $result === -1 ) echo "alert( 'У вас нет потходящего ключа, чтобы открыть дверь' );";
-		reloadInfo( );
-		f_MQuery( "DELETE FROM portal_revealed_cells WHERE player_id={$player->player_id} AND cell_id={$cell_id}" );
-		f_MQuery( "INSERT INTO portal_revealed_cells ( player_id, clan_id, cell_id, z, vis ) VALUES ( {$player->player_id}, {$player->clan_id}, $cell_id, {$cell[z]}, 0 )" );
+        if ($dir == 10) // exit
+        {
+            if ($cell['z'] == 1 && $cell['type'] == 1)
+            {
+                $player->SetDepth(10);
+                echo "location.href='game.php';";
+            }
+        }
+        else
+        {
+            $result = portal_move_player( $player, $dir, $cell, $clan_id, $keys );
+            if( $result === -1 ) echo "alert( 'У вас нет потходящего ключа, чтобы открыть дверь' );";
+            reloadInfo( );
+            f_MQuery( "DELETE FROM portal_revealed_cells WHERE player_id={$player->player_id} AND cell_id={$cell_id}" );
+            f_MQuery( "INSERT INTO portal_revealed_cells ( player_id, clan_id, cell_id, z, vis ) VALUES ( {$player->player_id}, {$clan_id}, $cell_id, {$cell[z]}, 0 )" );
+        }
 	}
 	else if( $act == 2 ) // attack monster
 	{
 		$entryId = (int)$_GET['b'];
-		$arr = f_MFetch( f_MQuery( "SELECT * FROM portal_monsters WHERE clan_id={$player->clan_id} AND cell_id={$cell_id} AND entry_id={$entryId}" ) );
+		$arr = f_MFetch( f_MQuery( "SELECT * FROM portal_monsters WHERE clan_id={$clan_id} AND cell_id={$cell_id} AND entry_id={$entryId}" ) );
 		$monsterId = $arr['monster_id'];
 		include_once( 'create_combat.php' );
 		$ok = true;
@@ -87,6 +100,6 @@ while( $arr = f_MFetch( $res ) )
 	echo "am('{$monsters[$arr[monster_id]][0]}',{$arr[entry_id]});";
 }
 
-echo "refr( {$cell[x]}, {$cell[y]}, {$cell[walls]}, {$keys} );";
+echo "refr( {$cell[x]}, {$cell[y]}, {$cell[walls]}, {$keys}, {$cell[type]} );";
 
 ?>

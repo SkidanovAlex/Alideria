@@ -1,9 +1,12 @@
 <?
+
+// Lab and Portal. Every minute
+
 require_once("time_functions.php");
 
 
-include( 'functions.php' );
-include('player.php');
+include_once( 'functions.php' );
+include_once('player.php');
 
 f_MConnect( );
 
@@ -95,5 +98,14 @@ for($z = 0; $z < $lab_num; $z++)
 	}
 
 }
+
+// ==== PORTAL
+include('locations/portal/monsterFunc.php');
+
+$moo = new PortalMonstersController( -1 );
+$moo->Process( );
+$moo->Save( );
+
+echo "Moo!";
 
 ?>

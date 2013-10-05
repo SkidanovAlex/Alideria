@@ -117,7 +117,7 @@ $gl_msg = '';
 $res_1 = f_MQuery("SELECT player_id FROM online WHERE player_id!=".$arr[player_id]);
 while ($arr_1 = f_MFetch($res_1))
 {
-	if (f_MValue("SELECT login_ip FROM history_logon_logout WHERE player_id={$arr_1[0]} ORDER BY entry_id DESC LIMIT 1") == $ipstr)
+	if ( f_MValue("SELECT login_ip FROM history_logon_logout WHERE player_id={$arr_1[0]} ORDER BY entry_id DESC LIMIT 1") == $ipstr)
 	{
 	$res_2 = f_MQuery("SELECT player_id, login FROM characters WHERE player_id=".$arr_1[0]);
 	$arr_2 = f_MFetch($res_2);

@@ -306,6 +306,16 @@ class Maze
 		f_MQuery( "DELETE FROM portal_state WHERE clan_id=$clan_id AND z=$z" );
 		f_MQuery( "INSERT INTO portal_state( clan_id, z, created ) VALUES ( $clan_id, $z, -1 )" );
 		f_MQuery( "UNLOCK TABLES" );
+
+        $res = f_MQuery(" SELECT player_id FROM portal_players INNER JOIN portal_maze ON portal_players.cell_id=portal_maze.cell_id WHERE portal_maze.clan_id=$clan_id AND portal_maze.z=$z" );
+        while ($arr = f_MFetch($res))
+        {
+            $plr = new Player($arr['player_id']);
+            if ($plr->location == 5 && $plr->depth == 1) {
+                $plr->SetDepth(10);
+                $plr->syst2("/items");
+            }
+        }
 		
 		$firstMonster = ($z - 1) * 4;
 		$this->GenerateMaze( $firstMonster + 0, $firstMonster + 1, $firstMonster + 2, $firstMonster + 3, 40 );

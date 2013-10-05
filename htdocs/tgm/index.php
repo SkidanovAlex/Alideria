@@ -41,6 +41,7 @@
 	$services['statistic-doubloons'] = 'Дублонные богачи';
 	$services['statistic-locations'] = 'Посещаемость локаций';
 	$services['statistic-regs'] = 'Статистика регистраций';
+	$services['statistic-quests'] = 'Прохождение квестов';
 	// Деньги
 	$services['finance-report'] = 'Финансовый отчёт';
 	$services['finance-partner'] = 'Отчёт партнёрки';
@@ -102,6 +103,7 @@
 				<a href="?service=statistic-doubloons">Дублонные богачи</a><br />
 				<a href="?service=statistic-locations">Посещаемость локаций</a><br />
 				<a href="?service=statistic-regs">Статистика регистраций</a><br />
+				<a href="?service=statistic-quests">Прохождение квестов</a><br />
 			</div>
 			<a href="#" id="menuTools" onmouseover="submenu.tools.show( )">Тулзы</a>
 			<div class="submenu" id="submenuTools" onmouseout="submenu.tools.hide( event )">

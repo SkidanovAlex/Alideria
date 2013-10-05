@@ -9,7 +9,7 @@ if( !isset( $mid_php ) ) die( );
 
 ?>
 
-<table><tr><td valign='top'><table><tr><td><script>FLUl();</script><div id='pt_map'>&nbsp;</div><script>FLL();</script><br><img width='11' height='11' id='pt_follow_map' src='images/e_check.gif' onclick='ptFollowMapClick()'> Двигать карту за персонажем</td></tr></table></td><td valign='top'><div id='arrows'>&nbsp;</div><br><div style='text-align:center;' id='pt_keys'>&nbsp;</div><div id='pt_monsters'>&nbsp;</div></td><td valign='top'><b>Миникарта:</b><script>FLUl();</script><div id='pt_minimap'>&nbsp;</div><script>FLL();</script></td></tr></table>
+<table><tr><td valign='top'><table><tr><td><script>FLUl();</script><div id='pt_map'>&nbsp;</div><script>FLL();</script><br><table width=100%><tr><td><img width='11' height='11' id='pt_follow_map' src='images/e_check.gif' onclick='ptFollowMapClick()'> Двигать карту за персонажем</td><td align=right><div id=pt_coords>&nbsp;</div></td></tr></table></td></tr></table></td><td valign='top'><div id='arrows'>&nbsp;</div><br><div style='text-align:center;' id='pt_keys'>&nbsp;</div><div id='pt_monsters'>&nbsp;</div></td><td valign='top'><b>Миникарта:</b><script>FLUl();</script><div id='pt_minimap'>&nbsp;</div><script>FLL();</script></td></tr></table>
 
 <script>
 
@@ -207,6 +207,8 @@ var wallImage = function( wallType, dir )
 	if( wallType == 5 ) return "misc/opend1.gif";
 	if( wallType == 6 ) return "misc/opend2.gif";
 	if( wallType == 7 ) return "misc/opend3.gif";
+
+	if( wallType == 10 ) return "misc/opend3.gif"; // exit
 }
 
 var wallImageLight = function( wallType, dir )
@@ -225,24 +227,33 @@ var wallImageLight = function( wallType, dir )
 	if( wallType == 5 ) return "misc/openl1.gif";
 	if( wallType == 6 ) return "misc/openl2.gif";
 	if( wallType == 7 ) return "misc/openl3.gif";
+
+	if( wallType == 10 ) return "misc/openl3.gif"; // exit
 }
 
 var getWallHtml = function( wallType, dir )
 {
 	if( wallType == 1 ) return "<img width='28' height='28' src='empty.gif'>";
+    else if( wallType == 10 ) 
+    {
+		return "<img onclick='__(1,10)' width='28' height='28' style='cursor:pointer;' onmouseout='this.src=\"images/" + wallImage( wallType, dir ) + "\"' onmouseover='this.src=\"images/" + wallImageLight( wallType, dir ) + "\"' src=\"images/" + wallImage( wallType, dir ) + "\">";
+    }
 	else
 	{
 		return "<img onclick='__(1,"+dir+")' width='28' height='28' style='cursor:pointer;' onmouseout='this.src=\"images/" + wallImage( wallType, dir ) + "\"' onmouseover='this.src=\"images/" + wallImageLight( wallType, dir ) + "\"' src=\"images/" + wallImage( wallType, dir ) + "\">";
 	}
 }
 
-var showArrows = function( mask ) {
+var showArrows = function( mask, tp ) {
 	var types = [[1,1,1],[1,1,1],[1,1,1]];
 	var dirs = [[-1,0,-1],[1,-1,3],[-1,2,-1]];
 	types[0][1] = mask & 7; mask >>= 3;
 	types[1][0] = mask & 7; mask >>= 3;
 	types[2][1] = mask & 7; mask >>= 3;
 	types[1][2] = mask & 7; mask >>= 3;
+    if( tp == 1 ) {
+        types[1][1] = 10;
+    }
 	
 	var table = document.createElement( 'table' );
 	var tbody = document.createElement( 'tbody' );
@@ -310,7 +321,7 @@ function UpdateLeftAndTop()
 	portal.top = Math.min( portal.top, portal.height - portal.renderer.rows );
 }
 		
-function refr( x, y, mask, keys )
+function refr( x, y, mask, keys, tp )
 {
 	portal.mex = x;
 	portal.mey = y;
@@ -325,7 +336,8 @@ function refr( x, y, mask, keys )
 	pt_map.appendChild( portal.renderer.render() );
    	pt_minimap.innerHTML = '';
    	pt_minimap.appendChild( portal.renderer.renderMinimap() );
-	showArrows( mask );
+	showArrows( mask, tp );
+    pt_coords.innerHTML = "Координаты: <b>" + x + "x" + y + "</b>";
 	
 	var ks = '';
 	for( var i = 1; i <= 3; ++ i ) if( keys & ( 1 << i ) )
@@ -347,9 +359,10 @@ function refr( x, y, mask, keys )
 
 <?
 
+$clan_id = $player->location == 5 ? -1 : $player->clan_id;
 $cell_id = f_MValue( "SELECT cell_id FROM portal_players WHERE player_id={$player->player_id}" );
 $z = f_MValue( "SELECT z FROM portal_maze WHERE cell_id={$cell_id}" );
-$res = f_MQuery( "SELECT portal_maze.* FROM portal_maze INNER JOIN portal_revealed_cells ON portal_maze.cell_id = portal_revealed_cells.cell_id WHERE player_id={$player->player_id} AND portal_maze.z={$z}" );
+$res = f_MQuery( "SELECT portal_maze.* FROM portal_maze INNER JOIN portal_revealed_cells ON portal_maze.cell_id = portal_revealed_cells.cell_id WHERE player_id={$player->player_id} AND portal_maze.z={$z} AND portal_maze.clan_id={$clan_id}" );
 while( $arr = f_MFetch( $res ) )
 {
 	echo "v($arr[x], $arr[y], $arr[walls]);";
