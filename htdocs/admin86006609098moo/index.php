@@ -27,6 +27,7 @@ include( 'admin_header.php' );
 <a href=craft_editor.php target=_top>Редактор Рецептов</a><br>
 <a href=craft_shops.php target=_top>Магазины Крафтеров</a><br>
 <a href=tournament_editor.php target=_top>Редактор Турниров</a><br>
+<a href=runes_editor.php target=_top>Редактор Рун</a><br>
 <a href=admin_spams_list.php target=_top>Спам-список</a><br>
 <a href=admin_voters.php target=_top>Смотрелка голосов на форуме</a><br>
 <br>
@@ -49,10 +50,13 @@ include( 'admin_header.php' );
 <a href=forest_editor.php target=_top>Редактор Карты Леса</a> (не для IE)<br>
 <a href=forest_map.php target=_blank>Карта Леса</a><br>
 </center></td><td valign=top><center>
-<b>Управление персонажами</b><br>
-<a href=admin_change_passwd.php target=_top>Сменить пароль игроку</a><br>
+<b>Права доступа</b><br>
 <a href=admin_ranks.php target=_top>Управление правами персонажей</a><br>
 <a href=admin_forum_ranks.php target=_top>Управление модераторами форума</a><br>
+<a href=admin_quest_grants.php target=_top>Управление доступом к квестам</a><br>
+<br>
+<b>Управление персонажами</b><br>
+<a href=admin_change_passwd.php target=_top>Сменить пароль игроку</a><br>
 <a href=admin_items.php target=_top>Добавить Вещи Персонажу</a><br>
 <a href=admin_cards.php target=_top>Добавить Свиток в Книгу Заклинаний Персонажу</a><br>
 <a href=admin_leave_combat.php target=_top>Выкинуть Персонажа из боя</a><br>

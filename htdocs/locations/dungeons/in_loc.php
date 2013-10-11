@@ -21,8 +21,10 @@ $arr_cur = f_MFetch($res);
 if (!$arr_cur)
 	RaiseError("Неверное местонахождение игрока в данже");
 
+/*
 $regime = f_MValue("SELECT regime FROM characters WHERE player_id = $player->player_id");
-if($regime = 100) die();
+if($regime == 100) die();
+*/
 ?>
 
 <table>

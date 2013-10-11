@@ -57,6 +57,7 @@ else
 				$rres = f_MQuery( "SELECT * FROM player_items WHERE weared=0 AND player_id=$uarr[0] AND item_id=$id" );
 				if( f_MNum( $rres ) ) f_MQuery( "UPDATE player_items SET number = number + $uarr[3] WHERE weared=0 AND player_id=$uarr[0] AND item_id=$id" );
 				else f_MQuery( "UPDATE player_items SET item_id=$id WHERE item_id=$uarr[2]" );
+				f_MQuery( "DELETE FROM player_items WHERE item_id=$uarr[2]" );
 				f_MQuery( "DELETE FROM items WHERE item_id=$uarr[2]" );
 			}
 		}

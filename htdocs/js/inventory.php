@@ -369,9 +369,15 @@ function get_inv_html( )
     {
     	var st = '';
     	var shown = 0;
-    	for( i = ioffset; i < n; ++ i )
+        var skip = ioffset;
+    	for( i = 0; i < n; ++ i )
     		if( items[i].slot == 0 && items[i].num > 0 && ( cur_filter == -1 || cur_filter < 100 && items[i].type == cur_filter || cur_filter >= 100 && items[i].type == 0 && parseInt( items[i].type2 ) + 100 == cur_filter ) )
     		{
+                if (skip > 0) 
+                {
+                    -- skip;
+                    continue;
+                }
     			if( shown == 35 )
     			{
     				has_more = true;
@@ -397,7 +403,7 @@ function get_inv_html( )
     	if( shown <= 28 && ioffset > 0 )
     	{
     		ioffset -= 7;
-    		return get_inv_html( );
+    		return "reset";
     	}
 
     	for( ; shown < 35; ++ shown )
@@ -412,6 +418,7 @@ function get_inv_html( )
 	if( cur_filter != -1 && !( cur_filter < 100 && type_nums[cur_filter] ) && !( cur_filter >= 100 && type2_nums[cur_filter - 100] ) ) cur_filter = -1;
 
 	var ist = get_items( );
+    if (ist == "reset") return get_inv_html();
 
 	var st = '<table background=images/invbg.jpg style="width:679px;height:329px;" cellspacing=0 cellpadding=0><tr><td style="width:679px;height:329px;" align=center valign=middle>';
 	st += '<table style="width:669px;height:319px;" cellspacing=0 cellpadding=0><colgroup><col width=20><col width=420><col width=209><col width=20><tr><td>&nbsp;</td><td style="margin-top:2px;margin:bottom:12px;" valign=top style="height:319px;">';
@@ -462,9 +469,14 @@ function set_inv_events( )
 {
 	var shown = 0;
 	var has_more = false;
-	for( i = ioffset; i < n && shown < 35; ++ i )
+    var skip = ioffset;
+	for( i = 0; i < n && shown < 35; ++ i )
 		if( items[i].slot == 0 && items[i].num > 0 && ( cur_filter == -1 || items[i].type == cur_filter ) )
 		{
+            if (skip > 0) {
+                -- skip;
+                continue;
+            }
 			g( 'nv' + i ).onmousedown = prepare_drag;
 			g( 'nv' + i ).onmousemove=begin_drag;
 			var tmp1 = function( v ) { return function() { show_item( v ); } }

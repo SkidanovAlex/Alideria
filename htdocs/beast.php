@@ -24,6 +24,7 @@
 			$this->mxd = $arr['max_depth'];
 			$this->dfd = $arr['defend_depth'];
 			$this->loc = $arr['loc'];
+			$this->avatar = $arr['avatar'];
 
 			$this->attrs = array( );
 			$res = f_MQuery( "SELECT * FROM mob_attributes WHERE mob_id=$id" );
@@ -123,7 +124,7 @@
     		print( ", ".$this->GetAttr( 30 ).", ".$this->GetAttr( 130 ).",".( $this->GetAttr( 30 ) + $this->GetAttr( 33 ) ).", ".$this->GetAttr( 131 ).", ".$this->GetAttr( 132 ) );
     		print( ", ".$this->GetAttr( 40 ).", ".$this->GetAttr( 140 ).",".( $this->GetAttr( 40 ) + $this->GetAttr( 42 ) ).", ".$this->GetAttr( 141 ).", ".$this->GetAttr( 142 ) );
     		print( ", ".$this->GetAttr( 50 ).", ".$this->GetAttr( 150 ).",".( $this->GetAttr( 50 ) + $this->GetAttr( 51 ) ).", ".$this->GetAttr( 151 ).", ".$this->GetAttr( 152 ) );
-    		print( ", 0 )" );
+    		print( ", 0, '".$this->avatar."' )" );
 		}
 		function ShowCards( $pid = 0 )
 		{

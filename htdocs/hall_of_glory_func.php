@@ -77,10 +77,10 @@ if ($hog==0) // Книга Монстров
 			$ret .= "<td width=200><b>Монстр</b></td></tr>";
 			while ($arr1 = f_MFetch($res1))
 			{
-				$i++;
 				$res = f_MQuery("SELECT mob_id, player_id, wins FROM mob_wins WHERE mob_id=".$arr1[0]." ORDER BY wins DESC LIMIT 1");
 				if (f_MNum($res) > 0)
 				{
+					$i++;
 					$arr = f_MFetch($res);
 					$plr = new Player($arr[1]);
 					$ret .= "<tr><td width=20 align=center>$i</td><td><script>document.write(".$plr->Nick1().");</script>";

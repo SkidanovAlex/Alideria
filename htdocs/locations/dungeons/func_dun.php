@@ -30,25 +30,35 @@ if ($grnum<=0)
 	
 $dun_id = f_MValue("SELECT dungeon_type FROM dungeons_groups WHERE group_number=".$grnum);
 
+
 if(isset($_GET['checkForMobs']))
 {
   if($player->regime!=0) die();
-  $res = f_MQuery("SELECT d.*, m.name FROM mobs as m, dungeon_mobs as d WHERE m.mob_id=d.mob_id AND d.group_number=$grnum AND d.cell_num=".$cur_cell);
-  if(f_MNum($res) == 0) die();
-  include_once("mob.php");
+  f_MQuery("LOCK TABLE dungeon_mobs WRITE, mobs WRITE");
+  $res = f_MQuery("SELECT dungeon_mobs.*, mobs.name FROM mobs, dungeon_mobs WHERE mobs.mob_id=dungeon_mobs.mob_id AND dungeon_mobs.group_number=$grnum AND dungeon_mobs.cell_num=".$cur_cell);
+  f_MQuery("DELETE FROM dungeon_mobs WHERE group_number=$grnum AND cell_num=$cur_cell");
+  f_MQuery("UNLOCK TABLES");
+  if(f_MNum($res) == 0)
+  {
+    die();
+  }
+  include_once("../../mob.php");
   while($arr = f_MFetch($res))
   {
     $mob = new Mob;
     $mob->CreateMob($arr[3], $player->location, $player->depth);
     $mob->AttackPlayer( $player->player_id, 0, 0, true /* нападаем кроваво */, true );
+
     setCombatTimeout($mob->combat_id, 60);
-    $player->syst2("<b>".$mob_name."</b> нападает на Вас");
+    $player->syst2("<b>".$mob->name."</b> нападает на Вас");
   }
   $player->syst2("/combat");
   $combat_id = f_MValue("SELECT combat_id FROM combat_players WHERE player_id = $player->player_id");
   if($combat_id)
-    f_MQuery("INSERT INTO dungeon_combats");
+    f_MQuery("INSERT INTO dungeon_combats (combat_id, group_number, cell_num) VALUES ($combat_id, $grnum, $cur_cell)");
+  echo "showCombats();";
 }
+
 
 if (isset($_GET['showItems']))
 {
@@ -161,11 +171,11 @@ if (isset($_GET['move']))
 	$new_cell = checkCanMove($dun_id, $cur_cell, $mv, $player->player_id);
 	if ($new_cell<0)
 		die();
-	$tm = time() + 30;
+	$tm = time() + 3;
 	$player->SetRegime($mv);
 	$player->SetTill($tm);
 	$new_cell_name = f_MValue("SELECT cell_name FROM dungeons_cells WHERE dungeon_id=$dun_id AND cell_num=".$new_cell);
-	echo "mvTo(30, '{$new_cell_name}');";
+	echo "mvTo(5, '{$new_cell_name}');";
 	die();
 }
 

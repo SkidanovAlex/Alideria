@@ -25,7 +25,7 @@ function create_image_num( $num )
 
     $color = imagecolorallocate($target, 5, 5, 5);
 
-    $pathFonts = "/home/test/data/alideria/fonts/";
+    $pathFonts = "/srv/www/alideria/htdocs/fonts/";
 
     $fontName = $pathFonts . $fonts[0];
 
@@ -71,6 +71,5 @@ function create_image_item( $b )
 	return $name;
 }
 
-//echo create_image_num( $_GET['number'] );
 ?>
 

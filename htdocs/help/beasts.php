@@ -5,12 +5,15 @@
 <script src=functions.js></script>
 
 <script>
-function ccb(id,nick,lv,hp,mhp,wp,wm,wma,wa,wd,np,nm,nma,na,nd,fp,fm,fma,fa,fd,clan)
+function ccb(id,nick,lv,hp,mhp,wp,wm,wma,wa,wd,np,nm,nma,na,nd,fp,fm,fma,fa,fd,clan,avatar)
 {
 	var st = '<table width=220 height=112 cellspacing=0 cellpadding=0 border=0>';
 	
 	tt = window.top.ii( lv, nick, 'black',clan );
 	st += '<tr height=20><td align=center style="width:220px; height:20px;" background=images/rect/a.png>' + tt + '</td></tr>';
+
+	var avatar = avatar || 'f0.png';
+	st += '<tr><td align=center><span style="border-left: 1px solid #651010; border-right: 1px solid #651010; display:inline-block; background: url(/images/ibg.jpg);background-position: center center; "><img src="/images/avatars/' + avatar + '" style="width: 100px;" /></td></tr>';
 
 	st += '<tr height=15><td align=center style="width:220px; height:15px;">';
 		wdt = parseInt( 144 * hp / mhp );

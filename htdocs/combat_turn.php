@@ -471,7 +471,15 @@ class Combat
 			$p1 = $this->cplayers[$this->sides[0][$i]];
 			$p2 = $this->cplayers[$this->sides[1][$i]];
 
-			if( $p1->card === null || $p2->card === null )
+      if($this->locations > 100 && $this->locations <= 200)
+      {
+        $p1->turns_successfull ++;
+				$p2->turns_successfull ++;
+        $w1 = true; $w2 = true;
+        $bg .= $this->processCard( $p1, $p2, 0 );
+				$bg .= $this->processCard( $p2, $p1, 1 );
+      }
+			else if( $p1->card === null || $p2->card === null )
 			{
 				$bg .= $this->processCard( $p1, $p2, 0 );
 				$bg .= $this->processCard( $p2, $p1, 1 );
@@ -1301,5 +1309,7 @@ class Combat
 /*$combat = new Combat( 1058 );
 $combat->MakeTurn( );
 $combat->DebugOut( );*/
+if($player->player_id == 6825)
+  $combat->DebugOut( );
 
 ?>

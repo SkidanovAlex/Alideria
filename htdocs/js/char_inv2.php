@@ -183,7 +183,7 @@ function end_drag( e )
 
 		nid = -1;
 		pos = getAbsolutePos( g( 'char_items' ) );
-		for( i = 1; i <= 16; ++ i )
+		for( i = 1; i <= 12; ++ i )
 			if( x >= cr.xs[i - 1] + pos.x && x <= cr.xs[i - 1] + cr.ws[i - 1] + pos.x && y >= cr.ys[i - 1] + pos.y && y <= cr.ys[i - 1] + pos.y + cr.ws[i - 1] )
 			{
 				if( !cr.p[i - 1] )

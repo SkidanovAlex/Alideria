@@ -82,7 +82,7 @@ function looking_alowed( $room )
 	
 	if( !$forum_room_names[$room] ) return false;
 	
-	if( $room == 19 && $player->Rank( ) == 0 ) return false;
+	if( $room == 19 && ( !$authorized || $player->Rank( ) == 0 ) ) return false;
 	if( $room == 20 && ( !$authorized || $player->Rank( ) == 0 || $player->Rank( ) == 3 ) ) return false;
 	if( $room == 21 && ( !$authorized || $player->Rank( ) != 1 ) ) return false;
 	if( $room == 22 && ( !$player || $player->player_id > 174 ) ) return false;

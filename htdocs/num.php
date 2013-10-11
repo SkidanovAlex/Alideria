@@ -51,7 +51,7 @@ function ShowImage($text)
 
     $color = imagecolorresolve($im, $colR, $colG, $colB);
 
-    $pathFonts = "/home/test/data/alideria/fonts/";
+    $pathFonts = "/srv/www/alideria/htdocs/fonts/";
 
     $fontName = $pathFonts . $fonts[mt_rand(0, $qnFonts)];
 

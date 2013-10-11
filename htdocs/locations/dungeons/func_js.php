@@ -33,6 +33,7 @@ function refLock()
 	showPlayers();
 	showMap();
 	showItems();
+	checkForMobs();
 }
 
 function getYouStatus()

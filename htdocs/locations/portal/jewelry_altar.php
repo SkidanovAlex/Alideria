@@ -106,7 +106,7 @@ if( !$has_seat && $player->regime == 119 && $player->till <= time( ) + 2 )
 	f_MQuery( "LOCK TABLE jewelry_altar WRITE" );
 	$val_until = time( ) + 30*24*3600;
 	if( f_MValue( "SELECT count( player_id ) FROM jewelry_altar WHERE player_id={$player->player_id}" ) )
-		f_MQuery( "UPDATE jewelry_altar SET expires=expires + 30*24*3600 WHERE player_id={$player->player_id}" );
+		f_MQuery( "UPDATE jewelry_altar SET expires=GREATEST($val_until, expires + 30*24*3600) WHERE player_id={$player->player_id}" );
 	else f_MQuery( "INSERT INTO jewelry_altar ( player_id, expires ) VALUES ( {$player->player_id}, $val_until )" );
 	f_MQuery( "UNLOCK TABLES" );
 	$has_seat = true;

@@ -121,12 +121,12 @@ if ($hog==0) // Книга Монстров
 			echo "<td width=200><b>Монстр</b></td></tr>";
 			while ($arr1 = f_MFetch($res1))
 			{
-				$i++;
 				$m_id = $arr1['mob_id'];
 				$where = "mob_wins.mob_id=$m_id AND mobs.mob_id=$m_id AND characters.player_id=mob_wins.player_id AND (characters.level<mobs.level+3 OR mobs.level>=15 OR (mobs.level>25 AND characters.clan_id=1))";
 				$res = f_MQuery("SELECT mob_wins.mob_id, mob_wins.player_id, mob_wins.wins FROM mob_wins, characters, mobs WHERE $where ORDER BY mob_wins.wins DESC LIMIT 1");
 				if (f_MNum($res) > 0)
 				{
+					$i++;
 					$arr = f_MFetch($res);
 					$plr = new Player($arr[1]);
 					echo "<tr><td width=20 align=center>$i</td><td><script>document.write(".$plr->Nick1().");</script>";
