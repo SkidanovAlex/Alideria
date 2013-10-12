@@ -103,7 +103,6 @@ else
                     $player->AddToLogPost( $rune_item_id, -1, 36, 0, 2 );
 
                     // встраиваем
-                    echo "All good $slot";
                     $aa = ParseItemStr( $iarr['effect'] );
                     $item_id = copyItem( $item_id, true );
                     $aa[$rune_attr] += $rune_value;
@@ -116,6 +115,7 @@ else
 
                     $player->AddItems($item_id);
                     $player->AddToLogPost( $item_id, 1, 36, 0, 2 );
+                    $player->AlterQuestValue(6001, 1); // увеличиваем рейтинг
 
                     echo "<b><font color=darkgreen>Руна успешно встроена</font></b> - <a href=game.php>Назад</a>";
                 }
