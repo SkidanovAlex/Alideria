@@ -39,7 +39,21 @@ if( $player->depth == 0 )
 <tr><td id="LocationCell">
 
 <div id=capital_content style='position:relative;left:0px;top:0px;'>
-<script language="javascript" src="js/portal.js" type="text/javascript"></script>
+<!--<script language="javascript" src="js/portal.js" type="text/javascript"></script>-->
+<script>
+var selectArray = new Array();
+<?
+if( $player->HasTrigger( 180594 ) )
+{
+?>
+selectArray["Sel1"]  = new Array(191,  0, "images/locations/portal_sel_1.png", 106,  179 , "Старый Храм", "game.php?dir=10&tloc=5");
+<?
+}
+?>
+selectArray["Sel2"]  = new Array(292,  0, "images/locations/portal_sel_2.png", 199,  200 , "Людвиг",      "game.php?talk=190");
+//selectArray["Sel3"]  = new Array(588, 65, "images/locations/portal_sel_3.png",  56,  108 , "Мастерская",  "game.php?dir=2&tloc=5");
+//selectArray["Sel4"]  = new Array( 85, 89, "images/locations/portal_sel_4.png",  65,   73 , "Трактир" ,    "game.php?dir=3&tloc=5");
+</script>
 <script language="javascript" src="js/location_selection.js" type="text/javascript"></script>
 <script>SetAnim( );</script>
 <img style='position:absolute; z-index:100;' id="TransparentImage" src="images/empty.gif" width=720 height=200 usemap="#Map" border=0>
@@ -52,18 +66,7 @@ if( $player->depth == 0 )
 	<area shape="poly"coords="115,101,97,107,97,147,133,144,132,108,114,102" onmousemove="SelShow(event,'Sel4');" onmouseout="SelHide('Sel4');" onclick="LocClick('Sel4');" style='cursor:pointer'>
 </map>
 <script>
-var selectArray = new Array();
-<?
-if( $player->HasTrigger( 180594 ) )
-{
-?>
-selectArray["Sel1"]  = new Array(191,  0, "images/locations/portal_sel_1.png", 106,  179 , "Старый Храм", "game.php?dir=10&tloc=5");
-<?
-}
-?>
-selectArray["Sel2"]  = new Array(292,  0, "images/locations/portal_sel_2.png", 199,  200 , "Людвиг",      "game.php?talk=119");
-selectArray["Sel3"]  = new Array(588, 65, "images/locations/portal_sel_3.png",  56,  108 , "Мастерская",  "game.php?dir=2&tloc=5");
-selectArray["Sel4"]  = new Array( 85, 89, "images/locations/portal_sel_4.png",  65,   73 , "Трактир" ,    "game.php?dir=3&tloc=5");
+
 
 var animArray = new Array();
 
@@ -81,11 +84,11 @@ window.onresize = UpdatePositions;
 	//echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sep<a href='game.php?dir=2&tloc=5'>В мастерскую</a>$sep<a href='game.php?dir=3&tloc=5'>В трактир</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=4791&loc=1'>Покинуть Урочище</a><br>";\
 	if( $player->HasTrigger( 180594 ) )
 	{
-		echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sep<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=6292&tloc=1'>Покинуть Урочище</a><br>";
+		echo "<a href='game.php?dir=10&tloc=5'>В старый храм</a>$sep<a href='game.php?talk=190'>Говорить с Людвигом</a>$sep<a href='game.php?do=68'>Войти в Портал</a>$sep<a href='game.php?dir=6292&tloc=1'>Покинуть Урочище</a><br>";
 	}
 	else
 	{
-		echo "<a href='game.php?talk=119'>Говорить с Людвигом</a>$sep<a href='game.php?dir=6292&tloc=1'>Покинуть Урочище</a><br>";	
+		echo "<a href='game.php?talk=190'>Говорить с Людвигом</a>$sep<a href='game.php?do=68'>Войти в Портал</a>$sep<a href='game.php?dir=6292&tloc=1'>Покинуть Урочище</a><br>";	
 	}
 	echo "</center>";
 }

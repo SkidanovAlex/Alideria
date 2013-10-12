@@ -114,6 +114,19 @@ function itemDescr( $arr, $need_descr = true )
 	if( $orderName != false )
 		$st .= "<br><small><b>Владелец: </b><font color=green>" . $orderName . "</font></small><br>";
 
+    $hasRune = false;
+    for ($i = 1; $i <= 3; ++ $i)
+    {
+        if ($arr["rune$i"])
+        {
+            $rune_id = $arr["rune$i"];
+            $rimg = f_MValue("SELECT image FROM runes WHERE rune_id=$rune_id");
+            $st .= "<img src=images/items/$rimg width=25 height=25>";
+            $hasRune = true;
+        }
+    }
+    if ($hasRune) $st .= "<br>";/**/
+
 	return $st;
 }
 

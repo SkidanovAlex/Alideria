@@ -5,10 +5,11 @@ include_once( 'locations/portal/stuff.php' );
 $monsters = array( );
 
 // name, avatar, level(x,x+1), power, respawn, monsterId (for loot)
-$monsters[0] = array( "Скелет-Воин",      "skel1",   16,  12, 3600,  83 );
-$monsters[1] = array( "Скелет-Лучник",    "skel2",   17,  13, 4800,  85 );
-$monsters[2] = array( "Скелет-Рыцарь",    "skel3",   18,  14, 7200,   85 );
-$monsters[3] = array( "Леорик",           "skelboss",   20, 20, 43200,  84 );
+$monsters[0] = array( "Скелет-Воин",      "skel1",   16,  12, 3600,  94 );
+$monsters[1] = array( "Скелет-Лучник",    "skel2",   17,  13, 4800,  95 );
+$monsters[2] = array( "Скелет-Рыцарь",    "skel3",   18,  14, 7200,   96 );
+$monsters[3] = array( "Скелет-Рыцарь",    "skel3",   18,  14, 7200,   85 );
+//$monsters[3] = array( "Леорик",           "skelboss",   20, 20, 43200,  84 );
 
 $monsters[4] = array( "Зомби-Каменщик",   "zombie1", 19,  12, 4800 );
 $monsters[5] = array( "Зомби-Охотник",    "zombie2", 20,  13, 7200 );
