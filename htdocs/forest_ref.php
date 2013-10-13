@@ -745,7 +745,7 @@ $st .= "<br>";
 //		if( $depth == 0 )
 		if( $cur_tile == 10 )
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>»дти по тропинке в столицу</li></a>';
-		if( $cur_tile == 300 && $player->HasTrigger( 180572 ) )
+		if( $cur_tile == 300 )
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>»дти по тропинке в ”рочище</li></a>';
 		if( $cur_tile == 110 )
 			$st_act .= '<a href="javascript:void(0)" onclick="forest_go( 2, 0 );" style="cursor:pointer"><li>ѕлыть в ќмут</li></a>';

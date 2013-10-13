@@ -52,7 +52,7 @@ if(isset($_GET['checkForMobs']))
     setCombatTimeout($mob->combat_id, 60);
     $player->syst2("<b>".$mob->name."</b> нападает на Вас");
   }
-  $player->syst2("/combat");
+  echo $player->syst2("/combat");
   $combat_id = f_MValue("SELECT combat_id FROM combat_players WHERE player_id = $player->player_id");
   if($combat_id)
     f_MQuery("INSERT INTO dungeon_combats (combat_id, group_number, cell_num) VALUES ($combat_id, $grnum, $cur_cell)");

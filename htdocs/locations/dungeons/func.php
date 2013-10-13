@@ -205,6 +205,11 @@ if ($pl_id != 6825 && $pl_id != 186 && $pl_id != 1835898 && $pl_id != 173)
 	while ($arr = f_MFetch($res))
 		f_MQuery("INSERT INTO dungeon_items (group_number, cell_num, item_id, number) VALUES ($grnum, $arr[1], $arr[2], $arr[3])");
 	f_MQuery("UPDATE dungeons_groups SET status=7 WHERE group_number=$grnum");
+	
+	$res = f_MQuery("SELECT * FROM dungeon_template_mobs WHERE dungeon_id=$dtype");
+	while ($arr = f_MFetch($res))
+		f_MQuery("INSERT INTO dungeon_mobs VALUES ($grnum, $arr[1], $arr[2], $arr[3], $arr[4])");
+
 	echo ("<script>window.top.game.location.href='game.php';</script>");
 	return 0;
 }
@@ -217,6 +222,12 @@ function getPlayers($grnum, $cell_num)
 	{
 		$plr = new Player($arr[0]);
 		$ret .= "+'<br>'+".$plr->Nick1();
+	}
+	$res_mobs = f_MQuery("SELECT m.name, m.level FROM dungeon_mobs as d, mobs as m WHERE d.mob_id = m.mob_id AND d.group_number=$grnum AND d.cell_num=".$cell_num);
+	while ($arr = f_MFetch($res_mobs))
+	{
+		$mob = "window.top.ii( ".$arr[1].", '".$arr[0]."', 'black', 0, 0 )";
+		$ret .= "+'<br>'+".$mob;
 	}
 	return $ret;
 }

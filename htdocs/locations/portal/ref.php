@@ -77,7 +77,7 @@ if( $player->regime == 0 )
 			$monster = $monsters[$monsterId];
 			include_once( 'mob.php' );
 			$mob = new Mob( );
-			$mob->CreateDungeonMob( $monster[2], $monster[3], $monster[2], $monster[2], $monster[2], 5, 1, $monster[0], $monster[1].".jpg", $monster[5] );
+			$mob->CreateDungeonMob( $monster[2], $monster[3], 1, 1, 1, 5, 1, $monster[0], $monster[1].".jpg", /*mob_id*/$monster[5]);
 			$mob->AttackPlayer( $player );
 			$combat_id = $mob->combat_id;
 			f_MQuery( "UPDATE portal_monsters SET player_id={$mob->player_id} WHERE entry_id=$entryId" );
@@ -98,6 +98,36 @@ $res = f_MQuery( "SELECT * FROM portal_monsters WHERE cell_id=$cell_id AND died+
 while( $arr = f_MFetch( $res ) )
 {
 	echo "am('{$monsters[$arr[monster_id]][0]}',{$arr[entry_id]});";
+}
+
+if($_COOKIE['debug'])
+{
+	$loc = $player->location;
+	$depth = $player->depth;
+	echo "forest_clear_players( );";
+	echo "\nSELECT * FROM portal_players WHERE clan_id={$clan_id} AND cell_id={$cell_id}\n";
+	echo "\nSELECT characters.login, characters.regime, characters.player_id, combat_id, 0 as mobik FROM characters INNER JOIN online ON characters.player_id = online.player_id LEFT JOIN combat_players ON characters.player_id = combat_players.player_id WHERE characters.loc = $loc AND characters.depth = $depth UNION
+	                   SELECT characters.login, characters.regime, characters.player_id, combat_id, 1 as mobik FROM characters, combat_players WHERE characters.player_id = combat_players.player_id AND characters.loc = $loc AND characters.depth = $depth AND combat_players.ai = 1 AND combat_players.ready < 2\n";
+	$ares = f_MQuery( "SELECT characters.login, characters.regime, characters.player_id, combat_id, 0 as mobik FROM characters INNER JOIN online ON characters.player_id = online.player_id LEFT JOIN combat_players ON characters.player_id = combat_players.player_id WHERE characters.loc = $loc AND characters.depth = $depth UNION
+	                   SELECT characters.login, characters.regime, characters.player_id, combat_id, 1 as mobik FROM characters, combat_players WHERE characters.player_id = combat_players.player_id AND characters.loc = $loc AND characters.depth = $depth AND combat_players.ai = 1 AND combat_players.ready < 2" );
+	/*$can_attack = ( $cur_tile == 0 || $cur_tile == 10 ) ? 0 : 1;
+	if( $till || $player->regime != 0 ) $can_attack = 0;*/
+	$can_attack = 1;
+	while( $aarr = f_MFetch( $ares ) )
+	{
+		$plr = new Player( $aarr[2] );
+		$in_combat = ( $aarr[1] == 100 ) ? 1 : 0;
+		if( !$can_attack ) $in_combat = 0;
+		$moo = $can_attack;
+		if( $aarr[2] == $player->player_id ) $moo = 0;
+		if( !$plr->nick_clr ) $plr->nick_clr = 'FFFFFF';
+		$aarr['combat_id'] = (int)$aarr['combat_id'];
+		echo "forest_add_player( ".$plr->Nick2().", $moo, $in_combat, $aarr[2], $aarr[combat_id] );";
+	}
+	echo( "forest_show_players( );" );
+
+//echo '/*'.( ( function_exists( 'showFights' ) == true ) ? 'true' : 'false' ).'*/';
+//showFights( );
 }
 
 echo "refr( {$cell[x]}, {$cell[y]}, {$cell[walls]}, {$keys}, {$cell[type]} );";

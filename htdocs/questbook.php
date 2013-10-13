@@ -12,6 +12,21 @@ function expand_pe( a )
 		document.getElementById( 'i' + a ).src = "../images/e_plus.gif";
 	}
 }
+
+// fix http://alideria.ru/forum.php?thread=8457
+function refBugfix( link )
+{
+	if( !document.getElementById( 'ref' ) )
+	{
+		setTimeout( 'refBugfix( "' + link + '" )', 250 );
+	}
+	else
+	{
+		document.getElementById( 'ref' ).src = link;
+	}
+	
+	return false;
+}
 </script>
 
 <?
@@ -41,15 +56,15 @@ function moo( $a, $b )
 	{
 		while( $arr = f_MFetch( $res ) )
 		{
-			print( "<li><a href=quest_info.php?id=$arr[quest_id] target=ref>$arr[name]</a><br>" );
+			print( "<li><a href=quest_info.php?id=$arr[quest_id] target=ref onclick=\"return refBugfix('quest_info.php?id=$arr[quest_id]');\">$arr[name]</a><br>" );
 		}
 		if($gov_work ) while( $arr = f_Mfetch(  $gres) )
 		{
-			print( "<li><a href=quest_info.php?id=-$arr[guild_id] target=ref>Гос.Заказ ".$guilds[$arr['guild_id']][0]."</a><br>" );
+			print( "<li><a href=quest_info.php?id=-$arr[guild_id] target=ref onclick=\"return refBugfix('quest_info.php?id=$arr[quest_id]');\">>Гос.Заказ ".$guilds[$arr['guild_id']][0]."</a><br>" );
 		}
 		if( $raceQuestNow )
 		{
-			print( "<li><a href=quest_info.php?id=-1000 target=ref>Задание от Фавна</a><br>" );
+			print( "<li><a href=quest_info.php?id=-1000 target=ref onclick=\"return refBugfix('quest_info.php?id=$arr[quest_id]');\">>Задание от Фавна</a><br>" );
 		}
 	}
 }

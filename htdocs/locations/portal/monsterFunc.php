@@ -52,7 +52,7 @@ class PortalMonstersController
 			$this->monsters[] = new PortalMonster( $arr['entry_id'], $arr['monster_id'], $arr['speed'], $arr['x'], $arr['y'], $arr['z'] );
 		}
 		
-		$this->targets[] = new PortalMonsterTarget( 30, 30, 1 );
+		//$this->targets[] = new PortalMonsterTarget( 30, 30, 1 );
 	}
 	
 	function ProcessMonster( $monster )

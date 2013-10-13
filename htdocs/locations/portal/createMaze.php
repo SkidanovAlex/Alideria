@@ -288,6 +288,7 @@ class Maze
 	function CheckMaze( $clan_id, $z )
 	{
 		global $portalLifeTime;
+        global $portalMonstersPerLevel;
 		
 		f_MQuery( "LOCK TABLE portal_state WRITE" );
 		$created = f_MValue( "SELECT created FROM portal_state WHERE clan_id=$clan_id AND z=$z" );
@@ -318,7 +319,7 @@ class Maze
         }
 		
 		$firstMonster = ($z - 1) * 4;
-		$this->GenerateMaze( $firstMonster + 0, $firstMonster + 1, $firstMonster + 2, $firstMonster + 3, 40 );
+		$this->GenerateMaze( $firstMonster + 0, $firstMonster + 1, $firstMonster + 2, $firstMonster + 3, $portalMonstersPerLevel );
 		$this->SaveMaze( $clan_id, $z );
 
 		f_MQuery( "UPDATE portal_state SET created=".time( )." WHERE clan_id=$clan_id AND z=$z" );

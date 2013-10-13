@@ -8,7 +8,7 @@ include_once( 'prof_exp.php' );
 
 $stats = $player->getAllAttrNames( );
 
-if (!$player->player_id == 173)
+if ($player->player_id != 173)
 {
     echo "<i>Пока что тут пустыно. В углах комнаты стоят коробки, и повсюду валяются доски и инструменты.";
 }
@@ -36,8 +36,14 @@ else
         return;
     }
 
+    $skill = $player->GetQuestValue(6001);
+    $breakChance = ceil(500000 / (100 + $skill)); // 10000 = ломате всегда
+
     $types = "";
-    $help = "";
+    $help = "Ваш опыт работы в мастерской: <b>" . $player->GetQuestValue(6001) . "</b><br>";
+    $help .= "Шанс испортить вещь при вставке руны: <b>" . ($breakChance / 100) . "%</b><br>";
+    $help .= "<br>";
+    $help .= "Вы можете встраивать следующие руны:<br>";
     foreach ($typeGuilds as $type=>$guild)
     {
         if ($myGuilds[$guild])
@@ -60,12 +66,31 @@ else
 
     echo "<br>";
 
+    function getPrice($rune_item_id)
+    {
+        $item_price = f_MValue("SELECT price FROM items WHERE item_id=$rune_item_id");
+        $ret = array();
+        $ret[0] = $item_price * 5;
+        // вообще оно всегда делится, ceil на всякий случай
+        $ret[83469] = ceil($item_price / 2);
+        $ret[83470] = ceil($item_price / 4);
+        return $ret;
+    }
+
+    $priceImgs = array(0 => 'money.gif',
+            83469 => 'items/res/bone.png',
+            83470 => 'items/res/cherep.png');
+
+    $priceHints = array(0 => 'дублоны',
+            83469 => 'кости',
+            83470 => 'черепа');
+
     if (isset($_GET['rune_id']) && isset($_GET['item_id']))
     {
         $item_id = (int)$_GET['item_id'];
         $rune_id = (int)$_GET['rune_id'];
 
-        $ires = f_MQuery("SELECT * FROM items WHERE item_id=$item_id");
+        $ires = f_MQuery("SELECT * FROM items WHERE item_id=$item_id AND decay > 0 AND level <= $player->level");
         $iarr = f_MFetch($ires);
         if (!$iarr) RaiseError("Встраиваем руну в несуществующую вещь ($item_id)");
         $slot = -1;
@@ -81,15 +106,28 @@ else
             if (!$player->DropItems($rune_item_id))
             {
                 $player->AddItems($item_id);
-                LogError("Игрок попытался поюзать руну, но потерял ее");
+                RaiseError("Игрок попытался испльзовать руну, но потерял ее");
             }
             else
             {
                 $ok = true;
 
-                // здесь надо заплатить за руну
-                // если у игрока нет достаточно денег или ресов, то поставить ok в false
-                // руна и шмотка на прокачку возвращаются ниже в этом случае.
+                $cost = getPrice($rune_item_id);
+                $money_cost = $cost[0];
+                unset($cost[0]);
+
+                if (!$player->SpendMoney($money_cost))
+                {
+                    $ok = false;
+                }
+                else
+                {
+                    $ok = $player->DropItemsArr($cost, 36, 0, 2);
+                    if (!$ok)
+                    {
+                        $player->AddMoney($money_cost);
+                    }
+                }
 
                 if (!$ok)
                 {
@@ -99,6 +137,7 @@ else
                 }
                 else
                 {
+                    $player->AddToLogPost( 0, -$money_cost, 36, 0, 2 );
                     $player->AddToLogPost( $item_id, -1, 36, 0, 2 );
                     $player->AddToLogPost( $rune_item_id, -1, 36, 0, 2 );
 
@@ -117,7 +156,13 @@ else
                     $player->AddToLogPost( $item_id, 1, 36, 0, 2 );
                     $player->AlterQuestValue(6001, 1); // увеличиваем рейтинг
 
-                    echo "<b><font color=darkgreen>Руна успешно встроена</font></b> - <a href=game.php>Назад</a>";
+                    echo "<b><font color=darkgreen>Руна успешно встроена</font></b> - <a href=game.php>Назад</a><br>";
+
+                    if (mt_rand(0, 9999) < $breakChance)
+                    {
+                        f_MQuery( "UPDATE items SET decay = decay - 1 WHERE item_id=$item_id" );
+                        echo "<br>В ходе работы прочность вещи уменьшилась.<br>";
+                    }
                 }
             }
         }
@@ -132,7 +177,7 @@ else
         }
 
         $item_id = (int)$_GET['item_id'];
-        $ires = f_MQuery("SELECT i.*, p.number FROM player_items as p inner join items as i on p.item_id = i.item_id where p.player_id = {$player->player_id} AND i.item_id = $item_id AND weared=0");
+        $ires = f_MQuery("SELECT i.*, p.number FROM player_items as p inner join items as i on p.item_id = i.item_id where p.player_id = {$player->player_id} AND i.item_id = $item_id AND weared=0 AND decay > 0 AND level <= $player->level");
         $iarr = f_MFetch($ires);
         if (!$iarr) RaiseError("Попытка улучшить вещь, которой у игрока нет");
 
@@ -140,7 +185,7 @@ else
 
         $addt = "";
         if ($hpOnly[$iarr['type']]) $addt = " AND attr_id = 101";
-        $rres = f_MQuery("SELECT r.*, i.item_id FROM player_items as i inner join runes as r on r.item_id = i.item_id and player_id=$player->player_id $addt");
+        $rres = f_MQuery("SELECT r.* FROM player_items as i inner join runes as r on r.item_id = i.item_id and player_id=$player->player_id $addt");
 
         if (!f_MNum($rres)) echo "<i>У вас нет подходящих рун</i>";
         else {
@@ -155,10 +200,26 @@ else
 
                 echo "<td height=100%><script>FUlt();</script>";
                 echo "<b>{$attributes[$rarr[attr_id]]} +{$rarr[value]}</b><br>";
+                $cost = getPrice($rarr['item_id']);
+                $hasRes = true;
+                foreach ($cost as $cost_item => $cost_num)
+                {
+                    $clr = 'darkgreen';
+                    if ($cost_item != 0 && $player->NumberItems($cost_item) < $cost_num) { $hasRes = false; $clr = 'darkred'; }
+                    if ($cost_item == 0 && $player->money < $cost_num) { $hasRes = false; $clr = 'darkred'; }
+                    echo "<img width=11 height=11 title=".$priceHints[$cost_item]." src='images/".$priceImgs[$cost_item]."'> <font color=$clr>$cost_num</font> &nbsp; ";
+                }
                 echo "<script>FL();</script></td>";
 
                 echo "<td height=100%><script>FUlt();</script>";
-                echo "<button onclick='location.href=\"game.php?item_id=$item_id&rune_id=$rarr[rune_id]\";' class=ss_btn>Выбрать</button>";
+                if ($hasRes)
+                {
+                    echo "<button onclick='location.href=\"game.php?item_id=$item_id&rune_id=$rarr[rune_id]\";' class=ss_btn>Выбрать</button>";
+                }
+                else
+                {
+                    echo "<i>Нет ресурсов</i>";
+                }
                 echo "<script>FL();</script></td>";
 
                 echo "</tr>";
@@ -169,7 +230,7 @@ else
     }
     else
     {
-        $ires = f_MQuery("SELECT i.*, p.number FROM player_items as p inner join items as i on p.item_id = i.item_id where p.player_id = {$player->player_id} AND type IN ($types) AND weared=0 AND rune1=0");
+        $ires = f_MQuery("SELECT i.*, p.number FROM player_items as p inner join items as i on p.item_id = i.item_id where p.player_id = {$player->player_id} AND type IN ($types) AND weared=0 AND rune1=0 AND decay > 0 AND level <= $player->level");
         if (!f_MNum($ires))
         {
             echo "<i>Нет ни одной вещи для улучшения</i>";

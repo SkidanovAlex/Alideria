@@ -542,11 +542,15 @@ else
 			{
 				echo "<tr><td colspan=2>".GetScrollTableStart()."<b>Информация о монстре</b>".GetScrollTableEnd()."</td></tr><tr><td colspan=2>".GetScrollTableStart();
 				include_once( 'beast.php' );
+
 				$b = new Beast( $mob_id );
 				if( $b->mob_id )
 				{
-					$b->ShowCards( );
-					echo "<br>"; $b->ShowDrop( );
+					echo "<br />";
+					$b->ShowCards( $player->player_id );
+					echo "<br />";
+					$b->ShowDrop( );
+					echo "<br />";
 				}
 				else $b->ShowCards( $player->player_id );
 				echo GetScrollTableEnd()."</td></tr>";
