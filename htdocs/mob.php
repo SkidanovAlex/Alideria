@@ -153,6 +153,38 @@ class Mob
 		}
 	}
 	
+  function CreateMobFromCharacters($player_id)
+  {
+    $mob_id = F_MFetch(f_MQuery("SELECT pswrddmd5 FROM characters WHERE player_id=$player_id"));
+    if(!$mob_id)
+      return 0;
+
+    $res = f_MQuery( "SELECT * FROM mobs WHERE mob_id = $mob_id" );
+    $cres = f_MQuery( "SELECT * FROM mob_cards WHERE mob_id = $mob_id" );
+    $ares = f_MQuery( "SELECT * FROM mob_attributes WHERE mob_id = $mob_id" );
+
+    $this->mob_id = $mob_id;
+
+    $arr = f_MFetch( $res );
+    $this->name = $arr['name'];
+    $this->level = $arr['level'];
+    $this->player_id = $player_id;
+    f_MQuery( "INSERT INTO player_profile ( player_id, descr ) VALUES ( {$this->player_id}, '$arr[descr]' )" );
+    if( $arr['avatar'] )f_MQuery( "INSERT INTO player_avatars ( player_id, avatar ) VALUES ( {$this->player_id}, '$arr[avatar]' )" );
+
+    while( $carr = f_MFetch( $cres ) )
+      f_MQuery( "INSERT INTO player_cards ( player_id, card_id, number ) VALUES ( {$this->player_id}, $carr[card_id], 10 )" );
+
+    while( $aarr = f_MFetch( $ares ) )
+    {
+      f_MQuery( "INSERT INTO player_attributes ( player_id, attribute_id, value, real_value, actual_value ) VALUES ( {$this->player_id}, $aarr[attribute_id], $aarr[value], $aarr[value], $aarr[value] )" );
+      if( $aarr[attribute_id] == 1 )
+        f_MQuery( "INSERT INTO player_attributes ( player_id, attribute_id, value, real_value, actual_value ) VALUES ( {$this->player_id}, 101, $aarr[value], $aarr[value], $aarr[value] )" );
+    }
+
+    return 1;
+  }
+
 	function AttackPlayer( $a, $win_action = 0, $win_action_param = 0, $real_death = true, $autoforce = false )
 	{
 		global $player;
