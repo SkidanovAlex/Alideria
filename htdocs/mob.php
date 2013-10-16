@@ -169,18 +169,24 @@ class Mob
     $this->name = $arr['name'];
     $this->level = $arr['level'];
     $this->player_id = $player_id;
-    f_MQuery( "INSERT INTO player_profile ( player_id, descr ) VALUES ( {$this->player_id}, '$arr[descr]' )" );
-    if( $arr['avatar'] )f_MQuery( "INSERT INTO player_avatars ( player_id, avatar ) VALUES ( {$this->player_id}, '$arr[avatar]' )" );
+    if(f_MValue("SELECT COUNT(player_id) FROM player_profile WHERE player_id = ".$player_id) == 0)
+      f_MQuery( "INSERT INTO player_profile ( player_id, descr ) VALUES ( {$this->player_id}, '$arr[descr]' )" );
+    if(f_MValue("SELECT COUNT(player_id) FROM player_avatars WHERE player_id = ".$player_id) == 0)
+      if( $arr['avatar'] )f_MQuery( "INSERT INTO player_avatars ( player_id, avatar ) VALUES ( {$this->player_id}, '$arr[avatar]' )" );
 
-    while( $carr = f_MFetch( $cres ) )
-      f_MQuery( "INSERT INTO player_cards ( player_id, card_id, number ) VALUES ( {$this->player_id}, $carr[card_id], 10 )" );
+    if(f_MValue("SELECT COUNT(player_id) FROM player_cards WHERE player_id = ".$player_id) == 0)
+      while( $carr = f_MFetch( $cres ) )
+        f_MQuery( "INSERT INTO player_cards ( player_id, card_id, number ) VALUES ( {$this->player_id}, $carr[card_id], 10 )" );
 
-    while( $aarr = f_MFetch( $ares ) )
-    {
-      f_MQuery( "INSERT INTO player_attributes ( player_id, attribute_id, value, real_value, actual_value ) VALUES ( {$this->player_id}, $aarr[attribute_id], $aarr[value], $aarr[value], $aarr[value] )" );
-      if( $aarr[attribute_id] == 1 )
-        f_MQuery( "INSERT INTO player_attributes ( player_id, attribute_id, value, real_value, actual_value ) VALUES ( {$this->player_id}, 101, $aarr[value], $aarr[value], $aarr[value] )" );
-    }
+    if(f_MValue("SELECT COUNT(player_id) FROM player_attributes WHERE player_id = ".$player_id) == 0)
+      while( $aarr = f_MFetch( $ares ) )
+      {
+        f_MQuery( "INSERT INTO player_attributes ( player_id, attribute_id, value, real_value, actual_value ) VALUES ( {$this->player_id}, $aarr[attribute_id], $aarr[value], $aarr[value], $aarr[value] )" );
+        if( $aarr[attribute_id] == 1 )
+          f_MQuery( "INSERT INTO player_attributes ( player_id, attribute_id, value, real_value, actual_value ) VALUES ( {$this->player_id}, 101, $aarr[value], $aarr[value], $aarr[value] )" );
+      }
+
+    $this->combat_id = f_MValue("SELECT combat_id FROM combat_players WHERE player_id = $player_id LIMIT 1");
 
     return 1;
   }
