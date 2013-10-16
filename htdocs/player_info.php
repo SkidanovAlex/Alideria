@@ -311,7 +311,14 @@ else
 			echo "<tr><td height=100%>".GetScrollTableStart(/*"right"*/)."Девиз:".GetScrollTableEnd()."</td><td height=100%>".GetScrollTableStart()."{$profile->quote}".GetScrollTableEnd()."</td></tr>";
 
 		
-			if( $profile->show_email || $my_id==6825 || $my_id==172 ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."E-mail:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->email}".GetScrollTableEnd()."</td></tr>";
+			if($profile->email != '')
+			{
+				if( $profile->show_email || $my_id==6825 || $my_id==172 ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."E-mail:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->email}".GetScrollTableEnd()."</td></tr>";
+			}
+			else
+			{
+				if( $profile->show_email || $my_id==6825 || $my_id==172 ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."E-mail:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."&nbsp;".GetScrollTableEnd()."</td></tr>";
+			}
 			if( $profile->icq ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."ICQ:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->icq}".GetScrollTableEnd()."</td></tr>";
 			if( $profile->skype ) echo "<tr><td>".GetScrollTableStart(/*"right"*/)."Skype:".GetScrollTableEnd()."</td><td>".GetScrollTableStart()."{$profile->skype}".GetScrollTableEnd()."</td></tr>";
 
