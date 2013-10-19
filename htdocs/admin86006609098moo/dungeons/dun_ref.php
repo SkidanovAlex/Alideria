@@ -88,8 +88,8 @@ if(isset($_GET['get_action']))
   $arr = f_MFetch(f_MQuery("SELECT action, descr FROM dungeon_actions_template WHERE dungeon_id = $dun_id AND cell_num = $cell"));
   if($arr)
   {
-    $act = arr['action'];
-    $descr = arr['descr'];
+    $act = $arr['action'];
+    $descr = $arr['descr'];
   }
   else
   {
