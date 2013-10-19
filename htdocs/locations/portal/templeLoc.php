@@ -23,6 +23,8 @@ if( isset( $_GET['enterLab'] ) )
 		f_MQuery( "DELETE FROM portal_players WHERE player_id={$player->player_id}" );
 		f_MQuery( "INSERT INTO portal_players ( player_id, clan_id, cell_id, keys_mask ) VALUES ( {$player->player_id}, {$clan_id}, {$entrance}, 0 )" );
 		f_MQuery( "UNLOCK TABLES" );
+    f_MQuery( "DELETE FROM portal_revealed_cells WHERE player_id={$player->player_id} AND cell_id={$entrance}" );
+    f_MQuery( "INSERT INTO portal_revealed_cells ( player_id, clan_id, cell_id, z, vis ) VALUES ( {$player->player_id}, {$clan_id}, $entrance, 1, 0 )" );
 	
 		die( "<script>location.href='game.php';</script>" );
 	}
