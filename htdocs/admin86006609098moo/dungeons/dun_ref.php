@@ -81,6 +81,38 @@ if (isset($_GET['get_items']))
 	die();
 }
 
+if(isset($_GET['get_action']))
+{
+  $ret = "";
+  $ret .= "<table border=1><tr><td>Действие</td><td width=300>Описание</td><td>&nbsp;</td></tr>";
+  $arr = f_MFetch(f_MQuery("SELECT action, descr FROM dungeon_actions_template WHERE dungeon_id = $dun_id AND cell_num = $cell"));
+  if($arr)
+  {
+    $act = arr['action'];
+    $descr = arr['descr'];
+  }
+  else
+  {
+    $act = 0;
+    $descr = "Эту фразу увидит игрок.";
+  }
+  $sel = create_select("act", $dungeon_cell_actions, $act);
+  $ret .= "<tr><td>$sel</td><td><input type=text id=descr value='{$descr}'></td><td><button onclick=\"setAction()\">Ok</button></td></tr>";
+  $ret .= "</table>";
+	echo "document.getElementById('dactions').innerHTML = '".$ret."';";
+	die();
+}
+
+if(isset($_GET['set_action'] && isset($_GET['descr']))
+{
+  $act = $_GET['set_action'];
+  $descr = $_GET['descr'];
+  if($act == 0)
+    f_MQuery("DELETE FROM dungeon_actions_template WHERE dungeon_id = $dun_id AND cell_num = $cell");
+  else
+    f_MQuery("INSERT INTO dungeon_actions_template VALUES ($dun_id, $cell, $act, '{$descr}') ON DUPLICATE KEY UPDATE action = $act, descr = '{$descr}'");
+}
+
 if(isset($_GET['get_traps']))
 {
   $ret = "";
