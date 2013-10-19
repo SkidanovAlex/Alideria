@@ -81,6 +81,15 @@ if (isset($_GET['get_items']))
 	die();
 }
 
+if(isset($_GET['get_traps']))
+{
+  $ret = "";
+  $ret .= "<table border=1><tr><td>Имя ловушки</td><td width=300>Описание</td><td>ID эффекта</td><td>Прочность макс.</td><td>Хрупкость</td><td>&nbsp;</td></tr>";
+  $ret .= "</table>";
+	echo "document.getElementById('dtraps').innerHTML = '".$ret."';";
+	die();
+}
+
 if (isset($_GET['item_id']) && isset($_GET['number']))
 {
 	$item_id = (int)$_GET['item_id'];
