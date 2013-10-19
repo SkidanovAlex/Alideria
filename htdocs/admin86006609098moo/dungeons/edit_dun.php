@@ -167,6 +167,7 @@ function ShowAdds()
 	ret += selectImage();
 	ret += selectItems();
 	ret += selectMobs();
+	ret += selectActions();
 	return ret;
 }
 
@@ -204,6 +205,15 @@ function addItem(item_id, num)
 		num = document.getElementById('itm_num').value;
 	}
 	query('dun_ref.php?item_id='+item_id+'&number='+num, dun_id + '|' + x + '|' + y);
+}
+
+function setAction()
+{
+	var y = cur_cell % 100;
+	var x = Math.round(cur_cell / 100);
+	action = document.getElementById('act').value;
+	descr = document.getElementById('descr').value;
+	query('dun_ref.php?set_action='+action+'&descr='+descr, dun_id + '|' + x + '|' + y);
 }
 
 function addMob(mob_id, num)

@@ -96,14 +96,21 @@ if(isset($_GET['get_action']))
     $act = 0;
     $descr = "Эту фразу увидит игрок.";
   }
-  $sel = create_select("act", $dungeon_cell_actions, $act);
-  $ret .= "<tr><td>$sel</td><td><input type=text id=descr value='{$descr}'></td><td><button onclick=\"setAction()\">Ok</button></td></tr>";
+  $st = "<select id=\"act\" name=\"act\">";
+  foreach( $dungeon_cell_actions as $key=>$value )
+  {
+    $st .= "<option value=$key";
+    if( $key == $act ) $st .= " selected";
+    $st .= ">$value" ;
+  }
+  $st .= "</select>";
+  $ret .= "<tr><td>$st</td><td><input type=text id=descr value=\"{$descr}\"></td><td><button onclick=\"setAction()\">Ok</button></td></tr>";
   $ret .= "</table>";
-	echo "document.getElementById('dactions').innerHTML = '".$ret."';";
-	die();
+  echo "document.getElementById('dacts').innerHTML = '".$ret."';";
+  die();
 }
 
-if(isset($_GET['set_action'] && isset($_GET['descr']))
+if(isset($_GET['set_action']) && isset($_GET['descr']))
 {
   $act = $_GET['set_action'];
   $descr = $_GET['descr'];
