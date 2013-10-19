@@ -186,6 +186,14 @@ function selectItems()
 	return ret;
 }
 
+function selectActions()
+{
+	var ret = "";
+	ret += "<img width=11 height=11 style='cursor:pointer' onclick=\"expand_pe('acts', 'get_action')\" id=iacts src='../../images/e_plus.gif'>&nbsp;<b>Действия</b><br>";
+	ret += "<div id=dacts style='display:none'>&nbsp;</div><br>";
+	return ret;
+}
+
 function addItem(item_id, num)
 {
 	var y = cur_cell % 100;

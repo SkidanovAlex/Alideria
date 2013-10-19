@@ -23,6 +23,8 @@ $trade_types = Array( 0=>"Обмен", 1=>"Гос.Магазин" );
 
 $feather_types = array( "Простое", "Красивое", "Великолепное" );
 
+$dungeon_cell_actions = Array (0 => "Ничего", "Выход", , "Чекпоинт");
+
 $exp_table = Array(
 	1 => 75,
 	400,
