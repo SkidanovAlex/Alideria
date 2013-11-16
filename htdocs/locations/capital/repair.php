@@ -34,12 +34,12 @@ else
 		{
 			if (!checkOrderItem($iid))
 			{
-			$player->AddToLogPost( 0, -$iarr[2], 43);
 			$player->SpendMoney($iarr[2]);
-			$player->AddToLogPost( -1, -$repnum, 43);
+			$player->AddToLogPost( 0, -$iarr[2], 43);
 			$player->SpendUMoney($repnum);
-			$player->AddToLogPost( $iid, -1, 43);
+			$player->AddToLogPost( -1, -$repnum, 43);
 			$player->DropItems($iid);
+			$player->AddToLogPost( $iid, -1, 43);
 			$d = $iarr[1]-1;
 			$niid = 0;
 			if( !$iarr[4] && !$iarr[5] )
